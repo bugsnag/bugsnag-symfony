@@ -1,7 +1,7 @@
 # Bugsnag Notifier for Symfony
 
 [![Build Status](https://img.shields.io/travis/bugsnag/bugsnag-symfony/master.svg?style=flat-square)](https://travis-ci.org/bugsnag/bugsnag-symfony)
-[![StyleCI Status](https://styleci.io/repos/14268472/shield?branch=master)](https://styleci.io/repos/14268472)
+[![StyleCI Status](https://styleci.io/repos/62738129/shield?branch=master)](https://styleci.io/repos/62738129)
 
 
 The Bugsnag Notifier for Symfony gives you instant notification of errors and
