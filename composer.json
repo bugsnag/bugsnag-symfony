@@ -1,0 +1,34 @@
+{
+    "name": "bugsnag/bugsnag-symfony",
+    "description": "Official Bugsnag notifier for Symfony applications.",
+    "keywords": ["bugsnag", "exceptions", "errors", "logging", "tracking", "symfony"],
+    "homepage": "https://github.com/bugsnag/bugsnag-symfony",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "James Smith",
+            "email": "notifiers@bugsnag.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "symfony/symfony": "^2.7|^3.0",
+        "bugsnag/bugsnag": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8|^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bugsnag\\BugsnagBundle\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "1.0-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
