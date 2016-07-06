@@ -31,4 +31,4 @@ clarification or starting points.
 ## License
 
 The Bugsnag Symfony notifier is free software released under the MIT License.
-See [LICENSE.txt](LICENSE.txt) for details.
+See [LICENSE](LICENSE) for details.
