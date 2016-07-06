@@ -1,6 +1,6 @@
 <?php
 
-namespace Bugnsag\BugnsagBundle\DependencyInjection;
+namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
