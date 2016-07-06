@@ -16,7 +16,7 @@ Releasing
 =========
 
 1. Commit all outstanding changes
-2. Bump the version in `BugsnagBundle.php`
+2. Bump the version in `DependencyInjection/BugsnagExtension.php`
 3. Update the CHANGELOG.md, and README if appropriate.
 4. Commit, tag push
     ```
