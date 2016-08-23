@@ -26,16 +26,26 @@ class BugsnagListener
     protected $resolver;
 
     /**
+     * If auto notifying is enabled.
+     *
+     * @var bool
+     */
+    protected $auto;
+
+    /**
      * Create a new bugsnag listener instance.
      *
-     * @param \Bugsnag\Client $client
+     * @param \Bugsnag\Client                                $client
+     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver $resolver
+     * @param bool                                           $auto
      *
      * @return void
      */
-    public function __construct(Client $client, SymfonyResolver $resolver)
+    public function __construct(Client $client, SymfonyResolver $resolver, $auto)
     {
         $this->client = $client;
         $this->resolver = $resolver;
+        $this->auto = $auto;
     }
 
     /**
@@ -63,6 +73,10 @@ class BugsnagListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
+        if (!$this->auto) {
+            return;
+        }
+
         $exception = $event->getException();
 
         $this->client->notifyException($exception);
@@ -77,6 +91,10 @@ class BugsnagListener
      */
     public function onConsoleException(ConsoleExceptionEvent $event)
     {
+        if (!$this->auto) {
+            return;
+        }
+
         $exception = $event->getException();
 
         $meta = [
