@@ -39,7 +39,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('notify_release_stages')
                     ->prototype('scalar')->end()
-                    ->defaultValue(array())
+                    ->defaultValue([])
                 ->end()
                 ->arrayNode('filters')
                     ->prototype('scalar')->end()
