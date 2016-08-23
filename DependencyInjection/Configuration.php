@@ -2,7 +2,6 @@
 
 namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
-use Bugsnag\BugsnagBundle\DependencyInjection\ClientFactory;
 use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
