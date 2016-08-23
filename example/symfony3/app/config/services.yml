@@ -1,0 +1,9 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+    bugsnag:
+        api_key: YOUR-API-KEY-HERE
+        auto_notify: true
