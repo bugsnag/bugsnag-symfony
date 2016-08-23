@@ -1,0 +1,31 @@
+services:
+    bugsnag.resolver:
+        class: '%bugsnag.resolver%'
+
+    bugsnag.factory:
+        class: '%bugsnag.factory%'
+        arguments:
+          - '@bugsnag.resolver'
+          - '%bugsnag.api_key%'
+          - '%bugsnag.endpoint%'
+          - '%bugnsag.version%'
+          - '%bugsnag.callbacks%'
+          - '%bugsnag.strip_path%'
+          - '%bugsnag.project_root%'
+          - '%kernel.environment%'
+          - '%bugsnag.notify_release_stages%'
+          - '%bugsnag.filters%'
+
+    bugsnag.client:
+        class: '%bugsnag.client%'
+        factory: ['@bugsnag.factory', make]
+
+    bugsnag.listener:
+        class: '%bugsnag.listener%'
+        arguments:
+          - '@bugsnag.client'
+          - '@bugsnag.resolver'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+            - { name: kernel.event_listener, event: console.exception, method: onConsoleException }

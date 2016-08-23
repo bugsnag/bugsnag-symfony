@@ -2,6 +2,10 @@
 
 namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
+use Bugsnag\BugsnagBundle\DependencyInjection\ClientFactory;
+use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
+use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
+use Bugsnag\Client;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -34,16 +38,25 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('project_root')
                     ->defaultNull()
                 ->end()
-                ->scalarNode('exception_listener')
-                    ->defaultValue('Bugsnag\BugsnagBundle\EventListener\ExceptionListener')
+                ->scalarNode('resolver')
+                    ->defaultValue(SymfonyResolver::class)
+                ->end()
+                ->scalarNode('factory')
+                    ->defaultValue(ClientFactory::class)
+                ->end()
+                ->scalarNode('client')
+                    ->defaultValue(Client::class)
+                ->end()
+                ->scalarNode('listener')
+                    ->defaultValue(BugsnagListener::class)
                 ->end()
                 ->arrayNode('notify_release_stages')
                     ->prototype('scalar')->end()
-                    ->defaultValue([])
+                    ->defaultNull()
                 ->end()
                 ->arrayNode('filters')
                     ->prototype('scalar')->end()
-                    ->defaultValue(['password'])
+                    ->defaultNull()
                 ->end()
             ->end();
 
