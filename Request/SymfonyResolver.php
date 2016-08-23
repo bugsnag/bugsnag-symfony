@@ -4,28 +4,27 @@ namespace Bugsnag\BugsnagBundle\Request;
 
 use Bugsnag\Request\NullRequest;
 use Bugsnag\Request\ResolverInterface;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Request;
 
 class SymfonyResolver implements ResolverInterface
 {
     /**
-     * The application instance.
+     * The request instance.
      *
-     * @var \Illuminate\Contracts\Container\Container
+     * @var \Symfony\Component\HttpFoundation\Request|null
      */
-    protected $app;
+    protected $request;
 
     /**
-     * Create a new symfony request resolver instance.
+     * Set the current request.
      *
-     * @param \Illuminate\Contracts\Container\Container $app
+     * @param \Symfony\Component\HttpFoundation\Request
      *
      * @return void
      */
-    public function __construct(Container $app)
+    public function set(Request $request)
     {
-        $this->app = $app;
+        $this->request = $request;
     }
 
     /**
@@ -35,12 +34,10 @@ class SymfonyResolver implements ResolverInterface
      */
     public function resolve()
     {
-        if ($this->app->runningInConsole()) {
+        if (!$this->request) {
             return new NullRequest();
         }
 
-        $request = $this->app->make(Request::class);
-
-        return new SymfonyRequest($request);
+        return new SymfonyRequest($this->request);
     }
 }
