@@ -133,7 +133,7 @@ class ClientFactory
             $client->setProjectRoot($this->project);
         }
 
-        $client->setReleaseStage($this->stage === 'prod' ? 'production' : $stage);
+        $client->setReleaseStage($this->stage === 'prod' ? 'production' : $this->stage);
         $client->setAppType('Console');
 
         $client->setNotifier(array_filter([
