@@ -27,9 +27,9 @@ class BugsnagExtension extends Extension
         $loader->load('services.yml');
 
         foreach ($config as $key => $value) {
-            $container->setParameter('bugnsag.'.$key, $value);
+            $container->setParameter('bugsnag.'.$key, $value);
         }
 
-        $container->setParameter('bugnsag.version', BugsnagBundle::VERSION);
+        $container->setParameter('bugsnag.version', BugsnagBundle::VERSION);
     }
 }
