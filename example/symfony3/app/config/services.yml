@@ -4,6 +4,6 @@ parameters:
 #    parameter_name: value
 
 services:
-    bugsnag:
-        api_key: YOUR-API-KEY-HERE
-        auto_notify: true
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

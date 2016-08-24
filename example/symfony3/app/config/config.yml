@@ -66,3 +66,7 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+bugsnag:
+    api_key: YOUR-API-KEY-HERE
+    auto_notify: true
