@@ -4,7 +4,7 @@ namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
-use Bugsnag\Configuration;
+use Bugsnag\Configuration as Config;
 
 class ClientFactory
 {
@@ -117,7 +117,7 @@ class ClientFactory
     {
         $guzzle = Client::makeGuzzle($this->endpoint);
 
-        $client = new Client(new Configuration($this->key), $this->resolver, $guzzle);
+        $client = new Client(new Config($this->key), $this->resolver, $guzzle);
 
         if ($this->callbacks) {
             $client->registerDefaultCallbacks();
