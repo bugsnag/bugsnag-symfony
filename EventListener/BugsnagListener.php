@@ -4,6 +4,7 @@ namespace Bugsnag\BugsnagBundle\EventListener;
 
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
+use Bugsnag\Report;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -104,6 +105,8 @@ class BugsnagListener
             ],
         ];
 
-        $this->client->notifyException($exception, $meta);
+        $this->client->notifyException($exception, function (Report $report) use ($meta) {
+            $report->setMetaData($meta);
+        });
     }
 }
