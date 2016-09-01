@@ -10,7 +10,7 @@ use GrahamCampbell\TestBenchCore\MockeryTrait;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class SilexRequestTest extends TestCase
+class SymfonyRequestTest extends TestCase
 {
     use MockeryTrait;
 
