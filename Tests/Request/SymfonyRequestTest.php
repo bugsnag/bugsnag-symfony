@@ -2,8 +2,8 @@
 
 namespace Bugsnag\BugsnagBundle\Tests\Request;
 
-use Bugsnag\BugsnagBundle\Request\SilexRequest;
-use Bugsnag\BugsnagBundle\Request\SilexResolver;
+use Bugsnag\BugsnagBundle\Request\SymfonyRequest;
+use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Request\NullRequest;
 use Bugsnag\Request\RequestInterface;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
@@ -16,7 +16,7 @@ class SymfonyRequestTest extends TestCase
 
     public function testCanResolveNullRequest()
     {
-        $resolver = new SilexResolver();
+        $resolver = new SymfonyResolver();
 
         $request = $resolver->resolve();
 
@@ -24,15 +24,15 @@ class SymfonyRequestTest extends TestCase
         $this->assertInstanceOf(NullRequest::class, $request);
     }
 
-    public function testCanResolveSilexRequest()
+    public function testCanResolveSymfonyRequest()
     {
-        $resolver = new SilexResolver();
+        $resolver = new SymfonyResolver();
 
         $resolver->set(new Request());
 
         $request = $resolver->resolve();
 
         $this->assertInstanceOf(RequestInterface::class, $request);
-        $this->assertInstanceOf(SilexRequest::class, $request);
+        $this->assertInstanceOf(SymfonyRequest::class, $request);
     }
 }
