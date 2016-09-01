@@ -38,7 +38,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultNull()
                 ->end()
                 ->booleanNode('auto_notify')
-                    ->defaultValue(false)
+                    ->defaultValue(true)
                 ->end()
                 ->scalarNode('resolver')
                     ->defaultValue(SymfonyResolver::class)
