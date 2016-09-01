@@ -42,6 +42,9 @@
         ],
         "post-update-cmd": [
             "@symfony-scripts"
+        ],
+        "run": [
+            "php bin/console server:run"
         ]
     },
     "config": {
