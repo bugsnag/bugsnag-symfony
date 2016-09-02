@@ -134,7 +134,6 @@ class ClientFactory
         }
 
         $client->setReleaseStage($this->stage === 'prod' ? 'production' : $this->stage);
-        $client->setAppType('Console');
 
         $client->setNotifier(array_filter([
             'name' => 'Bugsnag Symfony',
