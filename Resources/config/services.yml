@@ -16,14 +16,14 @@ services:
           - '%bugsnag.notify_release_stages%'
           - '%bugsnag.filters%'
 
-    bugsnag.client:
+    bugsnag:
         class: '%bugsnag.client%'
         factory: ['@bugsnag.factory', make]
 
     bugsnag.listener:
         class: '%bugsnag.listener%'
         arguments:
-          - '@bugsnag.client'
+          - '@bugsnag'
           - '@bugsnag.resolver'
           - '%bugsnag.auto_notify%'
         tags:
