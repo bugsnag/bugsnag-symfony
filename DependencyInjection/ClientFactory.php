@@ -2,6 +2,7 @@
 
 namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
+use Bugsnag\BugsnagBundle\BugsnagBundle;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Configuration as Config;
@@ -30,6 +31,20 @@ class ClientFactory
     protected $endpoint;
 
     /**
+     * The callbacks.
+     *
+     * @var bool
+     */
+    protected $callbacks;
+
+    /**
+     * The type.
+     *
+     * @var string|null
+     */
+    protected $type;
+
+    /**
      * The version.
      *
      * @var string|null
@@ -37,11 +52,25 @@ class ClientFactory
     protected $version;
 
     /**
-     * The callbacks.
+     * The batch sending.
      *
      * @var bool
      */
-    protected $callbacks;
+    protected $batch;
+
+    /**
+     * The hostname.
+     *
+     * @var string|null
+     */
+    protected $hostname;
+
+    /**
+     * The send code flag.
+     *
+     * @var bool
+     */
+    protected $code;
 
     /**
      * The strip path.
@@ -84,8 +113,12 @@ class ClientFactory
      * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver $resolver
      * @param string                                         $key
      * @param string|null                                    $endpoint
-     * @param string|null                                    $version
      * @param bool                                           $callbacks
+     * @param string|null                                    $type
+     * @param string|null                                    $version
+     * @param bool                                           $batch
+     * @param string|null                                    $hostname
+     * @param bool                                           $code
      * @param string|null                                    $strip
      * @param string|null                                    $project
      * @param string|null                                    $stage
@@ -94,13 +127,31 @@ class ClientFactory
      *
      * @return void
      */
-    public function __construct(SymfonyResolver $resolver, $key, $endpoint = null, $version = null, $callbacks = true, $strip = null, $project = null, $stage = null, array $stages = null, array $filters = null)
-    {
+    public function __construct(
+        SymfonyResolver $resolver,
+        $key,
+        $endpoint = null,
+        $callbacks = true,
+        $type = null,
+        $version = true,
+        $batch = null,
+        $hostname = null,
+        $code = true,
+        $strip = null,
+        $project = null,
+        $stage = null,
+        array $stages = null,
+        array $filters = null
+    ) {
         $this->resolver = $resolver;
         $this->key = $key;
         $this->endpoint = $endpoint;
-        $this->version = $version;
         $this->callbacks = $callbacks;
+        $this->type = $type;
+        $this->version = $version;
+        $this->batch = $batch;
+        $this->hostname = $hostname;
+        $this->code = $code;
         $this->strip = $strip;
         $this->project = $project;
         $this->stage = $stage;
@@ -137,7 +188,7 @@ class ClientFactory
 
         $client->setNotifier(array_filter([
             'name' => 'Bugsnag Symfony',
-            'version' => $this->version,
+            'version' => BugsnagBundle::VERSION,
             'url' => 'https://github.com/bugsnag/bugsnag-symfony',
         ]));
 

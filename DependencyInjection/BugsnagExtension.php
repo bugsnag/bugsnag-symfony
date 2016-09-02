@@ -29,7 +29,5 @@ class BugsnagExtension extends Extension
         foreach ($config as $key => $value) {
             $container->setParameter('bugsnag.'.$key, $value);
         }
-
-        $container->setParameter('bugsnag.version', BugsnagBundle::VERSION);
     }
 }
