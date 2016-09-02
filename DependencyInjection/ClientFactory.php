@@ -184,22 +184,7 @@ class ClientFactory
             $client->registerDefaultCallbacks();
         }
 
-        if ($this->strip) {
-            $client->setStripPath($this->strip);
-
-            if (!$this->project) {
-                $client->setProjectRoot("{$this->strip}/src");
-            }
-        } elseif ($this->project) {
-            if ($this->root && substr($this->project, 0, strlen($this->root)) === $this->root) {
-                $client->setStripPath($this->root);
-            }
-
-            $client->setProjectRoot($this->project);
-        } elseif ($this->root) {
-            $client->setStripPath($this->root);
-            $client->setProjectRoot("{$this->root}/src");
-        }
+        $this->setupPaths($client, $this->strip, $this->project, $this->root);
 
         $client->setReleaseStage($this->stage === 'prod' ? 'production' : $this->stage);
 
@@ -218,5 +203,45 @@ class ClientFactory
         }
 
         return $client;
+    }
+
+    /**
+     * Setup the client paths.
+     *
+     * @param \Bugsnag\Client $client
+     * @param string|null     $strip
+     * @param string|null     $project
+     * @param string|null     $root
+     *
+     * @return void
+     */
+    protected function setupPaths($client, $strip, $project, $root)
+    {
+        if ($strip) {
+            $client->setStripPath($strip);
+
+            if (!$project) {
+                $client->setProjectRoot("{$strip}/src");
+            }
+
+            return;
+        }
+
+        $base = $root ? realpath("{$root}/../") : false;
+
+        if ($project) {
+            if ($base && substr($project, 0, strlen($base)) === $base) {
+                $client->setStripPath($base);
+            }
+
+            $client->setProjectRoot($project);
+
+            return;
+        }
+
+        if ($base) {
+            $client->setStripPath($base);
+            $client->setProjectRoot("{$base}/src");
+        }
     }
 }
