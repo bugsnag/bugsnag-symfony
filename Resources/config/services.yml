@@ -17,7 +17,7 @@ services:
           - '%bugsnag.filters%'
 
     bugsnag:
-        class: '%bugsnag%'
+        class: '%bugsnag.client%'
         factory: ['@bugsnag.factory', make]
 
     bugsnag.listener:
