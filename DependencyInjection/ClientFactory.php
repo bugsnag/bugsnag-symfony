@@ -87,6 +87,13 @@ class ClientFactory
     protected $project;
 
     /**
+     * The symfony root.
+     *
+     * @var string|null
+     */
+    protected $root;
+
+    /**
      * The release stage.
      *
      * @var string|null
@@ -121,6 +128,7 @@ class ClientFactory
      * @param bool                                           $code
      * @param string|null                                    $strip
      * @param string|null                                    $project
+     * @param string|null                                    $root
      * @param string|null                                    $stage
      * @param string[]|null                                  $stages
      * @param string[]|null                                  $filters
@@ -139,6 +147,7 @@ class ClientFactory
         $code = true,
         $strip = null,
         $project = null,
+        $root = null,
         $stage = null,
         array $stages = null,
         array $filters = null
@@ -154,6 +163,7 @@ class ClientFactory
         $this->code = $code;
         $this->strip = $strip;
         $this->project = $project;
+        $this->root = $root;
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
@@ -181,7 +191,14 @@ class ClientFactory
                 $client->setProjectRoot("{$this->strip}/src");
             }
         } elseif ($this->project) {
+            if ($this->root && substr($this->project, 0, strlen($this->root)) === $this->root) {
+                $client->setStripPath($this->root);
+            }
+
             $client->setProjectRoot($this->project);
+        } elseif ($this->root) {
+            $client->setStripPath($this->root);
+            $client->setProjectRoot("{$this->root}/src");
         }
 
         $client->setReleaseStage($this->stage === 'prod' ? 'production' : $this->stage);

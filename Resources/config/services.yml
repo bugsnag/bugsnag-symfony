@@ -16,6 +16,7 @@ services:
           - '%bugsnag.send_code%'
           - '%bugsnag.strip_path%'
           - '%bugsnag.project_root%'
+          - '%kernel.root_dir%'
           - '%kernel.environment%'
           - '%bugsnag.notify_release_stages%'
           - '%bugsnag.filters%'
