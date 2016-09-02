@@ -2,7 +2,6 @@
 
 namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
-use Bugsnag\BugsnagBundle\BugsnagBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -29,7 +28,5 @@ class BugsnagExtension extends Extension
         foreach ($config as $key => $value) {
             $container->setParameter('bugsnag.'.$key, $value);
         }
-
-        $container->setParameter('bugsnag.version', BugsnagBundle::VERSION);
     }
 }
