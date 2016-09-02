@@ -87,6 +87,13 @@ class ClientFactory
     protected $project;
 
     /**
+     * The symfony root.
+     *
+     * @var string|null
+     */
+    protected $root;
+
+    /**
      * The release stage.
      *
      * @var string|null
@@ -121,6 +128,7 @@ class ClientFactory
      * @param bool                                           $code
      * @param string|null                                    $strip
      * @param string|null                                    $project
+     * @param string|null                                    $root
      * @param string|null                                    $stage
      * @param string[]|null                                  $stages
      * @param string[]|null                                  $filters
@@ -139,6 +147,7 @@ class ClientFactory
         $code = true,
         $strip = null,
         $project = null,
+        $root = null,
         $stage = null,
         array $stages = null,
         array $filters = null
@@ -154,6 +163,7 @@ class ClientFactory
         $this->code = $code;
         $this->strip = $strip;
         $this->project = $project;
+        $this->root = $root;
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
@@ -174,15 +184,7 @@ class ClientFactory
             $client->registerDefaultCallbacks();
         }
 
-        if ($this->strip) {
-            $client->setStripPath($this->strip);
-
-            if (!$this->project) {
-                $client->setProjectRoot("{$this->strip}/src");
-            }
-        } elseif ($this->project) {
-            $client->setProjectRoot($this->project);
-        }
+        $this->setupPaths($client, $this->strip, $this->project, $this->root);
 
         $client->setReleaseStage($this->stage === 'prod' ? 'production' : $this->stage);
 
@@ -201,5 +203,45 @@ class ClientFactory
         }
 
         return $client;
+    }
+
+    /**
+     * Setup the client paths.
+     *
+     * @param \Bugsnag\Client $client
+     * @param string|null     $strip
+     * @param string|null     $project
+     * @param string|null     $root
+     *
+     * @return void
+     */
+    protected function setupPaths($client, $strip, $project, $root)
+    {
+        if ($strip) {
+            $client->setStripPath($strip);
+
+            if (!$project) {
+                $client->setProjectRoot("{$strip}/src");
+            }
+
+            return;
+        }
+
+        $base = $root ? realpath("{$root}/../") : false;
+
+        if ($project) {
+            if ($base && substr($project, 0, strlen($base)) === $base) {
+                $client->setStripPath($base);
+            }
+
+            $client->setProjectRoot($project);
+
+            return;
+        }
+
+        if ($base) {
+            $client->setStripPath($base);
+            $client->setProjectRoot("{$base}/src");
+        }
     }
 }
