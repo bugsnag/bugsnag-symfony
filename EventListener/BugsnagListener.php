@@ -62,6 +62,8 @@ class BugsnagListener
             return;
         }
 
+        $this->client->setFallbackType('HTTP');
+
         $this->resolver->set($event->getRequest());
     }
 
