@@ -187,7 +187,14 @@ class ClientFactory
         $this->setupPaths($client, $this->strip, $this->project, $this->root);
 
         $client->setReleaseStage($this->stage === 'prod' ? 'production' : $this->stage);
+
+        $client->setAppVersion($this->version);
         $client->setFallbackType('Console');
+        $client->setAppType($this->type);
+
+        $client->setBatchSending($this->batch);
+        $client->setHostname($this->hostname);
+        $client->setSendCode($this->code);
 
         $client->setNotifier(array_filter([
             'name' => 'Bugsnag Symfony',
