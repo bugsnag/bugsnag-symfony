@@ -6,9 +6,12 @@ services:
         class: '%bugsnag.factory%'
         arguments:
           - '@bugsnag.resolver'
+          - '?@security.token_storage'
+          - '?@security.authorization_checker'
           - '%bugsnag.api_key%'
           - '%bugsnag.endpoint%'
           - '%bugsnag.callbacks%'
+          - '%bugsnag.user%'
           - '%bugsnag.app_type%'
           - '%bugsnag.app_version%'
           - '%bugsnag.batch_sending%'
