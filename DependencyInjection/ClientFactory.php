@@ -260,7 +260,7 @@ class ClientFactory
      * @return void
      */
     protected function setupUserDetection(Client $client, TokenStorageInterface $tokens, AuthorizationCheckerInterface $checker)
-{
+    {
         $client->registerCallback(new CustomUser(function () use ($tokens, $checker) {
             $token = $tokens->getToken();
 
