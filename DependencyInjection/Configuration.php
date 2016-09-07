@@ -23,10 +23,10 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('api_key')
-                    ->defaultValue(getenv('BUGSNAG_API_KEY'))
+                    ->defaultValue(getenv('BUGSNAG_API_KEY') ?: null)
                 ->end()
                 ->scalarNode('endpoint')
-                    ->defaultValue(getenv('BUGSNAG_ENDPOINT'))
+                    ->defaultValue(getenv('BUGSNAG_ENDPOINT') ?: null)
                 ->end()
                 ->booleanNode('callbacks')
                     ->defaultValue(true)
