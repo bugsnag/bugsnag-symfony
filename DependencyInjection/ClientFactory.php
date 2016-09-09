@@ -249,7 +249,10 @@ class ClientFactory
 
         if ($base) {
             $client->setStripPath($base);
-            $client->setProjectRoot("{$base}/src");
+
+            if ($root = realpath("{$base}/src")) {
+                $client->setProjectRoot($root);
+            }
         }
     }
 }
