@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 1.1.0 (2016-09-08)
+## 1.1.0 (2016-11-29)
 
 ### Enhancements
 
@@ -9,15 +9,15 @@ Changelog
   [Graham Campbell](https://github.com/GrahamCampbell)
   [#15](https://github.com/bugsnag/bugsnag-symfony/pull/15)
 
-* Added support for earlier symfony versions
-  [Graham Campbell](https://github.com/GrahamCampbell)
-  [#16](https://github.com/bugsnag/bugsnag-symfony/pull/16)
-
 ### Bug Fixes
 
 * Fixed edge cases with automatic project root detection
   [Graham Campbell](https://github.com/GrahamCampbell)
-  [#31](https://github.com/bugsnag/bugsnag-silex/pull/31)
+  [#31](https://github.com/bugsnag/bugsnag-symfony/pull/31)
+
+* Fixed bug with empty json content decoding
+  [Graham Campbell](https://github.com/GrahamCampbell)
+  [#33](https://github.com/bugsnag/bugsnag-symfony/pull/33)
 
 ## 1.0.0 (2016-09-05)
 
