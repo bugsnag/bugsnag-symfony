@@ -4,12 +4,8 @@ namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
 use Bugsnag\BugsnagBundle\BugsnagBundle;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
-use Bugsnag\Callbacks\CustomUser;
 use Bugsnag\Client;
 use Bugsnag\Configuration as Config;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class ClientFactory
 {
@@ -19,20 +15,6 @@ class ClientFactory
      * @var \Bugsnag\BugsnagBundle\Request\SymfonyResolver
      */
     protected $resolver;
-
-    /**
-     * The token resolver.
-     *
-     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface|null
-     */
-    protected $tokens;
-
-    /**
-     * The auth checker.
-     *
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|null
-     */
-    protected $checker;
 
     /**
      * The api key.
@@ -54,13 +36,6 @@ class ClientFactory
      * @var bool
      */
     protected $callbacks;
-
-    /**
-     * User detection enabled.
-     *
-     * @var bool
-     */
-    protected $user;
 
     /**
      * The type.
@@ -149,36 +124,30 @@ class ClientFactory
     /**
      * Create a new client factory instance.
      *
-     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver                                           $resolver
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface|null $tokens
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|null        $checker
-     * @param string|null                                                                              $key
-     * @param string|null                                                                              $endpoint
-     * @param bool                                                                                     $callbacks
-     * @param bool                                                                                     $user
-     * @param string|null                                                                              $type
-     * @param string|null                                                                              $version
-     * @param bool                                                                                     $batch
-     * @param string|null                                                                              $hostname
-     * @param bool                                                                                     $code
-     * @param string|null                                                                              $strip
-     * @param string|null                                                                              $project
-     * @param string|null                                                                              $root
-     * @param string|null                                                                              $env
-     * @param string|null                                                                              $stage
-     * @param string[]|null                                                                            $stages
-     * @param string[]|null                                                                            $filters
+     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver $resolver
+     * @param string|null                                    $key
+     * @param string|null                                    $endpoint
+     * @param bool                                           $callbacks
+     * @param string|null                                    $type
+     * @param string|null                                    $version
+     * @param bool                                           $batch
+     * @param string|null                                    $hostname
+     * @param bool                                           $code
+     * @param string|null                                    $strip
+     * @param string|null                                    $project
+     * @param string|null                                    $root
+     * @param string|null                                    $env
+     * @param string|null                                    $stage
+     * @param string[]|null                                  $stages
+     * @param string[]|null                                  $filters
      *
      * @return void
      */
     public function __construct(
         SymfonyResolver $resolver,
-        TokenStorageInterface $tokens = null,
-        AuthorizationCheckerInterface $checker = null,
         $key = null,
         $endpoint = null,
         $callbacks = true,
-        $user = true,
         $type = null,
         $version = true,
         $batch = null,
@@ -193,12 +162,9 @@ class ClientFactory
         array $filters = null
     ) {
         $this->resolver = $resolver;
-        $this->tokens = $tokens;
-        $this->checker = $checker;
         $this->key = $key;
         $this->endpoint = $endpoint;
         $this->callbacks = $callbacks;
-        $this->user = $user;
         $this->type = $type;
         $this->version = $version;
         $this->batch = $batch;
@@ -228,10 +194,6 @@ class ClientFactory
             $client->registerDefaultCallbacks();
         }
 
-        if ($this->tokens && $this->checker && $this->user) {
-            $this->setupUserDetection($client, $this->tokens, $this->checker);
-        }
-
         $this->setupPaths($client, $this->strip, $this->project, $this->root);
 
         $client->setReleaseStage($this->stage ?: ($this->env === 'prod' ? 'production' : $this->env));
@@ -259,34 +221,6 @@ class ClientFactory
         }
 
         return $client;
-    }
-
-    /**
-     * Setup user detection.
-     *
-     * @param \Bugsnag\Client                                                                     $client
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokens
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface        $checker
-     *
-     * @return void
-     */
-    protected function setupUserDetection(Client $client, TokenStorageInterface $tokens, AuthorizationCheckerInterface $checker)
-    {
-        $client->registerCallback(new CustomUser(function () use ($tokens, $checker) {
-            $token = $tokens->getToken();
-
-            if (!$token || !$checker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                return;
-            }
-
-            $user = $token->getUser();
-
-            if ($user instanceof UserInterface) {
-                return ['id' => $user->getUsername()];
-            }
-
-            return ['id' => (string) $user];
-        }));
     }
 
     /**
