@@ -1,11 +1,15 @@
 {
-    "name": "bugsnag/bugsnag-symfony",
-    "description": "Official Bugsnag notifier for Symfony applications.",
+    "name": "roboticsexpert/bugsnag-symfony",
+    "description": "roboticsexpert Bugsnag notifier for Symfony applications.",
     "keywords": ["bugsnag", "exceptions", "errors", "logging", "tracking", "symfony"],
-    "homepage": "https://github.com/bugsnag/bugsnag-symfony",
+    "homepage": "https://github.com/roboticsexpert/bugsnag-symfony",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Mahdi Youseftabar",
+            "email": "roboticsexpert@gmail.com"
+        },
         {
             "name": "James Smith",
             "email": "notifiers@bugsnag.com"

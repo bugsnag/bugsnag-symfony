@@ -2,6 +2,7 @@
 
 namespace Bugsnag\BugsnagBundle\EventListener;
 
+use Bugsnag\BugsnagBundle\DependencyInjection\ClientFactory;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Report;
@@ -33,20 +34,22 @@ class BugsnagListener
      */
     protected $auto;
 
+    protected $clientFactory;
+
     /**
-     * Create a new bugsnag listener instance.
-     *
-     * @param \Bugsnag\Client                                $client
-     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver $resolver
-     * @param bool                                           $auto
-     *
-     * @return void
+     * BugsnagListener constructor.
+     * @param Client $client
+     * @param SymfonyResolver $resolver
+     * @param $auto
+     * @param ClientFactory $clientFactory
      */
-    public function __construct(Client $client, SymfonyResolver $resolver, $auto)
+    public function __construct(Client $client, SymfonyResolver $resolver, $auto, ClientFactory $clientFactory)
     {
+
         $this->client = $client;
         $this->resolver = $resolver;
         $this->auto = $auto;
+        $this->clientFactory = $clientFactory;
     }
 
     /**
@@ -76,13 +79,14 @@ class BugsnagListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
+
         if (!$this->auto) {
             return;
         }
 
         $exception = $event->getException();
 
-        $this->client->notifyException($exception);
+        $this->notifyException($exception);
     }
 
     /**
@@ -107,8 +111,24 @@ class BugsnagListener
             ],
         ];
 
-        $this->client->notifyException($exception, function (Report $report) use ($meta) {
-            $report->setMetaData($meta);
-        });
+        $this->notifyException($exception, $meta);
+    }
+
+
+    private function notifyException($exception, $meta = null)
+    {
+        $excepts = $this->clientFactory->getExcepts();
+
+        if (in_array(get_class($exception), $excepts)) {
+            return;
+        }
+
+        if (empty($meta)) {
+            $this->client->notifyException($exception);
+        } else {
+            $this->client->notifyException($exception, function (Report $report) use ($meta) {
+                $report->setMetaData($meta);
+            });
+        }
     }
 }
