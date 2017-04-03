@@ -140,26 +140,34 @@ class ClientFactory
     protected $filters;
 
     /**
+     * The exception excepts to not report.
+     *
+     * @var string[]|null
+     */
+    protected $excepts;
+
+    /**
      * Create a new client factory instance.
      *
-     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver                                           $resolver
+     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver $resolver
      * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface|null $tokens
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|null        $checker
-     * @param string|null                                                                              $key
-     * @param string|null                                                                              $endpoint
-     * @param bool                                                                                     $callbacks
-     * @param bool                                                                                     $user
-     * @param string|null                                                                              $type
-     * @param string|null                                                                              $version
-     * @param bool                                                                                     $batch
-     * @param string|null                                                                              $hostname
-     * @param bool                                                                                     $code
-     * @param string|null                                                                              $strip
-     * @param string|null                                                                              $project
-     * @param string|null                                                                              $root
-     * @param string|null                                                                              $stage
-     * @param string[]|null                                                                            $stages
-     * @param string[]|null                                                                            $filters
+     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|null $checker
+     * @param string|null $key
+     * @param string|null $endpoint
+     * @param bool $callbacks
+     * @param bool $user
+     * @param string|null $type
+     * @param string|null $version
+     * @param bool $batch
+     * @param string|null $hostname
+     * @param bool $code
+     * @param string|null $strip
+     * @param string|null $project
+     * @param string|null $root
+     * @param string|null $stage
+     * @param string[]|null $stages
+     * @param string[]|null $filters
+     * @param string[]|null $excepts
      *
      * @return void
      */
@@ -181,8 +189,10 @@ class ClientFactory
         $root = null,
         $stage = null,
         array $stages = null,
-        array $filters = null
-    ) {
+        array $filters = null,
+        array $excepts = null
+    )
+    {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
         $this->checker = $checker;
@@ -201,6 +211,7 @@ class ClientFactory
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
+        $this->excepts = $excepts;
     }
 
     /**
@@ -254,9 +265,9 @@ class ClientFactory
     /**
      * Setup user detection.
      *
-     * @param \Bugsnag\Client                                                                     $client
+     * @param \Bugsnag\Client $client
      * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokens
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface        $checker
+     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $checker
      *
      * @return void
      */
@@ -275,7 +286,7 @@ class ClientFactory
                 return ['id' => $user->getUsername()];
             }
 
-            return ['id' => (string) $user];
+            return ['id' => (string)$user];
         }));
     }
 
@@ -283,9 +294,9 @@ class ClientFactory
      * Setup the client paths.
      *
      * @param \Bugsnag\Client $client
-     * @param string|null     $strip
-     * @param string|null     $project
-     * @param string|null     $root
+     * @param string|null $strip
+     * @param string|null $project
+     * @param string|null $root
      *
      * @return void
      */
@@ -320,5 +331,16 @@ class ClientFactory
                 $client->setProjectRoot($root);
             }
         }
+    }
+
+
+    /**
+     * @return array|\string[]
+     */
+    public function getExcepts()
+    {
+        if (is_array($this->excepts))
+            return $this->excepts;
+        return [];
     }
 }
