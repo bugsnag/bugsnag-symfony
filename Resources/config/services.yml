@@ -21,6 +21,7 @@ services:
           - '%bugsnag.project_root%'
           - '%kernel.root_dir%'
           - '%kernel.environment%'
+          - '%bugsnag.release_stage%'
           - '%bugsnag.notify_release_stages%'
           - '%bugsnag.filters%'
 
