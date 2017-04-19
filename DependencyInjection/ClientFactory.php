@@ -119,6 +119,13 @@ class ClientFactory
     protected $root;
 
     /**
+     * The environment name.
+     *
+     * @var string|null
+     */
+    protected $env;
+
+    /**
      * The release stage.
      *
      * @var string|null
@@ -200,6 +207,7 @@ class ClientFactory
         $this->strip = $strip;
         $this->project = $project;
         $this->root = $root;
+        $this->env = $env;
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
