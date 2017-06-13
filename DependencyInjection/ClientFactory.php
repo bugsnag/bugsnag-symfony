@@ -119,6 +119,13 @@ class ClientFactory
     protected $root;
 
     /**
+     * The environment name.
+     *
+     * @var string|null
+     */
+    protected $env;
+
+    /**
      * The release stage.
      *
      * @var string|null
@@ -157,6 +164,7 @@ class ClientFactory
      * @param string|null                                                                              $strip
      * @param string|null                                                                              $project
      * @param string|null                                                                              $root
+     * @param string|null                                                                              $env
      * @param string|null                                                                              $stage
      * @param string[]|null                                                                            $stages
      * @param string[]|null                                                                            $filters
@@ -179,6 +187,7 @@ class ClientFactory
         $strip = null,
         $project = null,
         $root = null,
+        $env = null,
         $stage = null,
         array $stages = null,
         array $filters = null
@@ -198,6 +207,7 @@ class ClientFactory
         $this->strip = $strip;
         $this->project = $project;
         $this->root = $root;
+        $this->env = $env;
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
@@ -224,7 +234,7 @@ class ClientFactory
 
         $this->setupPaths($client, $this->strip, $this->project, $this->root);
 
-        $client->setReleaseStage($this->stage === 'prod' ? 'production' : $this->stage);
+        $client->setReleaseStage($this->stage ?: ($this->env === 'prod' ? 'production' : $this->env));
 
         $client->setAppVersion($this->version);
         $client->setFallbackType('Console');
