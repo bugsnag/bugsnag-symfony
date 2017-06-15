@@ -4,7 +4,7 @@ namespace Bugsnag\BugsnagBundle\Tests\Callbacks;
 
 use Bugsnag\BugsnagBundle\Callbacks\UserSettingCallback;
 use Bugsnag\Report;
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

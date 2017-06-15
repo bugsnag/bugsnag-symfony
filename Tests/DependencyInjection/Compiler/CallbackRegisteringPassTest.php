@@ -4,7 +4,7 @@ namespace Bugsnag\BugsnagBundle\Tests\DependencyInjection\Compiler;
 
 use Bugsnag\BugsnagBundle\DependencyInjection\Compiler\CallbackRegisteringPass;
 use Bugsnag\Client;
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
