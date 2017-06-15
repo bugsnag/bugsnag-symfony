@@ -32,6 +32,8 @@ class UserSettingCallback
      * @param null|\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokens
      * @param null|\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface        $checker
      * @param bool                                                                                     $setUser
+     *
+     * @return void
      */
     public function __construct(
         TokenStorageInterface $tokens = null,
@@ -44,6 +46,9 @@ class UserSettingCallback
     }
 
     /**
+     * Define a callback to set the currently authenticated user as the user
+     * on any Bugsnag reports that are sent.
+     *
      * @param \Bugsnag\Report $report
      *
      * @return void

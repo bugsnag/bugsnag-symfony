@@ -16,7 +16,7 @@ class BugsnagBundle extends Bundle
     const VERSION = '1.0.0';
 
     /**
-     * {@inheritdoc}
+     * Setup the callback registering pass.
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *

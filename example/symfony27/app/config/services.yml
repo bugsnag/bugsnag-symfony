@@ -4,7 +4,6 @@ parameters:
 #    parameter_name: value
 
 services:
-
     bugsnag_metadata_callback:
         class: AppBundle\Bugsnag\MetadataCallback
         tags:
