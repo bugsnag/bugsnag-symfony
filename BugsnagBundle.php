@@ -2,6 +2,8 @@
 
 namespace Bugsnag\BugsnagBundle;
 
+use Bugsnag\BugsnagBundle\DependencyInjection\Compiler\CallbackRegisteringPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class BugsnagBundle extends Bundle
@@ -12,4 +14,16 @@ class BugsnagBundle extends Bundle
      * @return string
      */
     const VERSION = '1.0.0';
+
+    /**
+     * Setup the callback registering pass.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @return void
+     */
+    public function build(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new CallbackRegisteringPass());
+    }
 }
