@@ -9,6 +9,10 @@ Changelog
   [Graham Campbell](https://github.com/GrahamCampbell)
   [#15](https://github.com/bugsnag/bugsnag-symfony/pull/15)
 
+* Support setting release stage from config
+  [Graham Campbell](https://github.com/GrahamCampbell)
+  [#39](https://github.com/bugsnag/bugsnag-symfony/pull/39)
+
 ### Bug Fixes
 
 * Fixed edge cases with automatic project root detection
