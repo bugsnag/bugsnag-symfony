@@ -87,7 +87,7 @@ class BugsnagListener
             $exception,
             Report::MIDDLEWARE_HANDLER,
             [
-                'name' => 'symfony'
+                'name' => 'symfony',
             ]
         );
 
@@ -121,10 +121,10 @@ class BugsnagListener
             $exception,
             Report::MIDDLEWARE_HANDLER,
             [
-                'name' => 'symfony'
+                'name' => 'symfony',
             ]
         );
-        
+
         $this->client->notify($report, function (Report $report) use ($meta) {
             $report->setMetaData($meta);
         });
