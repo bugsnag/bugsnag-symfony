@@ -31,7 +31,7 @@ class BugsnagListenerTest extends TestCase
         # Setup responses
         $event->shouldReceive('getException')->once()->andReturn('exception');
         $report->shouldReceive('fromPHPThrowable')
-            ->with('config', 'exception', 'middleware_handler', ['name' => 'symfony'])
+            ->with('config', 'exception', true, ['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']])
             ->once()
             ->andReturn($report);
         $client->shouldReceive('getConfig')->once()->andReturn('config');
@@ -55,12 +55,15 @@ class BugsnagListenerTest extends TestCase
         $event->shouldReceive('getCommand')->once()->andReturn($event);
         $event->shouldReceive('getName')->once()->andReturn('test');
         $event->shouldReceive('getExitCode')->once()->andReturn(1);
+
         $report->shouldReceive('fromPHPThrowable')
-            ->with('config', 'exception', 'middleware_handler', ['name' => 'symfony'])
+            ->with('config', 'exception', 'middleware_handler', ['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']])
             ->once()
             ->andReturn($report);
+        $report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
+
         $client->shouldReceive('getConfig')->once()->andReturn('config');
-        $client->shouldReceive('notify')->once()->with($report, Mockery::any());
+        $client->shouldReceive('notify')->once()->with($report);
         
         # Initiate test
         $listener = new BugsnagListener($client, $resolver, true);

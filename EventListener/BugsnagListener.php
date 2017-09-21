@@ -85,9 +85,12 @@ class BugsnagListener
         $report = Report::fromPHPThrowable(
             $this->client->getConfig(),
             $exception,
-            Report::MIDDLEWARE_HANDLER,
+            true,
             [
-                'name' => 'symfony',
+                'type' => 'unhandledExceptionMiddleware',
+                'attributes' => [
+                    'framework' => 'Symfony',
+                ]
             ]
         );
 
@@ -119,14 +122,16 @@ class BugsnagListener
         $report = Report::fromPHPThrowable(
             $this->client->getConfig(),
             $exception,
-            Report::MIDDLEWARE_HANDLER,
+            true,
             [
-                'name' => 'symfony',
+                'type' => 'unhandledExceptionMiddleware',
+                'attributes' => [
+                    'framework' => 'Symfony',
+                ]
             ]
         );
+        $report->setMetaData($meta);
 
-        $this->client->notify($report, function (Report $report) use ($meta) {
-            $report->setMetaData($meta);
-        });
+        $this->client->notify($report);
     }
 }
