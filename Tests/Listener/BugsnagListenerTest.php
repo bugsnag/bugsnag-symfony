@@ -65,8 +65,8 @@ class BugsnagListenerTest extends TestCase
 
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $client->shouldReceive('notify')->once()->with($report);
-        
-        # Initiate test
+
+        // Initiate test
         $listener = new BugsnagListener($client, $resolver, true);
         $listener->onConsoleException($event);
     }
