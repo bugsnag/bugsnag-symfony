@@ -90,7 +90,7 @@ class BugsnagListener
                 'type' => 'unhandledExceptionMiddleware',
                 'attributes' => [
                     'framework' => 'Symfony',
-                ]
+                ],
             ]
         );
 
@@ -127,7 +127,7 @@ class BugsnagListener
                 'type' => 'unhandledExceptionMiddleware',
                 'attributes' => [
                     'framework' => 'Symfony',
-                ]
+                ],
             ]
         );
         $report->setMetaData($meta);
