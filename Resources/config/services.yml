@@ -23,6 +23,7 @@ services:
           - '%kernel.environment%'
           - '%bugsnag.release_stage%'
           - '%bugsnag.notify_release_stages%'
+          - '%bugsnag.notify_hostnames%'
           - '%bugsnag.filters%'
 
     bugsnag:

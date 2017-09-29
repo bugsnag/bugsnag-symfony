@@ -140,6 +140,13 @@ class ClientFactory
     protected $stages;
 
     /**
+     * The notify hostnames.
+     *
+     * @var string[]|null
+     */
+    protected $notifyHostnames;
+
+    /**
      * The filters.
      *
      * @var string[]|null
@@ -190,6 +197,7 @@ class ClientFactory
         $env = null,
         $stage = null,
         array $stages = null,
+        array $notifyHostnames = null,
         array $filters = null
     ) {
         $this->resolver = $resolver;
@@ -210,6 +218,7 @@ class ClientFactory
         $this->env = $env;
         $this->stage = $stage;
         $this->stages = $stages;
+        $this->notifyHostnames = $notifyHostnames;
         $this->filters = $filters;
     }
 
@@ -252,6 +261,10 @@ class ClientFactory
 
         if ($this->stages) {
             $client->setNotifyReleaseStages($this->stages);
+        }
+
+        if ($this->notifyHostnames) {
+            $client->setNotifyHostnames($this->notifyHostnames);
         }
 
         if ($this->filters) {
