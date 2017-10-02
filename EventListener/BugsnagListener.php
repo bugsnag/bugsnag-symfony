@@ -82,7 +82,19 @@ class BugsnagListener
 
         $exception = $event->getException();
 
-        $this->client->notifyException($exception);
+        $report = Report::fromPHPThrowable(
+            $this->client->getConfig(),
+            $exception
+        );
+        $report->setUnhandled(true);
+        $report->setSeverityReason([
+            'type' => 'unhandledExceptionMiddleware',
+            'attributes' => [
+                'framework' => 'Symfony',
+            ],
+        ]);
+
+        $this->client->notify($report);
     }
 
     /**
@@ -107,8 +119,19 @@ class BugsnagListener
             ],
         ];
 
-        $this->client->notifyException($exception, function (Report $report) use ($meta) {
-            $report->setMetaData($meta);
-        });
+        $report = Report::fromPHPThrowable(
+            $this->client->getConfig(),
+            $exception
+        );
+        $report->setUnhandled(true);
+        $report->setSeverityReason([
+            'type' => 'unhandledExceptionMiddleware',
+            'attributes' => [
+                'framework' => 'Symfony',
+            ],
+        ]);
+        $report->setMetaData($meta);
+
+        $this->client->notify($report);
     }
 }
