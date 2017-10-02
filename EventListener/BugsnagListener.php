@@ -84,15 +84,15 @@ class BugsnagListener
 
         $report = Report::fromPHPThrowable(
             $this->client->getConfig(),
-            $exception,
-            true,
-            [
-                'type' => 'unhandledExceptionMiddleware',
-                'attributes' => [
-                    'framework' => 'Symfony',
-                ],
-            ]
+            $exception
         );
+        $report->setUnhandled(true);
+        $report->setSeverityReason([
+            'type' => 'unhandledExceptionMiddleware',
+            'attributes' => [
+                'framework' => 'Symfony',
+            ],
+        ]);
 
         $this->client->notify($report);
     }
@@ -121,15 +121,15 @@ class BugsnagListener
 
         $report = Report::fromPHPThrowable(
             $this->client->getConfig(),
-            $exception,
-            true,
-            [
-                'type' => 'unhandledExceptionMiddleware',
-                'attributes' => [
-                    'framework' => 'Symfony',
-                ],
-            ]
+            $exception
         );
+        $report->setUnhandled(true);
+        $report->setSeverityReason([
+            'type' => 'unhandledExceptionMiddleware',
+            'attributes' => [
+                'framework' => 'Symfony',
+            ],
+        ]);
         $report->setMetaData($meta);
 
         $this->client->notify($report);

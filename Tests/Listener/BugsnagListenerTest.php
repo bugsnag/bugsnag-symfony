@@ -32,9 +32,11 @@ class BugsnagListenerTest extends TestCase
         // Setup responses
         $event->shouldReceive('getException')->once()->andReturn('exception');
         $report->shouldReceive('fromPHPThrowable')
-            ->with('config', 'exception', true, ['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']])
+            ->with('config', 'exception')
             ->once()
             ->andReturn($report);
+        $report->shouldReceive('setUnhandled')->once()->with(true);
+        $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $client->shouldReceive('notify')->once()->with($report);
 
@@ -58,11 +60,12 @@ class BugsnagListenerTest extends TestCase
         $event->shouldReceive('getExitCode')->once()->andReturn(1);
 
         $report->shouldReceive('fromPHPThrowable')
-            ->with('config', 'exception', 'middleware_handler', ['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']])
+            ->with('config', 'exception')
             ->once()
             ->andReturn($report);
         $report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
-
+        $report->shouldReceive('setUnhandled')->once()->with(true);
+        $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $client->shouldReceive('notify')->once()->with($report);
 
