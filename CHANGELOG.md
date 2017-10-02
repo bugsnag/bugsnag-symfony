@@ -1,6 +1,16 @@
 Changelog
 =========
 
+## 1.2.0 (2017-10-02)
+
+### Enhancements
+
+* Added issue template
+  [#42](https://github.com/bugsnag/bugsnag-symfony/pull/42)
+
+* Added additional data for unhandled/handled feature
+  [#45](https://github.com/bugsnag/bugsnag-symfony/pull/45)
+
 ## 1.1.0 (2017-06-28)
 
 ### Enhancements
