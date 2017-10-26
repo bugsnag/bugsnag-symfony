@@ -31,7 +31,7 @@ class AppKernel extends Kernel
 
     public function boot()
     {
-        parent.boot();
+        parent::boot();
         $bugsnag = $this->getBundle('bugsnag');
         $bugsnag->registerCallback(function ($report) {
             $report->setMetaData(["someMetaData" => "Mydata"]);
