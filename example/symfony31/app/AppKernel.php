@@ -29,6 +29,19 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
+    public function boot()
+    {
+        parent::boot();
+        $bugsnag = $this->getBundle('bugsnag');
+        $bugsnag->registerCallback(function ($report) {
+            $report->setMetaData(['someMetaData' => 'Mydata']);
+            $someCondition = true;
+            if (!$someCondition) {
+                return false;
+            }
+        });
+    }
+
     public function getRootDir()
     {
         return __DIR__;
