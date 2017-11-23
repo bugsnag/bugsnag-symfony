@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## 1.3.0 (2017-11-23)
+
+### Enhancements
+
+* Added callback examples in Symfony 31
+  [#49](https://github.com/bugsnag/bugsnag-symfony/pull/49)
+  [#52](https://github.com/bugsnag/bugsnag-symfony/pull/52)
+
 ## 1.2.0 (2017-10-02)
 
 ### Enhancements

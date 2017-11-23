@@ -14,7 +14,7 @@
     "require": {
         "php": ">=5.5",
         "symfony/symfony": "^2.7|^3.0",
-        "bugsnag/bugsnag": "^3.8"
+        "bugsnag/bugsnag": "^3.9"
     },
     "require-dev": {
         "graham-campbell/testbench-core": "^1.1",
