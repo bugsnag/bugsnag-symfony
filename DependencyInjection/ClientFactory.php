@@ -7,11 +7,10 @@ use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Callbacks\CustomUser;
 use Bugsnag\Client;
 use Bugsnag\Configuration as Config;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 
 class ClientFactory
 {
@@ -343,16 +342,17 @@ class ClientFactory
     }
 
     /**
-     * Setup session tracking
+     * Setup session tracking.
      *
      * @param \Bugsnag\Client $client
      * @param string|null     $endpoint
      */
-    protected function setupSessionTracking(Client $client, $endpoint = null) {
+    protected function setupSessionTracking(Client $client, $endpoint = null)
+    {
         $client->setSessionTracking(true, $endpoint);
         $sessionTracker = $client->getSessionTracker();
 
-        $symfonySession = new Session;
+        $symfonySession = new Session();
 
         $sessionStorage = function ($session = null) use ($symfonySession) {
             if (is_null($session)) {
