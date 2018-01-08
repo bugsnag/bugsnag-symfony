@@ -10,6 +10,8 @@ use Bugsnag\Configuration as Config;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Cache\Simple\FilesystemCache;
 
 class ClientFactory
 {
@@ -190,7 +192,9 @@ class ClientFactory
         $env = null,
         $stage = null,
         array $stages = null,
-        array $filters = null
+        array $filters = null,
+        $sessions = null,
+        $sessionEndpoint = null
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -211,6 +215,8 @@ class ClientFactory
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
+        $this->sessions = $sessions;
+        $this->sessionEndpoint = $sessionEndpoint;
     }
 
     /**
@@ -256,6 +262,10 @@ class ClientFactory
 
         if ($this->filters) {
             $client->setFilters($this->filters);
+        }
+
+        if ($this->sessions) {
+            $this->setupSessionTracking($client, $sessionEndpoint);
         }
 
         return $client;
@@ -330,5 +340,40 @@ class ClientFactory
                 $client->setProjectRoot($root);
             }
         }
+    }
+
+    /**
+     * Setup session tracking
+     *
+     * @param \Bugsnag\Client $client
+     * @param string|null     $endpoint
+     */
+    protected function setupSessionTracking(Client $client, $endpoint = null) {
+        $client->setSessionTracking(true, $endpoint);
+        $sessionTracker = $client->getSessionTracker();
+
+        $symfonySession = new Session;
+
+        $sessionStorage = function ($session = null) use ($symfonySession) {
+            if (is_null($session)) {
+                return $symfonySession->get('bugsnag-session', []);
+            } else {
+                $symfonySession->set('bugsnag-session', $session);
+            }
+        };
+
+        $sessionTracker->setSessionFunction($sessionStorage);
+
+        $cache = new Session();
+
+        $genericStorage = function ($key, $value = null) use ($cache) {
+            if (is_null($value)) {
+                return $cache->get($key, null);
+            } else {
+                $cache->set($key, $value);
+            }
+        };
+
+        $sessionTracker->setStorageFunction($genericStorage);
     }
 }

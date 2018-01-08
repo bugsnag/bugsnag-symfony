@@ -24,6 +24,8 @@ services:
           - '%bugsnag.release_stage%'
           - '%bugsnag.notify_release_stages%'
           - '%bugsnag.filters%'
+          - '%bugsnag.auto_capture_sessions%'
+          - '%bugsnag.session_endpoint%'
 
     bugsnag:
         class: '%bugsnag.client%'
