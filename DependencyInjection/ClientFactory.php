@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 
 class ClientFactory
 {
@@ -364,44 +362,30 @@ class ClientFactory
      * @param string|null     $endpoint
      */
     protected function setupSessionTracking(Client $client, $endpoint = null) {
-        $client->setAutoCaptureSessions(true);
-        if (!is_null($endpoint)) {
-            $client->setSessionEndpoint($endpoint);
-        }
-        $sessionTracker = $client->getSessionTracker();
-
-        $symfonySession = new Session();
-        $bugsnagAttributeBag = new AttributeBag();
-        $bugsnagAttributeBag->setName("bugsnag-attributes");
-        $symfonySession->registerBag($bugsnagAttributeBag);
-        if (!$symfonySession->isStarted()) {
-            $symfonySession->start();
-        }
-
-        if ($bugsnagAttributeBag->has('bugsnag-session')) {
-            $bugsnagAttributeBag->remove('bugsnag-session');
-        }
-
-        $sessionStorage = function ($session = null) use ($symfonySession, $bugsnagAttributeBag) {
-            $bag = $symfonySession->getBag($bugsnagAttributeBag->getName());
-            if (is_null($session)) {
-                return $bag->get('bugsnag-session', []);
-            } else {
-                $bag->set('bugsnag-session', $session);
+        if (class_exists(\Symfony\Component\Cache\Adapter\FilesystemAdapter::class)) {
+            $client->setAutoCaptureSessions(true);
+            if (!is_null($endpoint)) {
+                $client->setSessionEndpoint($endpoint);
             }
-        };
+            $sessionTracker = $client->getSessionTracker();
 
-        $sessionTracker->setSessionFunction($sessionStorage);
+            $cache = new \Symfony\Component\Cache\Adapter\FilesystemAdapter();
 
-        $genericStorage = function ($key, $value = null) use ($symfonySession, $bugsnagAttributeBag) {
-            $bag = $symfonySession->getBag($bugsnagAttributeBag->getName());
-            if (is_null($value)) {
-                return $bag->get($key, null);
-            } else {
-                $bag->set($key, $value);
-            }
-        };
+            $genericStorage = function ($key, $value = null) use ($cache) {
+                if (is_null($value)) {
+                    if ($cache->hasItem($key)) {
+                        return $cache->getItem($key)->get();
+                    } else {
+                        return null;
+                    }
+                } else {
+                    $item = $cache->getItem($key);
+                    $item->set($value);
+                    $cache->save($item);
+                }
+            };
 
-        $sessionTracker->setStorageFunction($genericStorage);
+            $sessionTracker->setStorageFunction($genericStorage);
+        }
     }
 }
