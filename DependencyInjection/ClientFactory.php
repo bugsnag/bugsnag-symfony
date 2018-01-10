@@ -149,14 +149,14 @@ class ClientFactory
 
     /**
      * Whether to auto-capture sessions.
-     * 
+     *
      * @var bool
      */
     protected $captureSessions;
 
     /**
      * Custom endpoint to send sessions to.
-     * 
+     *
      * @var string|null
      */
     protected $sessionEndpoint;
@@ -361,7 +361,8 @@ class ClientFactory
      * @param \Bugsnag\Client $client
      * @param string|null     $endpoint
      */
-    protected function setupSessionTracking(Client $client, $endpoint = null) {
+    protected function setupSessionTracking(Client $client, $endpoint = null)
+    {
         if (class_exists(\Symfony\Component\Cache\Adapter\FilesystemAdapter::class)) {
             $client->setAutoCaptureSessions(true);
             if (!is_null($endpoint)) {
@@ -376,7 +377,7 @@ class ClientFactory
                     if ($cache->hasItem($key)) {
                         return $cache->getItem($key)->get();
                     } else {
-                        return null;
+                        return;
                     }
                 } else {
                     $item = $cache->getItem($key);
