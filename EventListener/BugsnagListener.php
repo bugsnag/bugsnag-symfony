@@ -62,6 +62,10 @@ class BugsnagListener
             return;
         }
 
+        if ($this->client->shouldCaptureSessions()) {
+            $this->client->startSession();
+        }
+
         $this->client->setFallbackType('HTTP');
 
         $this->resolver->set($event->getRequest());

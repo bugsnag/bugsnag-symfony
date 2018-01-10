@@ -11,6 +11,12 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+<<<<<<< Updated upstream
+=======
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
+use Symfony\Component\Cache\Simple\FilesystemCache;
+>>>>>>> Stashed changes
 
 class ClientFactory
 {
@@ -148,6 +154,20 @@ class ClientFactory
     protected $filters;
 
     /**
+     * Whether to auto-capture sessions.
+     * 
+     * @var bool
+     */
+    protected $captureSessions;
+
+    /**
+     * Custom endpoint to send sessions to.
+     * 
+     * @var string|null
+     */
+    protected $sessionEndpoint;
+
+    /**
      * Create a new client factory instance.
      *
      * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver                                           $resolver
@@ -214,7 +234,7 @@ class ClientFactory
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
-        $this->sessions = $sessions;
+        $this->captureSessions = $sessions;
         $this->sessionEndpoint = $sessionEndpoint;
     }
 
@@ -263,8 +283,8 @@ class ClientFactory
             $client->setFilters($this->filters);
         }
 
-        if ($this->sessions) {
-            $this->setupSessionTracking($client, $sessionEndpoint);
+        if ($this->captureSessions) {
+            $this->setupSessionTracking($client, $this->sessionEndpoint);
         }
 
         return $client;
@@ -347,30 +367,42 @@ class ClientFactory
      * @param \Bugsnag\Client $client
      * @param string|null     $endpoint
      */
-    protected function setupSessionTracking(Client $client, $endpoint = null)
-    {
-        $client->setSessionTracking(true, $endpoint);
+    protected function setupSessionTracking(Client $client, $endpoint = null) {
+        $client->setAutoCaptureSessions(true);
+        if (!is_null($endpoint)) {
+            $client->setSessionEndpoint($endpoint);
+        }
         $sessionTracker = $client->getSessionTracker();
 
         $symfonySession = new Session();
+        $bugsnagAttributeBag = new AttributeBag();
+        $bugsnagAttributeBag->setName("bugsnag-attributes");
+        $symfonySession->registerBag($bugsnagAttributeBag);
+        if (!$symfonySession->isStarted()) {
+            $symfonySession->start();
+        }
 
-        $sessionStorage = function ($session = null) use ($symfonySession) {
+        if ($bugsnagAttributeBag->has('bugsnag-session')) {
+            $bugsnagAttributeBag->remove('bugsnag-session');
+        }
+
+        $sessionStorage = function ($session = null) use ($symfonySession, $bugsnagAttributeBag) {
+            $bag = $symfonySession->getBag($bugsnagAttributeBag->getName());
             if (is_null($session)) {
-                return $symfonySession->get('bugsnag-session', []);
+                return $bag->get('bugsnag-session', []);
             } else {
-                $symfonySession->set('bugsnag-session', $session);
+                $bag->set('bugsnag-session', $session);
             }
         };
 
         $sessionTracker->setSessionFunction($sessionStorage);
 
-        $cache = new Session();
-
-        $genericStorage = function ($key, $value = null) use ($cache) {
+        $genericStorage = function ($key, $value = null) use ($symfonySession, $bugsnagAttributeBag) {
+            $bag = $symfonySession->getBag($bugsnagAttributeBag->getName());
             if (is_null($value)) {
-                return $cache->get($key, null);
+                return $bag->get($key, null);
             } else {
-                $cache->set($key, $value);
+                $bag->set($key, $value);
             }
         };
 
