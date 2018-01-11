@@ -183,6 +183,8 @@ class ClientFactory
      * @param string|null                                                                              $stage
      * @param string[]|null                                                                            $stages
      * @param string[]|null                                                                            $filters
+     * @param bool                                                                                     $sessions
+     * @param string|null                                                                              $sessionEndpoint
      *
      * @return void
      */
@@ -206,7 +208,7 @@ class ClientFactory
         $stage = null,
         array $stages = null,
         array $filters = null,
-        $sessions = null,
+        $sessions = false,
         $sessionEndpoint = null
     ) {
         $this->resolver = $resolver;
@@ -360,6 +362,8 @@ class ClientFactory
      *
      * @param \Bugsnag\Client $client
      * @param string|null     $endpoint
+     *
+     * @return void
      */
     protected function setupSessionTracking(Client $client, $endpoint = null)
     {
@@ -387,6 +391,46 @@ class ClientFactory
             };
 
             $sessionTracker->setStorageFunction($genericStorage);
+
+            $lockFunctions = $this->getLockFunctions();
+
+            $sessionTracker->setLockFunctions($lockFunctions['lock'], $lockFunctions['unlock']);
+        }
+    }
+
+    /**
+     * Returns a lock functions.
+     *
+     * @return callable[]
+     */
+    protected function getLockFunctions() {
+        $bugsnagLockName = 'bugsnag-mutex';
+
+        # For Symfony versions >=3.3
+        if (class_exists(\Symfony\Component\Lock\Factory::class)) {
+            $store = new \Symfony\Component\Lock\Store\SemaphoreStore();
+            $factory = new \Symfony\Component\Lock\Factory($store);
+            return [
+                'lock' => function() use ($factory, $bugsnagLockName) {
+                    $lock = $factory->createLock($bugsnagLockName);
+                    return $lock->acquire(true);
+                },
+                'unlock' => function() use ($factory) {
+                    $lock = $factory->createLock($bugsnagLockName);
+                    return $lock->release();
+                }
+            ];
+        } else {
+            return [
+                'lock' => function() use ($bugsnagLockName) {
+                    $lockHandler = new \Symfony\Component\Filesystem\LockHandler($bugsnagLockName);
+                    return $lockHandler->lock();
+                },
+                'unlock' => function() use ($bugsnagLockName) {
+                    $lockHandler = new \Symfony\Component\Filesystem\LockHandler($bugsnagLockName);
+                    return $lockHandler->release();
+                }
+            ];
         }
     }
 }
