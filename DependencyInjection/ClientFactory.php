@@ -403,33 +403,39 @@ class ClientFactory
      *
      * @return callable[]
      */
-    protected function getLockFunctions() {
+    protected function getLockFunctions()
+    {
         $bugsnagLockName = 'bugsnag-mutex';
 
-        # For Symfony versions >=3.3
+        // For Symfony versions >=3.3
         if (class_exists(\Symfony\Component\Lock\Factory::class)) {
             $store = new \Symfony\Component\Lock\Store\SemaphoreStore();
             $factory = new \Symfony\Component\Lock\Factory($store);
+
             return [
-                'lock' => function() use ($factory, $bugsnagLockName) {
+                'lock' => function () use ($factory, $bugsnagLockName) {
                     $lock = $factory->createLock($bugsnagLockName);
+
                     return $lock->acquire(true);
                 },
-                'unlock' => function() use ($factory) {
+                'unlock' => function () use ($factory) {
                     $lock = $factory->createLock($bugsnagLockName);
+
                     return $lock->release();
-                }
+                },
             ];
         } else {
             return [
-                'lock' => function() use ($bugsnagLockName) {
+                'lock' => function () use ($bugsnagLockName) {
                     $lockHandler = new \Symfony\Component\Filesystem\LockHandler($bugsnagLockName);
+
                     return $lockHandler->lock();
                 },
-                'unlock' => function() use ($bugsnagLockName) {
+                'unlock' => function () use ($bugsnagLockName) {
                     $lockHandler = new \Symfony\Component\Filesystem\LockHandler($bugsnagLockName);
+
                     return $lockHandler->release();
-                }
+                },
             ];
         }
     }
