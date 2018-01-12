@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 1.4.0 (2017-12-21)
+
+### Enhancements
+
+* Bumped version to Bugsnag-PHP 3.10.0 to add support for `addMetaData`
+
 ## 1.3.0 (2017-11-23)
 
 ### Enhancements
