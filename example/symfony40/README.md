@@ -47,7 +47,7 @@ services:
     # default configuration for services in *this* file
     _defaults:
         # ...
-        bind: 
+        bind:
             $bugsnag: '@bugsnag'
 ```
 
@@ -67,8 +67,8 @@ Which allows Bugsnag to be used within the class as you would any other property
 
 ## Running the example
 
-To run the example using the built in PHP test server:
+To run the example:
 
 ```shell
-php -S 0.0.0.0:8000 -t public/
+php bin/console server:run
 ```
