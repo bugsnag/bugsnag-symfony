@@ -11,6 +11,10 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Lock\Factory;
+use Symfony\Component\Lock\Store\SemaphoreStore;
+use Symfony\Component\Filesystem\LockHandler;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class ClientFactory
 {
@@ -367,14 +371,14 @@ class ClientFactory
      */
     protected function setupSessionTracking(Client $client, $endpoint = null)
     {
-        if (class_exists(\Symfony\Component\Cache\Adapter\FilesystemAdapter::class)) {
+        if (class_exists(FilesystemAdapter::class)) {
             $client->setAutoCaptureSessions(true);
             if (!is_null($endpoint)) {
                 $client->setSessionEndpoint($endpoint);
             }
             $sessionTracker = $client->getSessionTracker();
 
-            $cache = new \Symfony\Component\Cache\Adapter\FilesystemAdapter();
+            $cache = new FilesystemAdapter();
 
             $genericStorage = function ($key, $value = null) use ($cache) {
                 if (is_null($value)) {
@@ -408,9 +412,9 @@ class ClientFactory
         $bugsnagLockName = 'bugsnag-mutex';
 
         // For Symfony versions >=3.3
-        if (class_exists(\Symfony\Component\Lock\Factory::class)) {
-            $store = new \Symfony\Component\Lock\Store\SemaphoreStore();
-            $factory = new \Symfony\Component\Lock\Factory($store);
+        if (class_exists(Factory::class)) {
+            $store = new SemaphoreStore();
+            $factory = new Factory($store);
 
             return [
                 'lock' => function () use ($factory, $bugsnagLockName) {
@@ -427,12 +431,12 @@ class ClientFactory
         } else {
             return [
                 'lock' => function () use ($bugsnagLockName) {
-                    $lockHandler = new \Symfony\Component\Filesystem\LockHandler($bugsnagLockName);
+                    $lockHandler = new LockHandler($bugsnagLockName);
 
                     return $lockHandler->lock();
                 },
                 'unlock' => function () use ($bugsnagLockName) {
-                    $lockHandler = new \Symfony\Component\Filesystem\LockHandler($bugsnagLockName);
+                    $lockHandler = new LockHandler($bugsnagLockName);
 
                     return $lockHandler->release();
                 },
