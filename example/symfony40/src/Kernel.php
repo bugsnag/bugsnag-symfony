@@ -14,6 +14,16 @@ class Kernel extends BaseKernel
 
     const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
+    public function boot()
+    {
+        parent::boot();
+        $this->container->get('bugsnag')->registerCallback(function($report) {
+            $report->setMetaData([
+                'account'=>'testAccount'
+            ]);
+        });
+    }
+
     public function getCacheDir()
     {
         return $this->getProjectDir().'/var/cache/'.$this->environment;
