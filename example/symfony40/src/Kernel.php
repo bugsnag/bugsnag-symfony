@@ -17,9 +17,9 @@ class Kernel extends BaseKernel
     public function boot()
     {
         parent::boot();
-        $this->container->get('bugsnag')->registerCallback(function($report) {
+        $this->container->get('bugsnag')->registerCallback(function ($report) {
             $report->setMetaData([
-                'account'=>'testAccount'
+                'account' => 'testAccount',
             ]);
         });
     }
