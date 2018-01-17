@@ -28,6 +28,7 @@ services:
     bugsnag:
         class: '%bugsnag.client%'
         factory: ['@bugsnag.factory', make]
+        public: true
 
     bugsnag.listener:
         class: '%bugsnag.listener%'
