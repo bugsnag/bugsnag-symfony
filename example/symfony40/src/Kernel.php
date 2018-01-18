@@ -22,7 +22,7 @@ class Kernel extends BaseKernel
             $report->addMetaData([
                 'instance' => [
                     'name' => 'TestServer',
-                    'ip' => '0.0.0.0'
+                    'ip' => '0.0.0.0',
                 ],
             ]);
         });
