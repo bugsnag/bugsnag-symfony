@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Bugsnag\Report;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,9 +18,12 @@ class Kernel extends BaseKernel
     public function boot()
     {
         parent::boot();
-        $this->container->get('bugsnag')->registerCallback(function ($report) {
-            $report->setMetaData([
-                'account' => 'testAccount',
+        $this->container->get('bugsnag')->registerCallback(function (Report $report) {
+            $report->addMetaData([
+                'instance' => [
+                    'name' => 'TestServer',
+                    'ip' => '0.0.0.0'
+                ],
             ]);
         });
     }
