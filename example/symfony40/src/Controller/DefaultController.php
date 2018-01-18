@@ -3,18 +3,12 @@
 namespace App\Controller;
 
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DefaultController extends AbstractController
+class DefaultController extends Controller
 {
-    protected $bugsnag;
-
-    public function __construct($bugsnag)
-    {
-        $this->bugsnag = $bugsnag;
-    }
 
     /**
      * @Route("/", name="homepage")
@@ -39,7 +33,7 @@ class DefaultController extends AbstractController
      */
     public function callback()
     {
-        $this->bugsnag->registerCallback(function ($report) {
+        $this->container->get('bugsnag')->registerCallback(function ($report) {
             $report->setMetaData([
                 'account' => [
                     'name' => 'Acme Co.',
@@ -56,7 +50,7 @@ class DefaultController extends AbstractController
      */
     public function notify()
     {
-        $this->bugsnag->notifyException(new RuntimeException("It didn't crash!"));
+        $this->container->get('bugsnag')->notifyException(new RuntimeException("It didn't crash!"));
 
         return new Response("It didn't crash, but check your Bugsnag dashboard for the manual notification");
     }
@@ -66,7 +60,7 @@ class DefaultController extends AbstractController
      */
     public function metadata()
     {
-        $this->bugsnag->notifyException(new RuntimeException("It didn't crash, with metadata!"), function ($report) {
+        $this->container->get('bugsnag')->notifyException(new RuntimeException("It didn't crash, with metadata!"), function ($report) {
             $report->setMetaData([
                 'diagnostics' => [
                     'error' => 'RuntimeException',
@@ -83,7 +77,7 @@ class DefaultController extends AbstractController
      */
     public function severity()
     {
-        $this->bugsnag->notifyException(new RuntimeException("It didn't crash, with severity!"), function ($report) {
+        $this->container->get('bugsnag')->notifyException(new RuntimeException("It didn't crash, with severity!"), function ($report) {
             $report->setSeverity('info');
         });
 
