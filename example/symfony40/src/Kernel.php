@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Bugsnag\Report;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -13,6 +14,19 @@ class Kernel extends BaseKernel
     use MicroKernelTrait;
 
     const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+
+    public function boot()
+    {
+        parent::boot();
+        $this->container->get('bugsnag')->registerCallback(function (Report $report) {
+            $report->addMetaData([
+                'instance' => [
+                    'name' => 'TestServer',
+                    'ip' => '0.0.0.0',
+                ],
+            ]);
+        });
+    }
 
     public function getCacheDir()
     {

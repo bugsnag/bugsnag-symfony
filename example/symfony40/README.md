@@ -17,9 +17,15 @@ This example shows how to integrate Bugsnag with Symfony 4.  Full instructions o
 
 There are two ways of configuring your Bugsnag client.
 
-1. Use environment variables.  In this example you can set the `BUGSNAG_API_KEY` environment variable to your api key.
+1. Set the configuration options in `config/packages/bugsnag.yaml`.  These values will automatically be loaded in when the application starts.
 
-2. All other configuration should be in the applications `.env` file:
+```yaml
+bugsnag:
+    api_key: YOUR_API_KEY_HERE
+    auto_notify: true
+```
+
+2. Use environment variables.  In this example you can set the `BUGSNAG_API_KEY` environment variable to your api key. This can also be set in the applications `.env` file:
 
 ```
 BUGSNAG_API_KEY=YOUR_API_KEY_HERE
