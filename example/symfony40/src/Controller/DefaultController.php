@@ -20,7 +20,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/crash", name="crash")
+     * @Route("/crash/", name="crash")
      */
     public function crash()
     {
@@ -28,7 +28,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/callback", name="callback")
+     * @Route("/callback/", name="callback")
      */
     public function callback()
     {
@@ -45,7 +45,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/notify", name="notify")
+     * @Route("/notify/", name="notify")
      */
     public function notify()
     {
@@ -55,7 +55,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/metadata", name="metadata")
+     * @Route("/metadata/", name="metadata")
      */
     public function metadata()
     {
@@ -72,7 +72,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/severity", name="severity")
+     * @Route("/severity/", name="severity")
      */
     public function severity()
     {
