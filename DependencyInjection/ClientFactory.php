@@ -273,7 +273,7 @@ class ClientFactory
                 return ($report->getName() == HttpException::class || is_subclass_of($report->getName(), HttpException::class))
                     ? false
                     : $report
-                    ;
+                ;
             });
         }
 
