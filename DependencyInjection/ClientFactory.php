@@ -7,6 +7,8 @@ use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Callbacks\CustomUser;
 use Bugsnag\Client;
 use Bugsnag\Configuration as Config;
+use Bugsnag\Report;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -147,6 +149,11 @@ class ClientFactory
     protected $filters;
 
     /**
+     * @var bool
+     */
+    protected $suppressHttpErrors;
+
+    /**
      * Create a new client factory instance.
      *
      * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver                                           $resolver
@@ -168,6 +175,7 @@ class ClientFactory
      * @param string|null                                                                              $stage
      * @param string[]|null                                                                            $stages
      * @param string[]|null                                                                            $filters
+     * @param bool                                                                                     $suppressHttpErrors
      *
      * @return void
      */
@@ -190,7 +198,8 @@ class ClientFactory
         $env = null,
         $stage = null,
         array $stages = null,
-        array $filters = null
+        array $filters = null,
+        $suppressHttpErrors = false
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -211,6 +220,7 @@ class ClientFactory
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
+        $this->suppressHttpErrors = $suppressHttpErrors;
     }
 
     /**
@@ -256,6 +266,15 @@ class ClientFactory
 
         if ($this->filters) {
             $client->setFilters($this->filters);
+        }
+
+        if ($this->suppressHttpErrors) {
+            $client->registerCallback(function (Report $report) {
+                return ($report->getName() == HttpException::class || is_subclass_of($report->getName(), HttpException::class))
+                    ? false
+                    : $report
+                    ;
+            });
         }
 
         return $client;

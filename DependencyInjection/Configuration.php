@@ -83,6 +83,9 @@ class Configuration implements ConfigurationInterface
                     ->treatNullLike([])
                     ->defaultValue([])
                 ->end()
+                ->booleanNode('suppress_http_errors')
+                    ->defaultValue(false)
+                ->end()
             ->end();
 
         return $treeBuilder;

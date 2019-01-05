@@ -24,6 +24,7 @@ services:
           - '%bugsnag.release_stage%'
           - '%bugsnag.notify_release_stages%'
           - '%bugsnag.filters%'
+          - '%bugsnag.suppress_http_errors%'
 
     bugsnag:
         class: '%bugsnag.client%'
