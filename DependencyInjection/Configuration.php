@@ -17,8 +17,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('bugsnag');
+        $treeBuilder = new TreeBuilder('bugsnag');
+        $rootNode = $this->getRootNode($treeBuilder, 'bugsnag');
 
         $rootNode
             ->children()
@@ -86,5 +86,15 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $treeBuilder;
+    }
+
+    private function getRootNode(TreeBuilder $treeBuilder, $name)
+    {
+        // BC layer for symfony/config 4.1 and older
+        if ( ! \method_exists($treeBuilder, 'getRootNode')) {
+            return $treeBuilder->root($name);
+        }
+
+        return $treeBuilder->getRootNode();
     }
 }
