@@ -10,7 +10,11 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class BugsnagListener
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class BugsnagListener implements EventSubscriberInterface
 {
     /**
      * The bugsnag client instance.
@@ -133,5 +137,18 @@ class BugsnagListener
         $report->setMetaData($meta);
 
         $this->client->notify($report);
+    }
+
+    public static function getSubscribedEvents(){
+        $listeners = [
+            KernelEvents::REQUEST => ['onKernelRequest',256],
+            KernelEvents::EXCEPTION => ['onException',128]
+        ];
+
+        if (class_exists('Symfony\Component\Console\ConsoleEvents')) {
+            $listeners[class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent') ? ConsoleEvents::ERROR : ConsoleEvents::EXCEPTION] = ['onConsoleException',128];
+        }
+
+        return $listeners;
     }
 }
