@@ -7,6 +7,7 @@ use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Callbacks\CustomUser;
 use Bugsnag\Client;
 use Bugsnag\Configuration as Config;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -243,6 +244,8 @@ class ClientFactory
         $client->setBatchSending($this->batch);
         $client->setHostname($this->hostname);
         $client->setSendCode($this->code);
+
+        $client->mergeDeviceData(['runtimeVersions' => ['symfony' => Kernel::VERSION]]);
 
         $client->setNotifier(array_filter([
             'name' => 'Bugsnag Symfony',
