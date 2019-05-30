@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## TBD
+
+### Bug Fixes
+
+* Removed deprecation warnings on `Request.getSession` and `ConsoleEvents::EXCEPTION`
+  [Jan Myszkier](https://github.com/janmyszkier)
+  [#79](https://github.com/bugsnag/bugsnag-symfony/pull/79)
+
 ## 1.5.0 (2018-02-01)
 
 This release adds support for Symfony 4. A guide on integrating the notifier with a Symfony 4 application can be found in the [Bugsnag Symfony integration guide](https://docs.bugsnag.com/platforms/php/symfony/).

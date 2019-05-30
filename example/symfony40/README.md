@@ -78,3 +78,9 @@ To run the example:
 ```shell
 php bin/console server:run
 ```
+
+Or for the command example:
+
+```shell
+php bin/console app:crash
+```
