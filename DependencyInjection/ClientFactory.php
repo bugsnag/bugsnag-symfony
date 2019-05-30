@@ -245,7 +245,7 @@ class ClientFactory
         $client->setHostname($this->hostname);
         $client->setSendCode($this->code);
 
-        $client->mergeDeviceData(['runtimeVersions' => ['symfony' => Kernel::VERSION]]);
+        $client->getConfig()->mergeDeviceData(['runtimeVersions' => ['symfony' => Kernel::VERSION]]);
 
         $client->setNotifier(array_filter([
             'name' => 'Bugsnag Symfony',
