@@ -18,6 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder('bugsnag');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
