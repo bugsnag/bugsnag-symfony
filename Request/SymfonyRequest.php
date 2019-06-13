@@ -43,6 +43,10 @@ class SymfonyRequest implements RequestInterface
      */
     public function getSession()
     {
+        if (!$this->request->hasSession()) {
+            return [];
+        }
+
         $session = $this->request->getSession();
 
         return $session ? $session->all() : [];
