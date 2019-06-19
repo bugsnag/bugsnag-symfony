@@ -52,9 +52,6 @@ class BugsnagListenerTest extends TestCase
         $listener->onKernelException($event);
     }
 
-    /**
-     * @requires class foo
-     */
     public function testOnConsoleError()
     {
         if (!class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {

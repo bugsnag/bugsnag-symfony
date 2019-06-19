@@ -84,7 +84,8 @@ class BugsnagListener implements EventSubscriberInterface
     }
 
     /**
-     * Handle a console exception.
+     * Handle a console exception (used instead of ConsoleErrorEvent before
+     * Symfony 3.3 and kept for backwards compatibility).
      *
      * @param \Symfony\Component\Console\Event\ConsoleExceptionEvent $event
      *
