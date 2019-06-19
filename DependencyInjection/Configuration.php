@@ -11,14 +11,21 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
+     * The name of the root of the configuration.
+     *
+     * @var string
+     */
+    const ROOT_NAME = 'bugsnag';
+
+    /**
      * Get the configuration tree builder.
      *
      * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('bugsnag');
+        $treeBuilder = new TreeBuilder(self::ROOT_NAME);
+        $rootNode = $this->getRootNode($treeBuilder);
 
         $rootNode
             ->children()
@@ -86,5 +93,24 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $treeBuilder;
+    }
+
+    /**
+     * Returns the root node of TreeBuilder with backwards compatibility
+     * for pre-Symfony 4.1.
+     *
+     * @param Symfony\Component\Config\Definition\Builder\TreeBuilder $treeBuilder a
+     *            TreeBuilder to extract/create the root node from
+     *
+     * @return Symfony\Component\Config\Definition\Builder\NodeDefinition the root
+     *            node of the config
+     */
+    protected function getRootNode(TreeBuilder $treeBuilder)
+    {
+        if (\method_exists($treeBuilder, 'getRootNode')) {
+            return $treeBuilder->getRootNode();
+        } else {
+            return $treeBuilder->root(self::ROOT_NAME);
+        }
     }
 }
