@@ -93,7 +93,7 @@ class BugsnagListener implements EventSubscriberInterface
      */
     public function onConsoleException(ConsoleExceptionEvent $event)
     {
-        $meta = [ 'status' => $event->getExitCode() ];
+        $meta = ['status' => $event->getExitCode()];
         if ($event->getCommand()) {
             $meta['name'] = $event->getCommand()->getName();
         }
@@ -109,7 +109,7 @@ class BugsnagListener implements EventSubscriberInterface
      */
     public function onConsoleError(ConsoleErrorEvent $event)
     {
-        $meta = [ 'status' => $event->getExitCode() ];
+        $meta = ['status' => $event->getExitCode()];
         if ($event->getCommand()) {
             $meta['name'] = $event->getCommand()->getName();
         }
@@ -138,10 +138,11 @@ class BugsnagListener implements EventSubscriberInterface
         $this->client->notify($report);
     }
 
-    public static function getSubscribedEvents(){
+    public static function getSubscribedEvents()
+    {
         $listeners = [
             KernelEvents::REQUEST => ['onKernelRequest', 256],
-            KernelEvents::EXCEPTION => ['onKernelException', 128]
+            KernelEvents::EXCEPTION => ['onKernelException', 128],
         ];
 
         // Added ConsoleEvents in Symfony 2.3

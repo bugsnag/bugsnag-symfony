@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Command;
 
 use Exception;
@@ -14,7 +15,6 @@ class CrashCommand extends Command
     protected function configure()
     {
         $this->setDescription('Crashes for fun');
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

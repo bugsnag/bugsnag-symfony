@@ -6,11 +6,10 @@ use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Report;
+use Exception;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use Mockery;
 use PHPUnit_Framework_TestCase as TestCase;
-
-use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
