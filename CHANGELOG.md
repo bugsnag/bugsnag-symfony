@@ -9,6 +9,11 @@ Changelog
   [Jan Myszkier](https://github.com/janmyszkier)
   [#79](https://github.com/bugsnag/bugsnag-symfony/pull/79)
 
+### Enhancements
+
+* Add Symfony version string to report (device.runtimeVersions)
+  [#78](https://github.com/bugsnag/bugsnag-symfony/pull/78)
+
 ## 1.5.0 (2018-02-01)
 
 This release adds support for Symfony 4. A guide on integrating the notifier with a Symfony 4 application can be found in the [Bugsnag Symfony integration guide](https://docs.bugsnag.com/platforms/php/symfony/).
