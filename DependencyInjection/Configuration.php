@@ -99,11 +99,10 @@ class Configuration implements ConfigurationInterface
      * Returns the root node of TreeBuilder with backwards compatibility
      * for pre-Symfony 4.1.
      *
-     * @param Symfony\Component\Config\Definition\Builder\TreeBuilder $treeBuilder a
-     *            TreeBuilder to extract/create the root node from
+     * @param TreeBuilder $treeBuilder a TreeBuilder to extract/create the root node
+     *                                 from
      *
-     * @return Symfony\Component\Config\Definition\Builder\NodeDefinition the root
-     *            node of the config
+     * @return NodeDefinition the root node of the config
      */
     protected function getRootNode(TreeBuilder $treeBuilder)
     {
