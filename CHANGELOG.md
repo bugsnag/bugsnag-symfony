@@ -1,13 +1,16 @@
 Changelog
 =========
 
-## TBD
+## 1.5.1 (2019-06-24)
 
 ### Bug Fixes
 
 * Removed deprecation warnings on `Request.getSession` and `ConsoleEvents::EXCEPTION`
   [Jan Myszkier](https://github.com/janmyszkier)
   [#79](https://github.com/bugsnag/bugsnag-symfony/pull/79)
+* Removed `TreeBuilder.root` deprecated usage
+  [Damien Alexandre](https://github.com/damienalexandre)
+  [#80](https://github.com/bugsnag/bugsnag-symfony/pull/80)
 
 ### Enhancements
 
