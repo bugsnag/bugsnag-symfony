@@ -5,12 +5,16 @@ namespace Bugsnag\BugsnagBundle\EventListener;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Report;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
-class BugsnagListener
+class BugsnagListener implements EventSubscriberInterface
 {
     /**
      * The bugsnag client instance.
@@ -76,29 +80,12 @@ class BugsnagListener
      */
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
-        if (!$this->auto) {
-            return;
-        }
-
-        $exception = $event->getException();
-
-        $report = Report::fromPHPThrowable(
-            $this->client->getConfig(),
-            $exception
-        );
-        $report->setUnhandled(true);
-        $report->setSeverityReason([
-            'type' => 'unhandledExceptionMiddleware',
-            'attributes' => [
-                'framework' => 'Symfony',
-            ],
-        ]);
-
-        $this->client->notify($report);
+        $this->sendNotify($event->getException(), []);
     }
 
     /**
-     * Handle a console exception.
+     * Handle a console exception (used instead of ConsoleErrorEvent before
+     * Symfony 3.3 and kept for backwards compatibility).
      *
      * @param \Symfony\Component\Console\Event\ConsoleExceptionEvent $event
      *
@@ -106,22 +93,38 @@ class BugsnagListener
      */
     public function onConsoleException(ConsoleExceptionEvent $event)
     {
+        $meta = ['status' => $event->getExitCode()];
+        if ($event->getCommand()) {
+            $meta['name'] = $event->getCommand()->getName();
+        }
+        $this->sendNotify($event->getException(), ['command' => $meta]);
+    }
+
+    /**
+     * Handle a console error.
+     *
+     * @param \Symfony\Component\Console\Event\ConsoleErrorEvent $event
+     *
+     * @return void
+     */
+    public function onConsoleError(ConsoleErrorEvent $event)
+    {
+        $meta = ['status' => $event->getExitCode()];
+        if ($event->getCommand()) {
+            $meta['name'] = $event->getCommand()->getName();
+        }
+        $this->sendNotify($event->getError(), ['command' => $meta]);
+    }
+
+    private function sendNotify($throwable, $meta)
+    {
         if (!$this->auto) {
             return;
         }
 
-        $exception = $event->getException();
-
-        $meta = [
-            'command' => [
-                'name' => $event->getCommand()->getName(),
-                'status' => $event->getExitCode(),
-            ],
-        ];
-
         $report = Report::fromPHPThrowable(
             $this->client->getConfig(),
-            $exception
+            $throwable
         );
         $report->setUnhandled(true);
         $report->setSeverityReason([
@@ -133,5 +136,25 @@ class BugsnagListener
         $report->setMetaData($meta);
 
         $this->client->notify($report);
+    }
+
+    public static function getSubscribedEvents()
+    {
+        $listeners = [
+            KernelEvents::REQUEST => ['onKernelRequest', 256],
+            KernelEvents::EXCEPTION => ['onKernelException', 128],
+        ];
+
+        // Added ConsoleEvents in Symfony 2.3
+        if (class_exists('Symfony\Component\Console\ConsoleEvents')) {
+            // Added with ConsoleEvents::ERROR in Symfony 3.3 to deprecate ConsoleEvents::EXCEPTION
+            if (class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
+                $listeners[ConsoleEvents::ERROR] = ['onConsoleError', 128];
+            } else {
+                $listeners[ConsoleEvents::EXCEPTION] = ['onConsoleException', 128];
+            }
+        }
+
+        return $listeners;
     }
 }

@@ -3,7 +3,15 @@ Changelog
 
 ## TBD
 
-*  Add Symfony version string to report and session payloads (device.runtimeVersions)
+### Bug Fixes
+
+* Removed deprecation warnings on `Request.getSession` and `ConsoleEvents::EXCEPTION`
+  [Jan Myszkier](https://github.com/janmyszkier)
+  [#79](https://github.com/bugsnag/bugsnag-symfony/pull/79)
+
+### Enhancements
+
+* Add Symfony version string to report (device.runtimeVersions)
   [#78](https://github.com/bugsnag/bugsnag-symfony/pull/78)
 
 ## 1.5.0 (2018-02-01)
