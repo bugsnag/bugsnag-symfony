@@ -2,6 +2,7 @@
 
 namespace Bugsnag\BugsnagBundle\EventListener;
 
+use Bugsnag\BugsnagBundle\MetaData\MetaDataAwareInterface;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Report;
@@ -133,7 +134,12 @@ class BugsnagListener implements EventSubscriberInterface
                 'framework' => 'Symfony',
             ],
         ]);
+
         $report->setMetaData($meta);
+
+        if ($throwable instanceof MetaDataAwareInterface) {
+            $report->addMetaData($throwable->getMetaData());
+        }
 
         $this->client->notify($report);
     }

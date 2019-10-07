@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## TBD
+
+### Enhancements
+
+* Added `MetaDataAwareInterface` and `MetaDataAwareTrait` for extend exception with additional data
+  [Michel Chowanski](https://github.com/migo315)
+
 ## 1.5.1 (2019-06-24)
 
 ### Bug Fixes
