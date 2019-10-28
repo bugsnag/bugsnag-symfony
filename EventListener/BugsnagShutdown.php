@@ -9,6 +9,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
+/**
+ * A Shutdown strategy that uses Symfony's TERMINATE event to trigger calls to Client::flush()
+ *
+ * This is preferred to the default PhpShutdownStrategy for two primary reasons:
+ * 1) No memory leaks When running tests: memory used by the Bugsnag\Client can be garbage collected (this is not possible when register_shutdown_function is used)
+ * 2) Better performance: Symfony uses fastcgi_finish_request(), so for PHP-FPM users the flush() calls take place after the HTTP connection has closed
+ */
 class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInterface
 {
     /**
@@ -17,16 +24,20 @@ class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInter
     private $client;
 
     /**
+     * Called when Symfony shuts down the kernel (after response has been sent)
      * @param TerminateEvent $event
      */
     public function onTerminate(TerminateEvent $event)
     {
         if ($this->client) {
-            file_put_contents('/tmp/rtest', $event->getRequest()->getUri()."\n");
             $this->client->flush();
         }
     }
 
+    /**
+     * Indicate which events we wish to subscribe to
+     * @return array
+     */
     public static function getSubscribedEvents()
     {
         $listeners = [
@@ -41,8 +52,15 @@ class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInter
         return $listeners;
     }
 
-    public function register(Client $client)
+    /**
+     * Implement the ShutdownStrategyInterface
+     * @param Client $client
+     */
+    public function registerShutdownStrategy(Client $client)
     {
+        /**
+         * Set a reference to the client. This "enables" the onTerminate event.
+         */
         $this->client = $client;
     }
 }
