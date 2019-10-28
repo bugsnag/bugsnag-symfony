@@ -11,6 +11,15 @@
             "email": "notifiers@bugsnag.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/Users/rharrison/Projects/bugsnag-php",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
         "php": ">=5.5",
         "symfony/config": "^2.7|^3.0|^4.0",
@@ -19,7 +28,7 @@
         "symfony/console": "^2.7|^3.0|^4.0",
         "symfony/http-foundation": "^2.7|^3.0|^4.0",
         "symfony/security": "^2.7|^3.0|^4.0",
-        "bugsnag/bugsnag": "^3.15.0"
+        "bugsnag/bugsnag": "@dev"
     },
     "require-dev": {
         "graham-campbell/testbench-core": "^1.1",

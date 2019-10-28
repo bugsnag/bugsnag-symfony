@@ -3,6 +3,7 @@
 namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
 use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
+use Bugsnag\BugsnagBundle\EventListener\BugsnagShutdown;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -90,6 +91,8 @@ class Configuration implements ConfigurationInterface
                     ->treatNullLike([])
                     ->defaultValue([])
                 ->end()
+                ->scalarNode('shutdown')
+                    ->defaultValue(BugsnagShutdown::class)
             ->end();
 
         return $treeBuilder;

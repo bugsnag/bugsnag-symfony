@@ -24,6 +24,7 @@ services:
           - '%bugsnag.release_stage%'
           - '%bugsnag.notify_release_stages%'
           - '%bugsnag.filters%'
+          - '@bugsnag.shutdown'
 
     bugsnag:
         class: '%bugsnag.client%'
@@ -36,5 +37,10 @@ services:
           - '@bugsnag'
           - '@bugsnag.resolver'
           - '%bugsnag.auto_notify%'
+        tags:
+          - { name: "kernel.event_subscriber" }
+
+    bugsnag.shutdown:
+        class: '%bugsnag.shutdown%'
         tags:
           - { name: "kernel.event_subscriber" }
