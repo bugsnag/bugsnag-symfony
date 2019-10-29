@@ -3,7 +3,6 @@
 namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
 use Bugsnag\BugsnagBundle\BugsnagBundle;
-use Bugsnag\BugsnagBundle\EventListener\BugsnagShutdown;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Callbacks\CustomUser;
 use Bugsnag\Client;
