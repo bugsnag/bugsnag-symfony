@@ -5,11 +5,8 @@ namespace Bugsnag\BugsnagBundle\Tests\DependencyInjection;
 use Bugsnag\BugsnagBundle\DependencyInjection\ClientFactory;
 use Bugsnag\BugsnagBundle\EventListener\BugsnagShutdown;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
-use Bugsnag\Shutdown\ShutdownStrategyInterface;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ClientFactoryTest extends TestCase
 {
@@ -35,21 +32,24 @@ class ClientFactoryTest extends TestCase
         $this->tearDownMockery();
     }
 
-
     /**
-     * Creates a factory from arguments supplied as a hash
+     * Creates a factory from arguments supplied as a hash.
+     *
      * @param $args
-     * @return ClientFactory
+     *
      * @throws \ReflectionException
+     *
+     * @return ClientFactory
      */
     protected static function createFactory($args)
     {
         $class = new \ReflectionClass(ClientFactory::class);
+
         return $class->newInstanceArgs(array_values($args));
     }
 
     /**
-     * Sets a hash of default variables that can be accessed/edited to configure different factories
+     * Sets a hash of default variables that can be accessed/edited to configure different factories.
      */
     protected function setDefaultArgs()
     {
