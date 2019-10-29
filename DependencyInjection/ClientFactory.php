@@ -151,7 +151,7 @@ class ClientFactory
     protected $filters;
 
     /**
-     * @var ShutdownStrategyInterface
+     * @var \Bugsnag\Shutdown\ShutdownStrategyInterface
      */
     protected $shutdownStrategy;
 
@@ -177,7 +177,7 @@ class ClientFactory
      * @param string|null                                                                              $stage
      * @param string[]|null                                                                            $stages
      * @param string[]|null                                                                            $filters
-     * @param ShutdownStrategyInterface                                                                $shutdownStrategy
+     * @param \Bugsnag\Shutdown\ShutdownStrategyInterface                                              $shutdownStrategy
      *
      * @return void
      */
@@ -222,7 +222,7 @@ class ClientFactory
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
-        $this->shutdownStrategy = $shutdownStrategy ?: new PhpShutdownStrategy();
+        $this->shutdownStrategy = $shutdownStrategy;
     }
 
     /**
