@@ -13,8 +13,12 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * A Shutdown strategy that uses Symfony's TERMINATE event to trigger calls to Client::flush().
  *
  * This is preferred to the default PhpShutdownStrategy for two primary reasons:
- * 1) No memory leaks When running tests: memory used by the Bugsnag\Client can be garbage collected (this is not possible when register_shutdown_function is used)
- * 2) Better performance: Symfony uses fastcgi_finish_request(), so for PHP-FPM users the flush() calls take place after the HTTP connection has closed
+ *
+ * 1) No memory leaks When running tests: memory used by the Bugsnag\Client can be garbage collected (this is not
+ *    possible when register_shutdown_function is used).
+ *
+ * 2) Better performance: Symfony uses fastcgi_finish_request(), so if PHP-FPM is being used flush() calls take place
+ *    after the HTTP connection has closed.
  */
 class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInterface
 {
