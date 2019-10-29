@@ -33,7 +33,7 @@ class ClientFactoryTest extends TestCase
     }
 
     /**
-     * Creates a factory from arguments supplied as a hash.
+     * Creates a factory from arguments supplied as an associative array.
      *
      * @param $args
      *
@@ -49,7 +49,7 @@ class ClientFactoryTest extends TestCase
     }
 
     /**
-     * Sets a hash of default variables that can be accessed/edited to configure different factories.
+     * Sets an associative array of default variables that can be accessed/edited to configure different factories.
      */
     protected function setDefaultArgs()
     {

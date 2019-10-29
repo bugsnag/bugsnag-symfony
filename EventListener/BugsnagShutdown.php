@@ -28,20 +28,6 @@ class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInter
     private $client;
 
     /**
-     * Called when Symfony shuts down the kernel (after response has been sent).
-     *
-     * @param \Symfony\Component\HttpKernel\Event\TerminateEvent $event
-     *
-     * @return void
-     */
-    public function onTerminate(TerminateEvent $event)
-    {
-        if ($this->client) {
-            $this->client->flush();
-        }
-    }
-
-    /**
      * Indicate which events we wish to subscribe to.
      *
      * @return array
@@ -58,6 +44,20 @@ class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInter
         }
 
         return $listeners;
+    }
+
+    /**
+     * Called when Symfony shuts down the kernel (after response has been sent).
+     *
+     * @param \Symfony\Component\HttpKernel\Event\TerminateEvent $event
+     *
+     * @return void
+     */
+    public function onTerminate(TerminateEvent $event)
+    {
+        if ($this->client) {
+            $this->client->flush();
+        }
     }
 
     /**

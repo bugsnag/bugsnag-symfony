@@ -31,9 +31,12 @@ class BugsnagShutdownTest extends TestCase
         $mockClient = \Mockery::mock(Client::class);
         $mockClient->shouldReceive('flush')->once();
 
-        $shutdown = new BugsnagShutdown();
-        $shutdown->registerShutdownStrategy($mockClient);
-        $shutdown->onTerminate(\Mockery::mock(TerminateEvent::class));
+        // Initialise the strategy
+        $shutdownStrategy = new BugsnagShutdown();
+        $shutdownStrategy->registerShutdownStrategy($mockClient);
+
+        // Trigger an onTerminate() call
+        $shutdownStrategy->onTerminate(\Mockery::mock(TerminateEvent::class));
 
         $this->tearDownMockery();
     }
