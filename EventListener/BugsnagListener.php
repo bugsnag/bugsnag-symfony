@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 
 class BugsnagListener implements EventSubscriberInterface
 {
@@ -145,6 +146,22 @@ class BugsnagListener implements EventSubscriberInterface
     }
 
     /**
+     * Handle a failing message.
+     *
+     * @param \Symfony\Component\Messenger\Event\WorkerMessageFailedEvent $event
+     *
+     * @return void
+     */
+    public function onWorkerMessageFailed(WorkerMessageFailedEvent $event)
+    {
+        if ($event->willRetry()) {
+            return;
+        }
+
+        $this->sendNotify($event->getThrowable(), []);
+    }
+
+    /**
      * @param \Throwable $throwable
      * @param array      $meta
      *
@@ -225,6 +242,10 @@ class BugsnagListener implements EventSubscriberInterface
             } else {
                 $listeners[ConsoleEvents::EXCEPTION] = ['onConsoleException', 128];
             }
+        }
+
+        if (class_exists(WorkerMessageFailedEvent::class)) {
+            $listeners[WorkerMessageFailedEvent::class] = 'onWorkerMessageFailed';
         }
 
         return $listeners;
