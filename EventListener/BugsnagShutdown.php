@@ -5,8 +5,10 @@ namespace Bugsnag\BugsnagBundle\EventListener;
 use Bugsnag\Client;
 use Bugsnag\Shutdown\ShutdownStrategyInterface;
 use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -49,11 +51,9 @@ class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInter
     /**
      * Called when Symfony shuts down the kernel (after response has been sent).
      *
-     * @param \Symfony\Component\HttpKernel\Event\TerminateEvent $event
-     *
      * @return void
      */
-    public function onTerminate(TerminateEvent $event)
+    public function onTerminate()
     {
         if ($this->client) {
             $this->client->flush();
