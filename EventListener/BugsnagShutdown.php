@@ -5,11 +5,9 @@ namespace Bugsnag\BugsnagBundle\EventListener;
 use Bugsnag\Client;
 use Bugsnag\Shutdown\ShutdownStrategyInterface;
 use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\Console\Event\ConsoleTerminateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\TerminateEvent;
-use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * A Shutdown strategy that uses Symfony's TERMINATE event to trigger calls to Client::flush().
