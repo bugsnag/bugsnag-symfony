@@ -19,7 +19,7 @@ services:
           - '%bugsnag.send_code%'
           - '%bugsnag.strip_path%'
           - '%bugsnag.project_root%'
-          - '%kernel.root_dir%'
+          - '%bugsnag.symfony_root%'
           - '%kernel.environment%'
           - '%bugsnag.release_stage%'
           - '%bugsnag.notify_release_stages%'

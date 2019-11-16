@@ -314,7 +314,7 @@ class ClientFactory
             return;
         }
 
-        $base = $root ? realpath("{$root}/../") : false;
+        $base = $root ? realpath("{$root}/") : false;
 
         if ($project) {
             if ($base && substr($project, 0, strlen($base)) === $base) {

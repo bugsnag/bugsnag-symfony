@@ -28,5 +28,13 @@ class BugsnagExtension extends Extension
         foreach ($config as $key => $value) {
             $container->setParameter('bugsnag.'.$key, $value);
         }
+
+        if ($container->hasParameter('kernel.project_dir')) {
+            $symfonyRoot = $container->getParameter('kernel.project_dir');
+        } else {
+            $symfonyRoot = $container->getParameter('kernel.root_dir').'/../';
+        }
+
+        $container->setParameter('bugsnag.symfony_root', $symfonyRoot);
     }
 }

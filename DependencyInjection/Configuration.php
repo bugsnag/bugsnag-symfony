@@ -5,6 +5,7 @@ namespace Bugsnag\BugsnagBundle\DependencyInjection;
 use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

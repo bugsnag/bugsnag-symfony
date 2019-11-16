@@ -9,8 +9,10 @@ use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -56,12 +58,17 @@ class BugsnagListener implements EventSubscriberInterface
     /**
      * Handle an incoming request.
      *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
+     * @param GetResponseEvent|RequestEvent $event
      *
      * @return void
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest($event)
     {
+        // Compatibility with Symfony < 5 and Symfony >=5
+        if (!$event instanceof GetResponseEvent && !$event instanceof RequestEvent) {
+            return;
+        }
+
         if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
@@ -74,13 +81,18 @@ class BugsnagListener implements EventSubscriberInterface
     /**
      * Handle an http kernel exception.
      *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event
+     * @param GetResponseForExceptionEvent|ExceptionEvent $event
      *
      * @return void
      */
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException($event)
     {
-        $this->sendNotify($event->getException(), []);
+        // Compatibility with Symfony < 5 and Symfony >=5
+        if ($event instanceof GetResponseForExceptionEvent) {
+            $this->sendNotify($event->getException(), []);
+        } elseif ($event instanceof ExceptionEvent) {
+            $this->sendNotify($event->getThrowable(), []);
+        }
     }
 
     /**
@@ -145,14 +157,11 @@ class BugsnagListener implements EventSubscriberInterface
             KernelEvents::EXCEPTION => ['onKernelException', 128],
         ];
 
-        // Added ConsoleEvents in Symfony 2.3
-        if (class_exists('Symfony\Component\Console\ConsoleEvents')) {
-            // Added with ConsoleEvents::ERROR in Symfony 3.3 to deprecate ConsoleEvents::EXCEPTION
-            if (class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
-                $listeners[ConsoleEvents::ERROR] = ['onConsoleError', 128];
-            } else {
-                $listeners[ConsoleEvents::EXCEPTION] = ['onConsoleException', 128];
-            }
+        // Added with ConsoleEvents::ERROR in Symfony 3.3 to deprecate ConsoleEvents::EXCEPTION
+        if (class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
+            $listeners[ConsoleEvents::ERROR] = ['onConsoleError', 128];
+        } else {
+            $listeners[ConsoleEvents::EXCEPTION] = ['onConsoleException', 128];
         }
 
         return $listeners;

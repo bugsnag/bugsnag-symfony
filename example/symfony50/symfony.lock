@@ -1,0 +1,164 @@
+{
+    "bugsnag/bugsnag-symfony": {
+        "version": "1.1-dev"
+    },
+    "doctrine/annotations": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "cb4152ebcadbe620ea2261da1a1c5a9b8cea7672"
+        },
+        "files": [
+            "config/routes/annotations.yaml"
+        ]
+    },
+    "doctrine/lexer": {
+        "version": "1.2.x-dev"
+    },
+    "psr/cache": {
+        "version": "1.0.x-dev"
+    },
+    "psr/container": {
+        "version": "1.0.x-dev"
+    },
+    "psr/event-dispatcher": {
+        "version": "1.0.x-dev"
+    },
+    "psr/log": {
+        "version": "1.1.x-dev"
+    },
+    "sensio/framework-extra-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        },
+        "files": [
+            "config/packages/sensio_framework_extra.yaml"
+        ]
+    },
+    "symfony/cache": {
+        "version": "5.0-dev"
+    },
+    "symfony/cache-contracts": {
+        "version": "2.0-dev"
+    },
+    "symfony/config": {
+        "version": "5.0-dev"
+    },
+    "symfony/console": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "59d8cc5a923274e552412fcd51e284bba02982de"
+        },
+        "files": [
+            "bin/console",
+            "config/bootstrap.php"
+        ]
+    },
+    "symfony/dependency-injection": {
+        "version": "5.0-dev"
+    },
+    "symfony/dotenv": {
+        "version": "5.0-dev"
+    },
+    "symfony/error-handler": {
+        "version": "5.0-dev"
+    },
+    "symfony/event-dispatcher": {
+        "version": "5.0-dev"
+    },
+    "symfony/event-dispatcher-contracts": {
+        "version": "2.0-dev"
+    },
+    "symfony/filesystem": {
+        "version": "5.0-dev"
+    },
+    "symfony/finder": {
+        "version": "5.0-dev"
+    },
+    "symfony/flex": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "19fa03bacd9a6619583d1e4939da4388df22984d"
+        },
+        "files": [
+            ".env"
+        ]
+    },
+    "symfony/framework-bundle": {
+        "version": "4.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.4",
+            "ref": "9b91ef29da037baeec4c3715cf55bea2a165c902"
+        },
+        "files": [
+            "config/bootstrap.php",
+            "config/packages/cache.yaml",
+            "config/packages/framework.yaml",
+            "config/packages/test/framework.yaml",
+            "config/routes/dev/framework.yaml",
+            "config/secrets/prod/.gitignore",
+            "config/services.yaml",
+            "public/index.php",
+            "src/Controller/.gitignore",
+            "src/Kernel.php"
+        ]
+    },
+    "symfony/http-foundation": {
+        "version": "5.0-dev"
+    },
+    "symfony/http-kernel": {
+        "version": "5.0-dev"
+    },
+    "symfony/mime": {
+        "version": "5.0-dev"
+    },
+    "symfony/polyfill-intl-idn": {
+        "version": "1.12-dev"
+    },
+    "symfony/polyfill-mbstring": {
+        "version": "1.12-dev"
+    },
+    "symfony/polyfill-php73": {
+        "version": "1.12-dev"
+    },
+    "symfony/routing": {
+        "version": "4.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.2",
+            "ref": "683dcb08707ba8d41b7e34adb0344bfd68d248a7"
+        },
+        "files": [
+            "config/packages/prod/routing.yaml",
+            "config/packages/routing.yaml",
+            "config/routes.yaml"
+        ]
+    },
+    "symfony/service-contracts": {
+        "version": "2.0-dev"
+    },
+    "symfony/var-dumper": {
+        "version": "5.0-dev"
+    },
+    "symfony/var-exporter": {
+        "version": "5.0-dev"
+    },
+    "symfony/yaml": {
+        "version": "5.0-dev"
+    }
+}
