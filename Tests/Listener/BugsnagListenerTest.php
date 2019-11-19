@@ -16,6 +16,7 @@ use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 
 class ReportStub
 {
@@ -26,29 +27,52 @@ class BugsnagListenerTest extends TestCase
 {
     use MockeryTrait;
 
+    /**
+     * @var BugsnagListener
+     */
+    private $listener;
+
+    /**
+     * @var Mockery\Mock
+     */
+    private $report;
+    /**
+     * @var Mockery\Mock
+     */
+    private $client;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        // Setup a default mock report
+        $report = Mockery::namedMock(Report::class, ReportStub::class);
+        $report->shouldReceive('fromPHPThrowable')->byDefault()
+            ->with('config', 'exception')
+            ->andReturn($report);
+        $report->shouldReceive('setUnhandled')->once()->with(true)->byDefault();
+        $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']])->byDefault();
+        $report->shouldReceive('setMetaData')->once()->with([])->byDefault();
+        $this->report = $report;
+
+        // Setup a default mock client
+        $client = Mockery::mock(Client::class);
+        $client->shouldReceive('getConfig')->once()->andReturn('config')->byDefault();
+        $client->shouldReceive('notify')->once()->with($this->report)->byDefault();
+        $this->client = $client;
+
+        // Instantiate a fresh listener to test
+        $this->listener = new BugsnagListener($this->client, Mockery::mock(SymfonyResolver::class), true);
+    }
+
     public function testOnKernelException()
     {
-        // Create mocks
-        $report = Mockery::namedMock(Report::class, ReportStub::class);
-        $client = Mockery::mock(Client::class);
+        // mock event
         $event = Mockery::mock(GetResponseForExceptionEvent::class);
-        $resolver = Mockery::mock(SymfonyResolver::class);
-
-        // Setup responses
         $event->shouldReceive('getException')->once()->andReturn('exception');
-        $report->shouldReceive('fromPHPThrowable')
-            ->with('config', 'exception')
-            ->once()
-            ->andReturn($report);
-        $report->shouldReceive('setUnhandled')->once()->with(true);
-        $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
-        $client->shouldReceive('getConfig')->once()->andReturn('config');
-        $report->shouldReceive('setMetaData')->once()->with([]);
-        $client->shouldReceive('notify')->once()->with($report);
 
         // Initiate test
-        $listener = new BugsnagListener($client, $resolver, true);
-        $listener->onKernelException($event);
+        $this->listener->onKernelException($event);
     }
 
     public function testOnConsoleError()
@@ -57,59 +81,57 @@ class BugsnagListenerTest extends TestCase
             $this->markTestSkipped('ConsoleErrorEvent class not present - pre-Symfony3.3');
         } else {
             // Create mocks
-            $report = Mockery::namedMock(Report::class, ReportStub::class);
-            $client = Mockery::mock(Client::class);
             $input = Mockery::mock(InputInterface::class);
             $output = Mockery::mock(OutputInterface::class);
             $command = Mockery::mock(Command::class);
             $event = new ConsoleErrorEvent($input, $output, new Exception(), $command); // Unable to mock as final
             $event->setExitCode(1);
-            $resolver = Mockery::mock(SymfonyResolver::class);
 
             // Setup responses
             $command->shouldReceive('getName')->once()->andReturn('test');
-            $report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
-            $report->shouldReceive('fromPHPThrowable')
-                ->with('config', 'exception')
-                ->once()
-                ->andReturn($report);
-            $report->shouldReceive('setUnhandled')->once()->with(true);
-            $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
-            $client->shouldReceive('getConfig')->once()->andReturn('config');
-            $client->shouldReceive('notify')->once()->with($report);
+            $this->report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
 
             // Initiate test
-            $listener = new BugsnagListener($client, $resolver, true);
-            $listener->onConsoleError($event);
+            $this->listener->onConsoleError($event);
         }
     }
 
     public function testOnConsoleException()
     {
-        // Create mocks
-        $report = Mockery::namedMock(Report::class, ReportStub::class);
-        $client = Mockery::mock(Client::class);
+        // mock event
         $event = Mockery::mock(ConsoleExceptionEvent::class);
-        $resolver = Mockery::mock(SymfonyResolver::class);
-
-        // Setup responses
         $event->shouldReceive('getException')->once()->andReturn('exception');
         $event->shouldReceive('getCommand')->twice()->andReturn($event);
         $event->shouldReceive('getName')->once()->andReturn('test');
         $event->shouldReceive('getExitCode')->once()->andReturn(1);
 
-        $report->shouldReceive('fromPHPThrowable')
-            ->with('config', 'exception')
-            ->once()
-            ->andReturn($report);
-        $report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
-        $report->shouldReceive('setUnhandled')->once()->with(true);
-        $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
-        $client->shouldReceive('getConfig')->once()->andReturn('config');
-        $client->shouldReceive('notify')->once()->with($report);
+        // assert meta data
+        $this->report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
 
         // Initiate test
-        $listener = new BugsnagListener($client, $resolver, true);
-        $listener->onConsoleException($event);
+        $this->listener->onConsoleException($event);
+    }
+
+    public function testOnWorkerFailedDoesNotCallNotifyIfRetry()
+    {
+        // mock an event triggered via a message that can be retried
+        $event = Mockery::mock(WorkerMessageFailedEvent::class);
+        $event->shouldReceive('willRetry')->once()->andReturn('true');
+
+        // sendNotify is not called, so these expectations need to be reset
+        $this->report->shouldNotReceive('setUnhandled','setSeverityReason', 'setMetaData');
+        $this->client->shouldNotReceive('notify', 'getConfig');
+
+        $this->listener->onWorkerMessageFailed($event);
+    }
+
+    public function testOnWorkerFailedDoesCallNotify()
+    {
+        // mock an event triggered via a message that can be retried
+        $event = Mockery::mock(WorkerMessageFailedEvent::class);
+        $event->shouldReceive('willRetry')->once()->andReturn(false);
+        $event->shouldReceive('getThrowable')->once()->andReturn(new \Exception());
+
+        $this->listener->onWorkerMessageFailed($event);
     }
 }

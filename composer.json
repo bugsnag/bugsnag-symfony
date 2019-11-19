@@ -19,7 +19,8 @@
         "symfony/console": "^2.7|^3.0|^4.0",
         "symfony/http-foundation": "^2.7|^3.0|^4.0",
         "symfony/security": "^2.7|^3.0|^4.0",
-        "bugsnag/bugsnag": "^3.15.0"
+        "bugsnag/bugsnag": "^3.15.0",
+        "symfony/messenger": "^4.3"
     },
     "require-dev": {
         "graham-campbell/testbench-core": "^1.1",
