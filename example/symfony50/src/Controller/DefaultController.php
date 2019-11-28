@@ -21,7 +21,7 @@ class DefaultController extends AbstractController
      */
     public function index()
     {
-        return new Response('Welcome to the Bugsnag Symfony 4 example. Visit the
+        return new Response('Welcome to the Bugsnag Symfony 5 example. Visit the
          file "src/Controller/DefaultController" to see how certain functions 
         are implemented, and routes they can be tested on.');
     }
