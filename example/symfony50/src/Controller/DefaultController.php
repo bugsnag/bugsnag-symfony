@@ -10,6 +10,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
+    protected $bugsnag;
+
+    public function __construct($bugsnag) {
+        $this->bugsnag = $bugsnag;
+    }
+
     /**
      * @Route("/", name="homepage")
      */
@@ -33,7 +39,7 @@ class DefaultController extends AbstractController
      */
     public function callback()
     {
-        $this->container->get('bugsnag')->registerCallback(function (Report $report) {
+        $this->bugsnag->registerCallback(function (Report $report) {
             $report->setMetaData([
                 'account' => [
                     'name' => 'Acme Co.',
@@ -50,7 +56,7 @@ class DefaultController extends AbstractController
      */
     public function notify()
     {
-        $this->container->get('bugsnag')->notifyException(new RuntimeException("It didn't crash!"));
+        $this->bugsnag->notifyException(new RuntimeException("It didn't crash!"));
 
         return new Response("It didn't crash, but check your Bugsnag dashboard for the manual notification");
     }
@@ -60,7 +66,7 @@ class DefaultController extends AbstractController
      */
     public function metadata()
     {
-        $this->container->get('bugsnag')->notifyException(new RuntimeException("It didn't crash, with metadata!"), function (Report $report) {
+        $this->bugsnag->notifyException(new RuntimeException("It didn't crash, with metadata!"), function (Report $report) {
             $report->setMetaData([
                 'diagnostics' => [
                     'error' => 'RuntimeException',
@@ -77,7 +83,7 @@ class DefaultController extends AbstractController
      */
     public function severity()
     {
-        $this->container->get('bugsnag')->notifyException(new RuntimeException("It didn't crash, with severity!"), function (Report $report) {
+        $this->bugsnag->notifyException(new RuntimeException("It didn't crash, with severity!"), function (Report $report) {
             $report->setSeverity('info');
         });
 
