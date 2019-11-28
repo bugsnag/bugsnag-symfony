@@ -157,11 +157,14 @@ class BugsnagListener implements EventSubscriberInterface
             KernelEvents::EXCEPTION => ['onKernelException', 128],
         ];
 
-        // Added with ConsoleEvents::ERROR in Symfony 3.3 to deprecate ConsoleEvents::EXCEPTION
-        if (class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
-            $listeners[ConsoleEvents::ERROR] = ['onConsoleError', 128];
-        } else {
-            $listeners[ConsoleEvents::EXCEPTION] = ['onConsoleException', 128];
+        // Added ConsoleEvents in Symfony 2.3
+        if (class_exists('Symfony\Component\Console\ConsoleEvents')) {
+            // Added with ConsoleEvents::ERROR in Symfony 3.3 to deprecate ConsoleEvents::EXCEPTION
+            if (class_exists('Symfony\Component\Console\Event\ConsoleErrorEvent')) {
+                $listeners[ConsoleEvents::ERROR] = ['onConsoleError', 128];
+            } else {
+                $listeners[ConsoleEvents::EXCEPTION] = ['onConsoleException', 128];
+            }
         }
 
         return $listeners;
