@@ -1,7 +1,13 @@
 Changelog
 =========
 
-## 1.6.0 ()
+## 1.6.0 (TBD)
+
+### Enhancements
+
+* Add Symfony-5 support including examples
+  [Loïck Piera](https://github.com/pyrech)
+  [#93](https://github.com/bugsnag/bugsnag-symfony/pull/93)
 
 ## 1.5.1 (2019-06-24)
 
