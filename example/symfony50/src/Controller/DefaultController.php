@@ -12,7 +12,8 @@ class DefaultController extends AbstractController
 {
     protected $bugsnag;
 
-    public function __construct($bugsnag) {
+    public function __construct($bugsnag)
+    {
         $this->bugsnag = $bugsnag;
     }
 
