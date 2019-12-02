@@ -5,6 +5,10 @@ Changelog
 
 ### Enhancements
 
+* Add Symfony-specific shutdown strategy
+  [Richard Harrison](https://github.com/rjharrison)
+  [#87](https://github.com/bugsnag/bugsnag-symfony/pull/87)
+
 * Add Symfony-5 support including examples
   [Loïck Piera](https://github.com/pyrech)
   [#93](https://github.com/bugsnag/bugsnag-symfony/pull/93)
