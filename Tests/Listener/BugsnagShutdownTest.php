@@ -5,7 +5,7 @@ namespace Bugsnag\BugsnagBundle\Tests\Listener;
 use Bugsnag\BugsnagBundle\EventListener\BugsnagShutdown;
 use Bugsnag\Client;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

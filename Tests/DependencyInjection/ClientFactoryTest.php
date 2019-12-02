@@ -6,7 +6,7 @@ use Bugsnag\BugsnagBundle\DependencyInjection\ClientFactory;
 use Bugsnag\BugsnagBundle\EventListener\BugsnagShutdown;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
-use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 
 class ClientFactoryTest extends TestCase
 {
