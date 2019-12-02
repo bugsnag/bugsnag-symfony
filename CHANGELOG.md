@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 1.6.0 (TBD)
+## 1.6.0 (2019-12-02)
 
 ### Enhancements
 
