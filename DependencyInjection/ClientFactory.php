@@ -7,6 +7,7 @@ use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Callbacks\CustomUser;
 use Bugsnag\Client;
 use Bugsnag\Configuration as Config;
+use Bugsnag\Shutdown\ShutdownStrategyInterface;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -148,6 +149,11 @@ class ClientFactory
     protected $filters;
 
     /**
+     * @var \Bugsnag\Shutdown\ShutdownStrategyInterface
+     */
+    protected $shutdownStrategy;
+
+    /**
      * Create a new client factory instance.
      *
      * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver                                           $resolver
@@ -169,6 +175,7 @@ class ClientFactory
      * @param string|null                                                                              $stage
      * @param string[]|null                                                                            $stages
      * @param string[]|null                                                                            $filters
+     * @param \Bugsnag\Shutdown\ShutdownStrategyInterface                                              $shutdownStrategy
      *
      * @return void
      */
@@ -191,7 +198,8 @@ class ClientFactory
         $env = null,
         $stage = null,
         array $stages = null,
-        array $filters = null
+        array $filters = null,
+        ShutdownStrategyInterface $shutdownStrategy = null
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -212,6 +220,7 @@ class ClientFactory
         $this->stage = $stage;
         $this->stages = $stages;
         $this->filters = $filters;
+        $this->shutdownStrategy = $shutdownStrategy;
     }
 
     /**
@@ -223,7 +232,7 @@ class ClientFactory
     {
         $guzzle = Client::makeGuzzle($this->endpoint);
 
-        $client = new Client(new Config($this->key ?: ''), $this->resolver, $guzzle);
+        $client = new Client(new Config($this->key ?: ''), $this->resolver, $guzzle, $this->shutdownStrategy);
 
         if ($this->callbacks) {
             $client->registerDefaultCallbacks();
