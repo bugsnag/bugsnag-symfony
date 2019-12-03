@@ -6,6 +6,7 @@ use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Report;
+use InvalidArgumentException;
 use Exception;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use Mockery;
@@ -49,6 +50,21 @@ class BugsnagListenerTest extends TestCase
         // Initiate test
         $listener = new BugsnagListener($client, $resolver, true);
         $listener->onKernelException($event);
+    }
+
+    public function testOnRequestArgumentException()
+    {
+        // Create mocks
+        $client = Mockery::mock(Client::class);
+        $event = Mockery::mock(GetResponseForExceptionEvent::class);
+        $resolver = Mockery::mock(SymfonyResolver::class);
+
+        // Setup responses
+        $this->expectException(InvalidArgumentException::class);
+
+        // Initiate test
+        $listener = new BugsnagListener($client, $resolver, true);
+        $listener->onKernelRequest("This should throw an exception");
     }
 
     public function testOnConsoleError()

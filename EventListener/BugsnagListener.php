@@ -2,6 +2,7 @@
 
 namespace Bugsnag\BugsnagBundle\EventListener;
 
+use InvalidArgumentException;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Report;
@@ -66,7 +67,7 @@ class BugsnagListener implements EventSubscriberInterface
     {
         // Compatibility with Symfony < 5 and Symfony >=5
         if (!$event instanceof GetResponseEvent && !$event instanceof RequestEvent) {
-            return;
+            throw new InvalidArgumentException("onKernelRequest function only accepts GetResponseEvent and RequestEvent arguments");
         }
 
         if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
