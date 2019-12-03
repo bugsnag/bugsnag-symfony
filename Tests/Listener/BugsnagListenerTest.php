@@ -6,9 +6,9 @@ use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Report;
-use InvalidArgumentException;
 use Exception;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
+use InvalidArgumentException;
 use Mockery;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -67,7 +67,7 @@ class BugsnagListenerTest extends TestCase
 
         // Initiate test
         $listener = new BugsnagListener($client, $resolver, true);
-        $listener->onKernelRequest("This should throw an exception");
+        $listener->onKernelRequest('This should throw an exception');
     }
 
     public function testOnConsoleError()
