@@ -54,6 +54,8 @@ class BugsnagListenerTest extends TestCase
 
     /**
      * @requires PHP 5.6
+     *
+     * PHPUnit version installed with PHP 5.5 doesn't support TestCase::expectException
      */
     public function testOnRequestArgumentException()
     {
