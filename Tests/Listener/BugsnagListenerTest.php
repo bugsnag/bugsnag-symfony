@@ -52,6 +52,9 @@ class BugsnagListenerTest extends TestCase
         $listener->onKernelException($event);
     }
 
+    /**
+     * @requires PHP 5.6
+     */
     public function testOnRequestArgumentException()
     {
         // Create mocks
