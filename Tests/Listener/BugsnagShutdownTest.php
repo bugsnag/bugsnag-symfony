@@ -7,7 +7,6 @@ use Bugsnag\Client;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use PHPUnit_Framework_TestCase as TestCase;
 use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class BugsnagShutdownTest extends TestCase
@@ -36,7 +35,7 @@ class BugsnagShutdownTest extends TestCase
         $shutdownStrategy->registerShutdownStrategy($mockClient);
 
         // Trigger an onTerminate() call
-        $shutdownStrategy->onTerminate(\Mockery::mock(TerminateEvent::class));
+        $shutdownStrategy->onTerminate();
 
         $this->tearDownMockery();
     }
