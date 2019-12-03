@@ -93,6 +93,8 @@ class BugsnagListener implements EventSubscriberInterface
             $this->sendNotify($event->getException(), []);
         } elseif ($event instanceof ExceptionEvent) {
             $this->sendNotify($event->getThrowable(), []);
+        } else {
+            throw new InvalidArgumentException('onKernelException function only accepts GetResponseForExceptionEvent and ExceptionEvent arguments');
         }
     }
 
