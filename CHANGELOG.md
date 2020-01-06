@@ -1,6 +1,16 @@
 Changelog
 =========
 
+## 1.6.1 (2020-01-06)
+
+### Fixes
+
+* Fix potential issue with ExceptionEvent missing getThrowable method in Symfony 4.3.
+  Additionally adds InvalidArgumentException in the case the event is triggered with an incorrect class.
+  [Loïck Piera](https://github.com/pyrech)
+  [#99](https://github.com/bugsnag/bugsnag-symfony/pull/99)
+
+
 ## 1.6.0 (2019-12-03)
 
 ### Enhancements
