@@ -158,51 +158,51 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                             ready to run Symfony applications.
                         </p>
 
-                        <?php if (count($majorProblems)): ?>
+                        <?php if (count($majorProblems)) { ?>
                             <h2 class="ko">Major problems</h2>
                             <p>Major problems have been detected and <strong>must</strong> be fixed before continuing:</p>
                             <ol>
-                                <?php foreach ($majorProblems as $problem): ?>
+                                <?php foreach ($majorProblems as $problem) { ?>
                                     <li><?php echo $problem->getTestMessage() ?>
                                         <p class="help"><em><?php echo $problem->getHelpHtml() ?></em></p>
                                     </li>
-                                <?php endforeach; ?>
+                                <?php } ?>
                             </ol>
-                        <?php endif; ?>
+                        <?php } ?>
 
-                        <?php if (count($minorProblems)): ?>
+                        <?php if (count($minorProblems)) { ?>
                             <h2>Recommendations</h2>
                             <p>
-                                <?php if (count($majorProblems)): ?>Additionally, to<?php else: ?>To<?php endif; ?> enhance your Symfony experience,
+                                <?php if (count($majorProblems)) { ?>Additionally, to<?php } else { ?>To<?php } ?> enhance your Symfony experience,
                                 it’s recommended that you fix the following:
                             </p>
                             <ol>
-                                <?php foreach ($minorProblems as $problem): ?>
+                                <?php foreach ($minorProblems as $problem) { ?>
                                     <li><?php echo $problem->getTestMessage() ?>
                                         <p class="help"><em><?php echo $problem->getHelpHtml() ?></em></p>
                                     </li>
-                                <?php endforeach; ?>
+                                <?php } ?>
                             </ol>
-                        <?php endif; ?>
+                        <?php } ?>
 
-                        <?php if ($symfonyRequirements->hasPhpIniConfigIssue()): ?>
+                        <?php if ($symfonyRequirements->hasPhpIniConfigIssue()) { ?>
                             <p id="phpini">*
-                                <?php if ($symfonyRequirements->getPhpIniConfigPath()): ?>
+                                <?php if ($symfonyRequirements->getPhpIniConfigPath()) { ?>
                                     Changes to the <strong>php.ini</strong> file must be done in "<strong><?php echo $symfonyRequirements->getPhpIniConfigPath() ?></strong>".
-                                <?php else: ?>
+                                <?php } else { ?>
                                     To change settings, create a "<strong>php.ini</strong>".
-                                <?php endif; ?>
+                                <?php } ?>
                             </p>
-                        <?php endif; ?>
+                        <?php } ?>
 
-                        <?php if (!count($majorProblems) && !count($minorProblems)): ?>
+                        <?php if (!count($majorProblems) && !count($minorProblems)) { ?>
                             <p class="ok">All checks passed successfully. Your system is ready to run Symfony applications.</p>
-                        <?php endif; ?>
+                        <?php } ?>
 
                         <ul class="symfony-install-continue">
-                            <?php if (count($majorProblems) || count($minorProblems)): ?>
+                            <?php if (count($majorProblems) || count($minorProblems)) { ?>
                                 <li><a href="config.php">Re-check configuration</a></li>
-                            <?php endif; ?>
+                            <?php } ?>
                         </ul>
                     </div>
                 </div>
