@@ -89,10 +89,15 @@ class BugsnagListener implements EventSubscriberInterface
     public function onKernelException($event)
     {
         // Compatibility with Symfony < 5 and Symfony >=5
-        if ($event instanceof GetResponseForExceptionEvent) {
-            $this->sendNotify($event->getException(), []);
-        } elseif ($event instanceof ExceptionEvent) {
+        // The additional `method_exists` check is to prevent errors in Symfony 4.3
+        // where the ExceptionEvent exists and is used but doesn't implement
+        // the `getThrowable` method, which was introduced in Symfony 4.4
+        if ($event instanceof ExceptionEvent && method_exists($event, 'getThrowable')) {
             $this->sendNotify($event->getThrowable(), []);
+        } elseif ($event instanceof GetResponseForExceptionEvent) {
+            $this->sendNotify($event->getException(), []);
+        } else {
+            throw new InvalidArgumentException('onKernelException function only accepts GetResponseForExceptionEvent and ExceptionEvent arguments');
         }
     }
 
