@@ -24,7 +24,7 @@
     "require-dev": {
         "graham-campbell/testbench-core": "^1.1",
         "mockery/mockery": "^0.9.4",
-        "phpunit/phpunit": "^4.8|^5"
+        "phpunit/phpunit": "^4.8.36|^5.7.21"
     },
     "autoload": {
         "psr-4": {
