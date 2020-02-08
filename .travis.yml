@@ -15,8 +15,6 @@ matrix:
       dist: bionic
     - php: 7.3
       dist: bionic
-    - php: 7.4
-      dist: bionic
 
 install:
   - travis_retry composer update $COMPOSER_OPTIONS
