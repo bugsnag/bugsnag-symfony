@@ -1,9 +1,16 @@
 Changelog
 =========
 
+## 1.6.2 (2020-02-26)
+
+### Bug Fixes
+
+* Added support for PHP 7.4
+  [#104](https://github.com/bugsnag/bugsnag-symfony/pull/104)
+
 ## 1.6.1 (2020-01-06)
 
-### Fixes
+### Bug Fixes
 
 * Fix potential issue with ExceptionEvent missing getThrowable method in Symfony 4.3.
   Additionally adds InvalidArgumentException in the case the event is triggered with an incorrect class.
@@ -22,6 +29,11 @@ Changelog
 * Add Symfony-5 support including examples
   [Loïck Piera](https://github.com/pyrech)
   [#93](https://github.com/bugsnag/bugsnag-symfony/pull/93)
+
+### Bug Fixes
+
+* Added support for PHP 7.2 and 7.3
+  [#87](https://github.com/bugsnag/bugsnag-symfony/pull/87)
 
 ## 1.5.1 (2019-06-24)
 
