@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## TDB
+
+### Enhancements
+
+* Add mechanism to allow filtering out some Exception from reports.
+  [Damien Villeneuve](https://github.com/days)
+
 ## 1.6.2 (2020-02-26)
 
 ### Bug Fixes
