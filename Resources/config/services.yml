@@ -2,6 +2,9 @@ services:
     bugsnag.resolver:
         class: '%bugsnag.resolver%'
 
+    bugsnag.error_notify_filter:
+        class: '%bugsnag.error_notify_filter%'
+
     bugsnag.factory:
         class: '%bugsnag.factory%'
         arguments:
@@ -36,6 +39,7 @@ services:
         arguments:
           - '@bugsnag'
           - '@bugsnag.resolver'
+          - '@bugsnag.error_notify_filter'
           - '%bugsnag.auto_notify%'
         tags:
           - { name: "kernel.event_subscriber" }

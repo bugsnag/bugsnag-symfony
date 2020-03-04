@@ -2,6 +2,7 @@
 
 namespace Bugsnag\BugsnagBundle\EventListener;
 
+use Bugsnag\BugsnagBundle\DependencyInjection\ErrorNotifyFilter;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use Bugsnag\Report;
@@ -34,6 +35,13 @@ class BugsnagListener implements EventSubscriberInterface
     protected $resolver;
 
     /**
+     * The error notify filter instance.
+     *
+     * @var \Bugsnag\BugsnagBundle\DependencyInjection\ErrorNotifyFilter
+     */
+    protected $errorNotifyFilter;
+
+    /**
      * If auto notifying is enabled.
      *
      * @var bool
@@ -43,16 +51,18 @@ class BugsnagListener implements EventSubscriberInterface
     /**
      * Create a new bugsnag listener instance.
      *
-     * @param \Bugsnag\Client                                $client
-     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver $resolver
-     * @param bool                                           $auto
+     * @param \Bugsnag\Client                                              $client
+     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver               $resolver
+     * @param \Bugsnag\BugsnagBundle\DependencyInjection\ErrorNotifyFilter $resolver
+     * @param bool                                                         $auto
      *
      * @return void
      */
-    public function __construct(Client $client, SymfonyResolver $resolver, $auto)
+    public function __construct(Client $client, SymfonyResolver $resolver, ErrorNotifyFilter $errorNotifyFilter, $auto)
     {
         $this->client = $client;
         $this->resolver = $resolver;
+        $this->errorNotifyFilter = $errorNotifyFilter;
         $this->auto = $auto;
     }
 
@@ -137,6 +147,9 @@ class BugsnagListener implements EventSubscriberInterface
     private function sendNotify($throwable, $meta)
     {
         if (!$this->auto) {
+            return;
+        }
+        if (!$this->errorNotifyFilter->shouldNotifyError($throwable, $meta)) {
             return;
         }
 

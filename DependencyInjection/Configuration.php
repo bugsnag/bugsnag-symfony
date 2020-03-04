@@ -93,6 +93,9 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('shutdown')
                     ->defaultValue(BugsnagShutdown::class)
+                ->end()
+                ->scalarNode('error_notify_filter')
+                    ->defaultValue(DefaultErrorNotifyFilter::class)
             ->end();
 
         return $treeBuilder;
