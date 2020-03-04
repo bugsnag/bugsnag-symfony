@@ -2,6 +2,7 @@
 
 namespace Bugsnag\BugsnagBundle\Tests\Listener;
 
+use Bugsnag\BugsnagBundle\DependencyInjection\ErrorNotifyFilter;
 use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
@@ -34,11 +35,13 @@ class BugsnagListenerTest extends TestCase
         $client = Mockery::mock(Client::class);
         $event = Mockery::mock(GetResponseForExceptionEvent::class);
         $resolver = Mockery::mock(SymfonyResolver::class);
+        $notifyFilter = Mockery::mock(ErrorNotifyFilter::class);
 
         // Setup responses
-        $event->shouldReceive('getException')->once()->andReturn('exception');
+        $exception = new Exception('exception');
+        $event->shouldReceive('getException')->once()->andReturn($exception);
         $report->shouldReceive('fromPHPThrowable')
-            ->with('config', 'exception')
+            ->with('config', $exception)
             ->once()
             ->andReturn($report);
         $report->shouldReceive('setUnhandled')->once()->with(true);
@@ -46,9 +49,10 @@ class BugsnagListenerTest extends TestCase
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $report->shouldReceive('setMetaData')->once()->with([]);
         $client->shouldReceive('notify')->once()->with($report);
+        $notifyFilter->shouldReceive('shouldNotifyError')->once()->with($exception, Mockery::any())->andReturn(true);
 
         // Initiate test
-        $listener = new BugsnagListener($client, $resolver, true);
+        $listener = new BugsnagListener($client, $resolver, $notifyFilter, true);
         $listener->onKernelException($event);
     }
 
@@ -63,12 +67,13 @@ class BugsnagListenerTest extends TestCase
         $client = Mockery::mock(Client::class);
         $event = Mockery::mock(GetResponseForExceptionEvent::class);
         $resolver = Mockery::mock(SymfonyResolver::class);
+        $notifyFilter = Mockery::mock(ErrorNotifyFilter::class);
 
         // Setup responses
         $this->expectException(InvalidArgumentException::class);
 
         // Initiate test
-        $listener = new BugsnagListener($client, $resolver, true);
+        $listener = new BugsnagListener($client, $resolver, $notifyFilter, true);
         $listener->onKernelRequest('This should throw an exception');
     }
 
@@ -83,24 +88,27 @@ class BugsnagListenerTest extends TestCase
             $input = Mockery::mock(InputInterface::class);
             $output = Mockery::mock(OutputInterface::class);
             $command = Mockery::mock(Command::class);
-            $event = new ConsoleErrorEvent($input, $output, new Exception(), $command); // Unable to mock as final
+            $exception = new Exception();
+            $event = new ConsoleErrorEvent($input, $output, $exception, $command); // Unable to mock as final
             $event->setExitCode(1);
             $resolver = Mockery::mock(SymfonyResolver::class);
+            $notifyFilter = Mockery::mock(ErrorNotifyFilter::class);
 
             // Setup responses
             $command->shouldReceive('getName')->once()->andReturn('test');
             $report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
             $report->shouldReceive('fromPHPThrowable')
-                ->with('config', 'exception')
+                ->with('config', $exception)
                 ->once()
                 ->andReturn($report);
             $report->shouldReceive('setUnhandled')->once()->with(true);
             $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
             $client->shouldReceive('getConfig')->once()->andReturn('config');
             $client->shouldReceive('notify')->once()->with($report);
+            $notifyFilter->shouldReceive('shouldNotifyError')->once()->with($exception, Mockery::any())->andReturn(true);
 
             // Initiate test
-            $listener = new BugsnagListener($client, $resolver, true);
+            $listener = new BugsnagListener($client, $resolver, $notifyFilter, true);
             $listener->onConsoleError($event);
         }
     }
@@ -112,9 +120,11 @@ class BugsnagListenerTest extends TestCase
         $client = Mockery::mock(Client::class);
         $event = Mockery::mock(ConsoleExceptionEvent::class);
         $resolver = Mockery::mock(SymfonyResolver::class);
+        $notifyFilter = Mockery::mock(ErrorNotifyFilter::class);
 
         // Setup responses
-        $event->shouldReceive('getException')->once()->andReturn('exception');
+        $exception = new Exception('exception');
+        $event->shouldReceive('getException')->once()->andReturn($exception);
         $event->shouldReceive('getCommand')->twice()->andReturn($event);
         $event->shouldReceive('getName')->once()->andReturn('test');
         $event->shouldReceive('getExitCode')->once()->andReturn(1);
@@ -128,9 +138,10 @@ class BugsnagListenerTest extends TestCase
         $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $client->shouldReceive('notify')->once()->with($report);
+        $notifyFilter->shouldReceive('shouldNotifyError')->once()->with($exception, Mockery::any())->andReturn(true);
 
         // Initiate test
-        $listener = new BugsnagListener($client, $resolver, true);
+        $listener = new BugsnagListener($client, $resolver, $notifyFilter, true);
         $listener->onConsoleException($event);
     }
 }
