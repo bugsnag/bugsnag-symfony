@@ -144,4 +144,28 @@ class BugsnagListenerTest extends TestCase
         $listener = new BugsnagListener($client, $resolver, $notifyFilter, true);
         $listener->onConsoleException($event);
     }
+
+    public function testOnKernelExceptionBeingFilteredOut()
+    {
+        // Create mocks
+        $report = Mockery::namedMock(Report::class, ReportStub::class);
+        $client = Mockery::mock(Client::class);
+        $event = Mockery::mock(GetResponseForExceptionEvent::class);
+        $resolver = Mockery::mock(SymfonyResolver::class);
+        $notifyFilter = Mockery::mock(ErrorNotifyFilter::class);
+
+        // Setup responses
+        $exception = new Exception('exception');
+        $notifyFilter->shouldReceive('shouldNotifyError')->once()->with($exception, Mockery::any())->andReturn(false);
+
+        $event->shouldReceive('getException')->once()->andReturn($exception);
+        $report->shouldReceive('fromPHPThrowable')
+            ->with('config', $exception)
+            ->never();
+        $client->shouldReceive('notify')->never();
+
+        // Initiate test
+        $listener = new BugsnagListener($client, $resolver, $notifyFilter, true);
+        $listener->onKernelException($event);
+    }
 }
