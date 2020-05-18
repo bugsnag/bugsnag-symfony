@@ -7,8 +7,8 @@ use Bugsnag\BugsnagBundle\EventListener\BugsnagShutdown;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
-use PHPUnit_Framework_TestCase as TestCase;
 use Mockery;
+use PHPUnit_Framework_TestCase as TestCase;
 use ReflectionClass;
 use ReflectionException;
 
@@ -72,8 +72,8 @@ final class ClientFactoryTest extends TestCase
      * @param string|null $stripPath
      * @param string|null $projectRootRegex
      * @param string|null $stripPathRegex
-     * @param string $expectedProjectRootRegex
-     * @param string $expectedStripPathRegex
+     * @param string      $expectedProjectRootRegex
+     * @param string      $expectedStripPathRegex
      *
      * @return void
      *
@@ -252,7 +252,7 @@ final class ClientFactoryTest extends TestCase
     }
 
     /**
-     * Creates a Client, using the default arguments merged with any overrides
+     * Creates a Client, using the default arguments merged with any overrides.
      *
      * For example, by default the API key will be 'null', but can be specified
      * by passing '["key" => "example-123"]' to this method
@@ -276,7 +276,7 @@ final class ClientFactoryTest extends TestCase
     }
 
     /**
-     * Get an array of default arguments for the ClientFactory
+     * Get an array of default arguments for the ClientFactory.
      *
      * This is an associative array purely to document the arguments — they are
      * applied in order rather than by name, i.e. index 0 will always be the

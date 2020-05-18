@@ -176,28 +176,28 @@ class ClientFactory
     protected $projectRootRegex;
 
     /**
-     * @param SymfonyResolver $resolver
-     * @param TokenStorageInterface|null $tokens
+     * @param SymfonyResolver                    $resolver
+     * @param TokenStorageInterface|null         $tokens
      * @param AuthorizationCheckerInterface|null $checker
-     * @param string|null $key
-     * @param string|null $endpoint
-     * @param bool $callbacks
-     * @param bool $user
-     * @param string|null $type
-     * @param string|null $version
-     * @param bool $batch
-     * @param string|null $hostname
-     * @param bool $code
-     * @param string|null $strip
-     * @param string|null $project
-     * @param string|null $root
-     * @param string|null $env
-     * @param string|null $stage
-     * @param string[]|null $stages
-     * @param string[]|null $filters
-     * @param ShutdownStrategyInterface $shutdownStrategy
-     * @param string|null $stripPathRegex
-     * @param string|null $projectRootRegex
+     * @param string|null                        $key
+     * @param string|null                        $endpoint
+     * @param bool                               $callbacks
+     * @param bool                               $user
+     * @param string|null                        $type
+     * @param string|null                        $version
+     * @param bool                               $batch
+     * @param string|null                        $hostname
+     * @param bool                               $code
+     * @param string|null                        $strip
+     * @param string|null                        $project
+     * @param string|null                        $root
+     * @param string|null                        $env
+     * @param string|null                        $stage
+     * @param string[]|null                      $stages
+     * @param string[]|null                      $filters
+     * @param ShutdownStrategyInterface          $shutdownStrategy
+     * @param string|null                        $stripPathRegex
+     * @param string|null                        $projectRootRegex
      *
      * @return void
      */

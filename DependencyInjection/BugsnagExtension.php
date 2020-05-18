@@ -12,7 +12,7 @@ class BugsnagExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array $configs
+     * @param array            $configs
      * @param ContainerBuilder $container
      *
      * @return void
@@ -23,7 +23,7 @@ class BugsnagExtension extends Extension
 
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
+            new FileLocator(__DIR__.'/../Resources/config')
         );
 
         $loader->load('services.yml');
@@ -36,7 +36,7 @@ class BugsnagExtension extends Extension
             $symfonyRoot = $container->getParameter('kernel.project_dir');
         } else {
             $symfonyRoot = realpath(
-                $container->getParameter('kernel.root_dir') . '/../'
+                $container->getParameter('kernel.root_dir').'/../'
             );
         }
 
