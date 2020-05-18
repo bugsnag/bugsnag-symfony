@@ -12,8 +12,8 @@ class BugsnagExtension extends Extension
     /**
      * Loads a specific configuration.
      *
-     * @param array                                                   $configs
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $configs
+     * @param ContainerBuilder $container
      *
      * @return void
      */
@@ -21,18 +21,23 @@ class BugsnagExtension extends Extension
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new YamlFileLoader(
+            $container,
+            new FileLocator(__DIR__ . '/../Resources/config')
+        );
 
         $loader->load('services.yml');
 
         foreach ($config as $key => $value) {
-            $container->setParameter('bugsnag.'.$key, $value);
+            $container->setParameter("bugsnag.{$key}", $value);
         }
 
         if ($container->hasParameter('kernel.project_dir')) {
             $symfonyRoot = $container->getParameter('kernel.project_dir');
         } else {
-            $symfonyRoot = $container->getParameter('kernel.root_dir').'/../';
+            $symfonyRoot = realpath(
+                $container->getParameter('kernel.root_dir') . '/../'
+            );
         }
 
         $container->setParameter('bugsnag.symfony_root', $symfonyRoot);

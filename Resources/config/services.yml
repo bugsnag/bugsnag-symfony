@@ -25,6 +25,8 @@ services:
           - '%bugsnag.notify_release_stages%'
           - '%bugsnag.filters%'
           - '@bugsnag.shutdown'
+          - '%bugsnag.strip_path_regex%'
+          - '%bugsnag.project_root_regex%'
 
     bugsnag:
         class: '%bugsnag.client%'

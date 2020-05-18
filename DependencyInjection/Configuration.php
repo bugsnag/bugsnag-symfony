@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Get the configuration tree builder.
      *
-     * @return \Symfony\Component\Config\Definition\Builder\TreeBuilder
+     * @return TreeBuilder
      */
     public function getConfigTreeBuilder()
     {
@@ -93,6 +93,13 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('shutdown')
                     ->defaultValue(BugsnagShutdown::class)
+                ->end()
+                ->scalarNode('strip_path_regex')
+                    ->defaultNull()
+                ->end()
+                ->scalarNode('project_root_regex')
+                    ->defaultNull()
+                ->end()
             ->end();
 
         return $treeBuilder;
@@ -111,8 +118,8 @@ class Configuration implements ConfigurationInterface
     {
         if (\method_exists($treeBuilder, 'getRootNode')) {
             return $treeBuilder->getRootNode();
-        } else {
-            return $treeBuilder->root(self::ROOT_NAME);
         }
+
+        return $treeBuilder->root(self::ROOT_NAME);
     }
 }
