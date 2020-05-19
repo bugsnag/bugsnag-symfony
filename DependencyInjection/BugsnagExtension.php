@@ -36,7 +36,7 @@ class BugsnagExtension extends Extension
             $symfonyRoot = $container->getParameter('kernel.project_dir');
         } else {
             $symfonyRoot = realpath(
-                $container->getParameter('kernel.root_dir').'/../'
+                $container->getParameter('kernel.root_dir').'/..'
             );
         }
 
