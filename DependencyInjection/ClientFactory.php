@@ -341,7 +341,7 @@ class ClientFactory
         } elseif ($this->project !== null) {
             $client->setProjectRoot($this->project);
         } else {
-            $client->setProjectRoot("{$this->root}/src");
+            $client->setProjectRoot($this->root.DIRECTORY_SEPARATOR.'src');
         }
 
         if ($this->stripPathRegex !== null) {
