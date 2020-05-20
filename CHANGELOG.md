@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## TBD
+
+### Enhancements
+
+* Add new options for using regexes to match the project root and strip path
+  [#109](https://github.com/bugsnag/bugsnag-symfony/pull/109)
+
 ## 1.6.2 (2020-02-26)
 
 ### Bug Fixes
