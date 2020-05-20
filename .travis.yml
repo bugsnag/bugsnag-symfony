@@ -89,13 +89,13 @@ before_install:
   - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/http-foundation:$(lastversion symfony/http-foundation --pre)" --no-update ; fi
   - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/http-kernel:$(lastversion symfony/http-kernel --pre)" --no-update ; fi
   - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/security-core:$(lastversion symfony/security-core --pre)" --no-update ; fi
-  # Show which versions of our direct dependencies we're using
-  - composer show --direct
   - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 install:
   - if [[ $TRAVIS_PHP_VERSION == 5.5.9 ]]; then travis_retry composer update --no-interaction --prefer-source --prefer-lowest ; fi
   - if [[ $TRAVIS_PHP_VERSION != 5.5.9 ]]; then travis_retry composer update --no-interaction --prefer-source ; fi
+  # Show which versions of our direct dependencies we're using
+  - composer show --direct
 
 script:
   - make test
