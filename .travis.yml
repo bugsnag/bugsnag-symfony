@@ -77,25 +77,10 @@ cache:
     - $HOME/.composer/cache
 
 before_install:
-  # If we're requesting a specific version we can simply install it
-  - if [[ $SYMFONY_VERSION != "latest" ]]; then travis_retry composer require "symfony/config:${SYMFONY_VERSION}" --no-update ; fi
-  - if [[ $SYMFONY_VERSION != "latest" ]]; then travis_retry composer require "symfony/console:${SYMFONY_VERSION}" --no-update ; fi
-  - if [[ $SYMFONY_VERSION != "latest" ]]; then travis_retry composer require "symfony/dependency-injection:${SYMFONY_VERSION}" --no-update ; fi
-  - if [[ $SYMFONY_VERSION != "latest" ]]; then travis_retry composer require "symfony/http-foundation:${SYMFONY_VERSION}" --no-update ; fi
-  - if [[ $SYMFONY_VERSION != "latest" ]]; then travis_retry composer require "symfony/http-kernel:${SYMFONY_VERSION}" --no-update ; fi
-  - if [[ $SYMFONY_VERSION != "latest" ]]; then travis_retry composer require "symfony/security-core:${SYMFONY_VERSION}" --no-update ; fi
-  # If we want the latest version, install the "lastversion" script
-  # see https://github.com/dvershinin/lastversion
-  - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry pip install lastversion==v1.1.5 ; fi
-  - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/config:$(lastversion symfony/config --pre)" --no-update ; fi
-  - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/console:$(lastversion symfony/console --pre)" --no-update ; fi
-  - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/dependency-injection:$(lastversion symfony/dependency-injection --pre)" --no-update ; fi
-  - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/http-foundation:$(lastversion symfony/http-foundation --pre)" --no-update ; fi
-  - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/http-kernel:$(lastversion symfony/http-kernel --pre)" --no-update ; fi
-  - if [[ $SYMFONY_VERSION == "latest" ]]; then travis_retry composer require "symfony/security-core:$(lastversion symfony/security-core --pre)" --no-update ; fi
   - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 
 install:
+  - ./.ci/require-symfony.sh "$SYMFONY_VERSION"
   - if [[ $TRAVIS_PHP_VERSION == 5.5.9 ]]; then travis_retry composer update --no-interaction --prefer-dist --prefer-lowest ; fi
   - if [[ $TRAVIS_PHP_VERSION != 5.5.9 ]]; then travis_retry composer update --no-interaction --prefer-dist ; fi
   # Show which versions of our direct dependencies we're using
