@@ -102,12 +102,16 @@ class ClientFactory
     /**
      * The strip path.
      *
+     * Note this won't be used if 'stripPathRegex' is also given.
+     *
      * @var string|null
      */
     protected $strip;
 
     /**
      * The project root.
+     *
+     * Note this won't be used if 'projectRootRegex' is also given.
      *
      * @var string|null
      */
@@ -154,28 +158,46 @@ class ClientFactory
     protected $shutdownStrategy;
 
     /**
-     * Create a new client factory instance.
+     * The strip path as a regular expression.
      *
-     * @param \Bugsnag\BugsnagBundle\Request\SymfonyResolver                                           $resolver
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface|null $tokens
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|null        $checker
-     * @param string|null                                                                              $key
-     * @param string|null                                                                              $endpoint
-     * @param bool                                                                                     $callbacks
-     * @param bool                                                                                     $user
-     * @param string|null                                                                              $type
-     * @param string|null                                                                              $version
-     * @param bool                                                                                     $batch
-     * @param string|null                                                                              $hostname
-     * @param bool                                                                                     $code
-     * @param string|null                                                                              $strip
-     * @param string|null                                                                              $project
-     * @param string|null                                                                              $root
-     * @param string|null                                                                              $env
-     * @param string|null                                                                              $stage
-     * @param string[]|null                                                                            $stages
-     * @param string[]|null                                                                            $filters
-     * @param \Bugsnag\Shutdown\ShutdownStrategyInterface                                              $shutdownStrategy
+     * This takes precedence over 'strip' if both are given.
+     *
+     * @var string|null
+     */
+    protected $stripPathRegex;
+
+    /**
+     * The project root as a regular expression.
+     *
+     * This takes precedence over 'project' if both are given.
+     *
+     * @var string|null
+     */
+    protected $projectRootRegex;
+
+    /**
+     * @param SymfonyResolver                    $resolver
+     * @param TokenStorageInterface|null         $tokens
+     * @param AuthorizationCheckerInterface|null $checker
+     * @param string|null                        $key
+     * @param string|null                        $endpoint
+     * @param bool                               $callbacks
+     * @param bool                               $user
+     * @param string|null                        $type
+     * @param string|null                        $version
+     * @param bool                               $batch
+     * @param string|null                        $hostname
+     * @param bool                               $code
+     * @param string|null                        $strip
+     * @param string|null                        $project
+     * @param string|null                        $root
+     * @param string|null                        $env
+     * @param string|null                        $stage
+     * @param string[]|null                      $stages
+     * @param string[]|null                      $filters
+     * @param ShutdownStrategyInterface          $shutdownStrategy
+     * @param string|null                        $stripPathRegex
+     * @param string|null                        $projectRootRegex
      *
      * @return void
      */
@@ -199,7 +221,9 @@ class ClientFactory
         $stage = null,
         array $stages = null,
         array $filters = null,
-        ShutdownStrategyInterface $shutdownStrategy = null
+        ShutdownStrategyInterface $shutdownStrategy = null,
+        $stripPathRegex = null,
+        $projectRootRegex = null
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -221,6 +245,8 @@ class ClientFactory
         $this->stages = $stages;
         $this->filters = $filters;
         $this->shutdownStrategy = $shutdownStrategy;
+        $this->stripPathRegex = $stripPathRegex;
+        $this->projectRootRegex = $projectRootRegex;
     }
 
     /**
@@ -242,7 +268,7 @@ class ClientFactory
             $this->setupUserDetection($client, $this->tokens, $this->checker);
         }
 
-        $this->setupPaths($client, $this->strip, $this->project, $this->root);
+        $this->setupPaths($client);
 
         $client->setReleaseStage($this->stage ?: ($this->env === 'prod' ? 'production' : $this->env));
 
@@ -304,43 +330,26 @@ class ClientFactory
     /**
      * Setup the client paths.
      *
-     * @param \Bugsnag\Client $client
-     * @param string|null     $strip
-     * @param string|null     $project
-     * @param string|null     $root
+     * @param Client $client
      *
      * @return void
      */
-    protected function setupPaths(Client $client, $strip, $project, $root)
+    protected function setupPaths(Client $client)
     {
-        if ($strip) {
-            $client->setStripPath($strip);
-
-            if (!$project) {
-                $client->setProjectRoot("{$strip}/src");
-            }
-
-            return;
+        if ($this->projectRootRegex !== null) {
+            $client->setProjectRootRegex($this->projectRootRegex);
+        } elseif ($this->project !== null) {
+            $client->setProjectRoot($this->project);
+        } else {
+            $client->setProjectRoot($this->root.DIRECTORY_SEPARATOR.'src');
         }
 
-        $base = $root ? realpath("{$root}/") : false;
-
-        if ($project) {
-            if ($base && substr($project, 0, strlen($base)) === $base) {
-                $client->setStripPath($base);
-            }
-
-            $client->setProjectRoot($project);
-
-            return;
-        }
-
-        if ($base) {
-            $client->setStripPath($base);
-
-            if ($root = realpath("{$base}/src")) {
-                $client->setProjectRoot($root);
-            }
+        if ($this->stripPathRegex !== null) {
+            $client->setStripPathRegex($this->stripPathRegex);
+        } elseif ($this->strip !== null) {
+            $client->setStripPath($this->strip);
+        } else {
+            $client->setStripPath($this->root);
         }
     }
 }
