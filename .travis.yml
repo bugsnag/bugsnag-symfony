@@ -69,7 +69,7 @@ matrix:
       dist: bionic
       env: SYMFONY_VERSION=^5.0
     - php: 7.4
-      dist: bionic
+      dist: focal
       env: SYMFONY_VERSION=latest
 
 cache:
