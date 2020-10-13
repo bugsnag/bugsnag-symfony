@@ -8,7 +8,7 @@ use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use Mockery;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
 
@@ -18,7 +18,10 @@ final class ClientFactoryTest extends TestCase
 
     private $rootPath = '/example/root/path';
 
-    public function tearDown()
+    /**
+     * @after
+     */
+    public function afterEach()
     {
         $this->tearDownMockery();
     }
