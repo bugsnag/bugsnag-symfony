@@ -20,12 +20,13 @@
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+
+    <coverage processUncoveredFiles="true">
+        <include>
             <directory suffix=".php">./Command</directory>
             <directory suffix=".php">./DependencyInjection</directory>
             <directory suffix=".php">./EventListener</directory>
             <directory suffix=".php">./Request</directory>
-        </whitelist>
-    </filter>
+        </include>
+    </coverage>
 </phpunit>

@@ -10,7 +10,7 @@ use Exception;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use InvalidArgumentException;
 use Mockery;
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
@@ -52,11 +52,6 @@ class BugsnagListenerTest extends TestCase
         $listener->onKernelException($event);
     }
 
-    /**
-     * @requires PHP 5.6
-     *
-     * PHPUnit version installed with PHP 5.5 doesn't support TestCase::expectException
-     */
     public function testOnRequestArgumentException()
     {
         // Create mocks
@@ -64,8 +59,12 @@ class BugsnagListenerTest extends TestCase
         $event = Mockery::mock(GetResponseForExceptionEvent::class);
         $resolver = Mockery::mock(SymfonyResolver::class);
 
-        // Setup responses
-        $this->expectException(InvalidArgumentException::class);
+        // PHPUnit 4 doesn't have 'expectException'
+        if (method_exists(TestCase::class, 'expectException')) {
+            $this->expectException(InvalidArgumentException::class);
+        } else {
+            $this->setExpectedException(InvalidArgumentException::class);
+        }
 
         // Initiate test
         $listener = new BugsnagListener($client, $resolver, true);
