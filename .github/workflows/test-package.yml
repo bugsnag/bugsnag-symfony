@@ -1,0 +1,86 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php-version: 5.5.9
+            symfony-version: '2.7.*'
+            composer-flags: '--prefer-lowest'
+          - php-version: 5.5
+            symfony-version: '2.7.*'
+          - php-version: 5.5
+            symfony-version: '2.8.*'
+          - php-version: 5.5
+            symfony-version: '^3.0'
+          - php-version: 5.6
+            symfony-version: '2.7.*'
+          - php-version: 5.6
+            symfony-version: '2.8.*'
+          - php-version: 5.6
+            symfony-version: '^3.0'
+          - php-version: 7.0
+            symfony-version: '2.8.*'
+          - php-version: 7.0
+            symfony-version: '^3.0'
+          - php-version: 7.1
+            symfony-version: '2.8.*'
+          - php-version: 7.1
+            symfony-version: '^3.0'
+          - php-version: 7.1
+            symfony-version: '^4.0'
+          - php-version: 7.2
+            symfony-version: '2.8.*'
+          - php-version: 7.2
+            symfony-version: '^3.0'
+          - php-version: 7.2
+            symfony-version: '^4.0'
+          - php-version: 7.2
+            symfony-version: '^5.0'
+          - php-version: 7.3
+            symfony-version: '^3.0'
+          - php-version: 7.3
+            symfony-version: '^4.0'
+          - php-version: 7.3
+            symfony-version: '^5.0'
+          - php-version: 7.4
+            symfony-version: '^3.0'
+          - php-version: 7.4
+            symfony-version: '^4.0'
+          - php-version: 7.4
+            symfony-version: '^5.0'
+          - php-version: 7.4
+            symfony-version: 'latest'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+
+    - name: install Python
+      if: ${{ matrix.symfony-version == 'latest' }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - run: composer validate
+
+    - name: require Symfony
+      run: ./.ci/require-symfony.sh "${{ matrix.symfony-version }}"
+
+    - name: install dependencies
+      run: composer update --prefer-dist --no-progress --no-suggest --no-interaction ${{ matrix.composer-flags }}
+
+    - run: composer test
