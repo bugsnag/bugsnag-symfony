@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## TBD
+
+### Enhancements
+
+* Allow passing a Guzzle instance to Bugsnag
+  [#117](https://github.com/bugsnag/bugsnag-symfony/pull/117)
+
 ## 1.7.0 (2020-06-01)
 
 ### Enhancements
