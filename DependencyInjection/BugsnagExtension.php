@@ -41,5 +41,11 @@ class BugsnagExtension extends Extension
         }
 
         $container->setParameter('bugsnag.symfony_root', $symfonyRoot);
+
+        // Register an alias for 'bugsnag.guzzle' if the user has supplied a
+        // service to use
+        if (isset($config['guzzle'])) {
+            $container->setAlias('bugsnag.guzzle', $config['guzzle']);
+        }
     }
 }

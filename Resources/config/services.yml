@@ -27,6 +27,7 @@ services:
           - '@bugsnag.shutdown'
           - '%bugsnag.strip_path_regex%'
           - '%bugsnag.project_root_regex%'
+          - '@?bugsnag.guzzle'
 
     bugsnag:
         class: '%bugsnag.client%'

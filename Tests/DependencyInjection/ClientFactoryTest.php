@@ -28,12 +28,27 @@ final class ClientFactoryTest extends TestCase
 
     public function testShutdownStrategyIsPassedToClient()
     {
+        /** @var \Mockery\MockInterface $shutdown */
         $shutdown = Mockery::mock(BugsnagShutdown::class);
         $shutdown->shouldReceive('registerShutdownStrategy')->once();
 
         $client = $this->createClient(['shutdownStrategy' => $shutdown]);
 
         $shutdown->shouldHaveReceived('registerShutdownStrategy', [$client]);
+    }
+
+    public function testGuzzleIsPassedToClient()
+    {
+        /** @var \Mockery\MockInterface $guzzle */
+        $guzzle = Mockery::mock(\GuzzleHttp\ClientInterface::class);
+        $guzzle->shouldIgnoreMissing();
+
+        $client = $this->createClient(['guzzle' => $guzzle]);
+
+        $httpClient = $this->getProperty($client, 'http');
+        $actual = $this->getProperty($httpClient, 'guzzle');
+
+        $this->assertSame($guzzle, $actual);
     }
 
     /**
@@ -312,6 +327,7 @@ final class ClientFactoryTest extends TestCase
             'shutdownStrategy' => null,
             'stripPathRegex' => null,
             'projectRootRegex' => null,
+            'guzzle' => null,
         ];
     }
 }
