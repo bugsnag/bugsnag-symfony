@@ -100,6 +100,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('project_root_regex')
                     ->defaultNull()
                 ->end()
+                ->scalarNode('guzzle')
+                    ->defaultNull()
+                ->end()
             ->end();
 
         return $treeBuilder;

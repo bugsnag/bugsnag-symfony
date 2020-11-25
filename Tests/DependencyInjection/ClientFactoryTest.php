@@ -28,12 +28,27 @@ final class ClientFactoryTest extends TestCase
 
     public function testShutdownStrategyIsPassedToClient()
     {
+        /** @var \Mockery\MockInterface $shutdown */
         $shutdown = Mockery::mock(BugsnagShutdown::class);
         $shutdown->shouldReceive('registerShutdownStrategy')->once();
 
-        $client = $this->createClient(['shutdown_strategy' => $shutdown]);
+        $client = $this->createClient(['shutdownStrategy' => $shutdown]);
 
         $shutdown->shouldHaveReceived('registerShutdownStrategy', [$client]);
+    }
+
+    public function testGuzzleIsPassedToClient()
+    {
+        /** @var \Mockery\MockInterface $guzzle */
+        $guzzle = Mockery::mock(\GuzzleHttp\ClientInterface::class);
+        $guzzle->shouldIgnoreMissing();
+
+        $client = $this->createClient(['guzzle' => $guzzle]);
+
+        $httpClient = $this->getProperty($client, 'http');
+        $actual = $this->getProperty($httpClient, 'guzzle');
+
+        $this->assertSame($guzzle, $actual);
     }
 
     /**
@@ -94,8 +109,8 @@ final class ClientFactoryTest extends TestCase
             'root' => $this->rootPath,
             'project' => $projectRoot,
             'strip' => $stripPath,
-            'project_root_regex' => $projectRootRegex,
-            'strip_path_regex' => $stripPathRegex,
+            'projectRootRegex' => $projectRootRegex,
+            'stripPathRegex' => $stripPathRegex,
         ]);
 
         $this->assertInstanceOf(Client::class, $client);
@@ -281,10 +296,9 @@ final class ClientFactoryTest extends TestCase
     /**
      * Get an array of default arguments for the ClientFactory.
      *
-     * This is an associative array purely to document the arguments — they are
-     * applied in order rather than by name, i.e. index 0 will always be the
-     * first argument for ClientFactory, which won't necessarily be the
-     * '$resolver' if the parameter order changes
+     * Note: before PHP 8, this associative array only documents the arguments,
+     * i.e. they are applied in order rather than by name. PHP 8 will use these
+     * keys as named arguments to the ClientFactory constructor
      *
      * @return array
      */
@@ -310,9 +324,10 @@ final class ClientFactoryTest extends TestCase
             'stage' => null,
             'stages' => null,
             'filters' => null,
-            'shutdown_strategy' => null,
-            'strip_path_regex' => null,
-            'project_root_regex' => null,
+            'shutdownStrategy' => null,
+            'stripPathRegex' => null,
+            'projectRootRegex' => null,
+            'guzzle' => null,
         ];
     }
 }
