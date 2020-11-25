@@ -8,6 +8,7 @@ use Bugsnag\Callbacks\CustomUser;
 use Bugsnag\Client;
 use Bugsnag\Configuration as Config;
 use Bugsnag\Shutdown\ShutdownStrategyInterface;
+use GuzzleHttp;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -176,6 +177,13 @@ class ClientFactory
     protected $projectRootRegex;
 
     /**
+     * The Guzzle client Bugsnag will use.
+     *
+     * @var GuzzleHttp\ClientInterface
+     */
+    private $guzzle;
+
+    /**
      * @param SymfonyResolver                    $resolver
      * @param TokenStorageInterface|null         $tokens
      * @param AuthorizationCheckerInterface|null $checker
@@ -198,6 +206,7 @@ class ClientFactory
      * @param ShutdownStrategyInterface          $shutdownStrategy
      * @param string|null                        $stripPathRegex
      * @param string|null                        $projectRootRegex
+     * @param GuzzleHttp\ClientInterface|null    $guzzle
      *
      * @return void
      */
@@ -223,7 +232,8 @@ class ClientFactory
         array $filters = null,
         ShutdownStrategyInterface $shutdownStrategy = null,
         $stripPathRegex = null,
-        $projectRootRegex = null
+        $projectRootRegex = null,
+        GuzzleHttp\ClientInterface $guzzle = null
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -247,6 +257,9 @@ class ClientFactory
         $this->shutdownStrategy = $shutdownStrategy;
         $this->stripPathRegex = $stripPathRegex;
         $this->projectRootRegex = $projectRootRegex;
+        $this->guzzle = $guzzle === null
+            ? Client::makeGuzzle()
+            : $guzzle;
     }
 
     /**
@@ -256,9 +269,12 @@ class ClientFactory
      */
     public function make()
     {
-        $guzzle = Client::makeGuzzle($this->endpoint);
-
-        $client = new Client(new Config($this->key ?: ''), $this->resolver, $guzzle, $this->shutdownStrategy);
+        $client = new Client(
+            new Config($this->key ?: ''),
+            $this->resolver,
+            $this->guzzle,
+            $this->shutdownStrategy
+        );
 
         if ($this->callbacks) {
             $client->registerDefaultCallbacks();
@@ -287,6 +303,10 @@ class ClientFactory
             'version' => BugsnagBundle::VERSION,
             'url' => 'https://github.com/bugsnag/bugsnag-symfony',
         ]));
+
+        if ($this->endpoint !== null) {
+            $client->setNotifyEndpoint($this->endpoint);
+        }
 
         if ($this->stages) {
             $client->setNotifyReleaseStages($this->stages);
