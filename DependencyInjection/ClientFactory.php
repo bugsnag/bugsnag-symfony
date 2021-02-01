@@ -298,11 +298,11 @@ class ClientFactory
 
         $client->getConfig()->mergeDeviceData(['runtimeVersions' => ['symfony' => Kernel::VERSION]]);
 
-        $client->setNotifier(array_filter([
+        $client->setNotifier([
             'name' => 'Bugsnag Symfony',
             'version' => BugsnagBundle::VERSION,
             'url' => 'https://github.com/bugsnag/bugsnag-symfony',
-        ]));
+        ]);
 
         if ($this->endpoint !== null) {
             $client->setNotifyEndpoint($this->endpoint);
