@@ -17,6 +17,8 @@ use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Debug\Exception\OutOfMemoryException as OutOfMemorySymfony2Or3;
+use Symfony\Component\ErrorHandler\Error\OutOfMemoryError as OutOfMemorySymfony4Plus;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 
 class ReportStub
@@ -46,6 +48,49 @@ class BugsnagListenerTest extends TestCase
         $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $report->shouldReceive('setMetaData')->once()->with([]);
+        $client->shouldReceive('notify')->once()->with($report);
+
+        $listener = new BugsnagListener($client, $resolver, true);
+        $listener->onKernelException($event);
+    }
+
+    public function testOnKernelExceptionWithAnOom()
+    {
+        $file = __FILE__;
+        $line = __LINE__;
+        $oomMessage = 'Allowed memory size of 12345 bytes exhausted (tried to allocate 9876 bytes)';
+
+        if (class_exists(OutOfMemorySymfony4Plus::class)) {
+            $error = [
+                'type' => E_ERROR,
+                'message' => $oomMessage,
+                'file' => $file,
+                'line' => $line,
+            ];
+
+            $oom = new OutOfMemorySymfony4Plus($oomMessage, 1, $error);
+        } else {
+            $oom = new OutOfMemorySymfony2Or3($oomMessage, 1, E_ERROR, $file, $line);
+        }
+
+        /** @var Mock&Report $report */
+        $report = Mockery::namedMock(Report::class, ReportStub::class);
+        /** @var Mock&Client $client */
+        $client = Mockery::mock(Client::class);
+        /** @var Mock&GetResponseForExceptionEvent $event */
+        $event = Mockery::mock(GetResponseForExceptionEvent::class);
+
+        $resolver = new SymfonyResolver();
+
+        $event->shouldReceive('getException')->once()->andReturn($oom);
+
+        $report->shouldReceive('fromPHPThrowable')->once()->with('config', $oom)->andReturn($report);
+        $report->shouldReceive('setUnhandled')->once()->with(true);
+        $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
+        $report->shouldReceive('setMetaData')->once()->with([]);
+
+        $client->shouldReceive('getConfig')->once()->andReturn('config');
+        $client->shouldReceive('getMemoryLimitIncrease')->twice()->andReturn(1234567890);
         $client->shouldReceive('notify')->once()->with($report);
 
         $listener = new BugsnagListener($client, $resolver, true);
