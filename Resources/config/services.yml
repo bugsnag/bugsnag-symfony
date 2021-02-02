@@ -28,6 +28,7 @@ services:
           - '%bugsnag.strip_path_regex%'
           - '%bugsnag.project_root_regex%'
           - '@?bugsnag.guzzle'
+          - '%bugsnag.memory_limit_increase%'
 
     bugsnag:
         class: '%bugsnag.client%'
