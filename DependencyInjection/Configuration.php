@@ -106,6 +106,11 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('memory_limit_increase')
                     ->defaultFalse()
                 ->end()
+                ->arrayNode('discard_classes')
+                    ->prototype('scalar')->end()
+                    ->treatNullLike([])
+                    ->defaultValue([])
+                ->end()
             ->end();
 
         return $treeBuilder;

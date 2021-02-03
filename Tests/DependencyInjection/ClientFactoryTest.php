@@ -272,6 +272,22 @@ final class ClientFactoryTest extends TestCase
         ];
     }
 
+    public function testDiscardClassesIsSetCorrectly()
+    {
+        $discardClasses = [\LogicException::class, \RuntimeException::class];
+
+        $client = $this->createClient([
+            'discardClasses' => $discardClasses,
+        ]);
+
+        $this->assertInstanceOf(Client::class, $client);
+
+        /** @var Client $client */
+        $actual = $client->getDiscardClasses();
+
+        $this->assertSame($discardClasses, $actual);
+    }
+
     /**
      * Get the value of the given property on the given object.
      *
@@ -361,6 +377,7 @@ final class ClientFactoryTest extends TestCase
             'projectRootRegex' => null,
             'guzzle' => null,
             'memoryLimitIncrease' => false,
+            'discardClasses' => [],
         ];
     }
 }

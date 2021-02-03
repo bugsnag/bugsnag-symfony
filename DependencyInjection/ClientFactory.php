@@ -193,6 +193,15 @@ class ClientFactory
     private $memoryLimitIncrease;
 
     /**
+     * An array of classes that should not be sent to Bugsnag.
+     *
+     * This can contain both fully qualified class names and regular expressions.
+     *
+     * @var array
+     */
+    private $discardClasses;
+
+    /**
      * @param SymfonyResolver                    $resolver
      * @param TokenStorageInterface|null         $tokens
      * @param AuthorizationCheckerInterface|null $checker
@@ -217,6 +226,7 @@ class ClientFactory
      * @param string|null                        $projectRootRegex
      * @param GuzzleHttp\ClientInterface|null    $guzzle
      * @param int|null|false                     $memoryLimitIncrease
+     * @param array                              $discardClasses
      *
      * @return void
      */
@@ -244,7 +254,8 @@ class ClientFactory
         $stripPathRegex = null,
         $projectRootRegex = null,
         GuzzleHttp\ClientInterface $guzzle = null,
-        $memoryLimitIncrease = false
+        $memoryLimitIncrease = false,
+        array $discardClasses = []
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -272,6 +283,7 @@ class ClientFactory
             ? Client::makeGuzzle()
             : $guzzle;
         $this->memoryLimitIncrease = $memoryLimitIncrease;
+        $this->discardClasses = $discardClasses;
     }
 
     /**
@@ -331,6 +343,10 @@ class ClientFactory
         // "false" is used as a sentinel here because "null" is a valid value
         if ($this->memoryLimitIncrease !== false) {
             $client->setMemoryLimitIncrease($this->memoryLimitIncrease);
+        }
+
+        if ($this->discardClasses) {
+            $client->setDiscardClasses($this->discardClasses);
         }
 
         return $client;
