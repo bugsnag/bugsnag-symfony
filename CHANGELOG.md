@@ -8,6 +8,9 @@ Changelog
 * Out of memory errors will now be reported by increasing the memory limit by 5 MiB. Use the new `memoryLimitIncrease` configuration option to change the amount of memory, or set it to `null` to disable the increase entirely.
   [#119](https://github.com/bugsnag/bugsnag-symfony/pull/119)
 
+* Support the new `discardClasses` configuration option. This allows events to be discarded based on the exception class name or PHP error name.
+  [#120](https://github.com/bugsnag/bugsnag-symfony/pull/120)
+
 ## 1.8.0 (2020-11-25)
 
 ### Enhancements
