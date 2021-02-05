@@ -149,6 +149,8 @@ class ClientFactory
     /**
      * The filters.
      *
+     * @deprecated use redactedKeys instead
+     *
      * @var string[]|null
      */
     protected $filters;
