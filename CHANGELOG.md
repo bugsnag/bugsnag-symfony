@@ -1,6 +1,23 @@
 Changelog
 =========
 
+## 1.9.0 (2021-02-10)
+
+### Enhancements
+
+* Out of memory errors will now be reported by increasing the memory limit by 5 MiB. Use the new `memoryLimitIncrease` configuration option to change the amount of memory, or set it to `null` to disable the increase entirely.
+  [#119](https://github.com/bugsnag/bugsnag-symfony/pull/119)
+
+* Support the new `discardClasses` configuration option. This allows events to be discarded based on the exception class name or PHP error name.
+  [#120](https://github.com/bugsnag/bugsnag-symfony/pull/120)
+
+* Support the new `redactedKeys` configuration option. This is similar to `filters` but allows both strings and regexes. String matching is exact but case-insensitive. Regex matching allows for partial and wildcard matching.
+  [#121](https://github.com/bugsnag/bugsnag-symfony/pull/121)
+
+### Deprecations
+
+* The `filters` configuration option is now deprecated as `redactedKeys` can express everything that filters could and more.
+
 ## 1.8.0 (2020-11-25)
 
 ### Enhancements

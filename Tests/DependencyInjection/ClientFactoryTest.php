@@ -241,6 +241,70 @@ final class ClientFactoryTest extends TestCase
     }
 
     /**
+     * @param int|null|false $memoryLimitIncrease
+     * @param int|null       $expected
+     *
+     * @return void
+     *
+     * @dataProvider memoryLimitIncreaseProvider
+     */
+    public function testMemoryLimitIncreaseIsSetCorrectly($memoryLimitIncrease, $expected)
+    {
+        $client = $this->createClient([
+            'memoryLimitIncrease' => $memoryLimitIncrease,
+        ]);
+
+        $this->assertInstanceOf(Client::class, $client);
+
+        /** @var Client $client */
+        $actual = $client->getMemoryLimitIncrease();
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function memoryLimitIncreaseProvider()
+    {
+        return [
+            'null' => [null, null],
+            '1234 bytes' => [1234, 1234],
+            '20 MiB' => [1024 * 1024 * 20, 1024 * 1024 * 20],
+            '"false" uses the default' => [false, 1024 * 1024 * 5],
+        ];
+    }
+
+    public function testDiscardClassesIsSetCorrectly()
+    {
+        $discardClasses = [\LogicException::class, \RuntimeException::class];
+
+        $client = $this->createClient([
+            'discardClasses' => $discardClasses,
+        ]);
+
+        $this->assertInstanceOf(Client::class, $client);
+
+        /** @var Client $client */
+        $actual = $client->getDiscardClasses();
+
+        $this->assertSame($discardClasses, $actual);
+    }
+
+    public function testRedactedKeysIsSetCorrectly()
+    {
+        $redactedKeys = ['password', 'not_password'];
+
+        $client = $this->createClient([
+            'redactedKeys' => $redactedKeys,
+        ]);
+
+        $this->assertInstanceOf(Client::class, $client);
+
+        /** @var Client $client */
+        $actual = $client->getRedactedKeys();
+
+        $this->assertSame($redactedKeys, $actual);
+    }
+
+    /**
      * Get the value of the given property on the given object.
      *
      * @param object $object
@@ -328,6 +392,9 @@ final class ClientFactoryTest extends TestCase
             'stripPathRegex' => null,
             'projectRootRegex' => null,
             'guzzle' => null,
+            'memoryLimitIncrease' => false,
+            'discardClasses' => [],
+            'redactedKeys' => [],
         ];
     }
 }
