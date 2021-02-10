@@ -288,6 +288,22 @@ final class ClientFactoryTest extends TestCase
         $this->assertSame($discardClasses, $actual);
     }
 
+    public function testRedactedKeysIsSetCorrectly()
+    {
+        $redactedKeys = ['password', 'not_password'];
+
+        $client = $this->createClient([
+            'redactedKeys' => $redactedKeys,
+        ]);
+
+        $this->assertInstanceOf(Client::class, $client);
+
+        /** @var Client $client */
+        $actual = $client->getRedactedKeys();
+
+        $this->assertSame($redactedKeys, $actual);
+    }
+
     /**
      * Get the value of the given property on the given object.
      *
@@ -378,6 +394,7 @@ final class ClientFactoryTest extends TestCase
             'guzzle' => null,
             'memoryLimitIncrease' => false,
             'discardClasses' => [],
+            'redactedKeys' => [],
         ];
     }
 }

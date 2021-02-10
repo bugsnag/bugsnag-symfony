@@ -149,6 +149,8 @@ class ClientFactory
     /**
      * The filters.
      *
+     * @deprecated use redactedKeys instead
+     *
      * @var string[]|null
      */
     protected $filters;
@@ -202,6 +204,13 @@ class ClientFactory
     private $discardClasses;
 
     /**
+     * An array of metadata keys that should be redacted.
+     *
+     * @var string[]
+     */
+    private $redactedKeys;
+
+    /**
      * @param SymfonyResolver                    $resolver
      * @param TokenStorageInterface|null         $tokens
      * @param AuthorizationCheckerInterface|null $checker
@@ -227,6 +236,7 @@ class ClientFactory
      * @param GuzzleHttp\ClientInterface|null    $guzzle
      * @param int|null|false                     $memoryLimitIncrease
      * @param array                              $discardClasses
+     * @param string[]                           $redactedKeys
      *
      * @return void
      */
@@ -255,7 +265,8 @@ class ClientFactory
         $projectRootRegex = null,
         GuzzleHttp\ClientInterface $guzzle = null,
         $memoryLimitIncrease = false,
-        array $discardClasses = []
+        array $discardClasses = [],
+        array $redactedKeys = []
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -284,6 +295,7 @@ class ClientFactory
             : $guzzle;
         $this->memoryLimitIncrease = $memoryLimitIncrease;
         $this->discardClasses = $discardClasses;
+        $this->redactedKeys = $redactedKeys;
     }
 
     /**
@@ -347,6 +359,10 @@ class ClientFactory
 
         if ($this->discardClasses) {
             $client->setDiscardClasses($this->discardClasses);
+        }
+
+        if ($this->redactedKeys) {
+            $client->setRedactedKeys($this->redactedKeys);
         }
 
         return $client;

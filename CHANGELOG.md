@@ -11,6 +11,13 @@ Changelog
 * Support the new `discardClasses` configuration option. This allows events to be discarded based on the exception class name or PHP error name.
   [#120](https://github.com/bugsnag/bugsnag-symfony/pull/120)
 
+* Support the new `redactedKeys` configuration option. This is similar to `filters` but allows both strings and regexes. String matching is exact but case-insensitive. Regex matching allows for partial and wildcard matching.
+  [#121](https://github.com/bugsnag/bugsnag-symfony/pull/121)
+
+### Deprecations
+
+* The `filters` configuration option is now deprecated as `redactedKeys` can express everything that filters could and more.
+
 ## 1.8.0 (2020-11-25)
 
 ### Enhancements

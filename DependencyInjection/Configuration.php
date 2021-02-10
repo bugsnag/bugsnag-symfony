@@ -111,6 +111,11 @@ class Configuration implements ConfigurationInterface
                     ->treatNullLike([])
                     ->defaultValue([])
                 ->end()
+                ->arrayNode('redacted_keys')
+                    ->prototype('scalar')->end()
+                    ->treatNullLike([])
+                    ->defaultValue([])
+                ->end()
             ->end();
 
         return $treeBuilder;

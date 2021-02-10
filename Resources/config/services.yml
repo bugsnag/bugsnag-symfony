@@ -30,6 +30,7 @@ services:
           - '@?bugsnag.guzzle'
           - '%bugsnag.memory_limit_increase%'
           - '%bugsnag.discard_classes%'
+          - '%bugsnag.redacted_keys%'
 
     bugsnag:
         class: '%bugsnag.client%'
