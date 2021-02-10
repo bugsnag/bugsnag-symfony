@@ -103,6 +103,9 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('guzzle')
                     ->defaultNull()
                 ->end()
+                ->scalarNode('memory_limit_increase')
+                    ->defaultFalse()
+                ->end()
             ->end();
 
         return $treeBuilder;

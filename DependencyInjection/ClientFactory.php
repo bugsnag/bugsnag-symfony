@@ -184,6 +184,15 @@ class ClientFactory
     private $guzzle;
 
     /**
+     * The amount to increase the memory_limit to handle an OOM.
+     *
+     * This can be disabled by setting "bugsnag.memory_limit_increase" to "null"
+     *
+     * @var int|null|false
+     */
+    private $memoryLimitIncrease;
+
+    /**
      * @param SymfonyResolver                    $resolver
      * @param TokenStorageInterface|null         $tokens
      * @param AuthorizationCheckerInterface|null $checker
@@ -207,6 +216,7 @@ class ClientFactory
      * @param string|null                        $stripPathRegex
      * @param string|null                        $projectRootRegex
      * @param GuzzleHttp\ClientInterface|null    $guzzle
+     * @param int|null|false                     $memoryLimitIncrease
      *
      * @return void
      */
@@ -233,7 +243,8 @@ class ClientFactory
         ShutdownStrategyInterface $shutdownStrategy = null,
         $stripPathRegex = null,
         $projectRootRegex = null,
-        GuzzleHttp\ClientInterface $guzzle = null
+        GuzzleHttp\ClientInterface $guzzle = null,
+        $memoryLimitIncrease = false
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -260,6 +271,7 @@ class ClientFactory
         $this->guzzle = $guzzle === null
             ? Client::makeGuzzle()
             : $guzzle;
+        $this->memoryLimitIncrease = $memoryLimitIncrease;
     }
 
     /**
@@ -298,11 +310,11 @@ class ClientFactory
 
         $client->getConfig()->mergeDeviceData(['runtimeVersions' => ['symfony' => Kernel::VERSION]]);
 
-        $client->setNotifier(array_filter([
+        $client->setNotifier([
             'name' => 'Bugsnag Symfony',
             'version' => BugsnagBundle::VERSION,
             'url' => 'https://github.com/bugsnag/bugsnag-symfony',
-        ]));
+        ]);
 
         if ($this->endpoint !== null) {
             $client->setNotifyEndpoint($this->endpoint);
@@ -314,6 +326,11 @@ class ClientFactory
 
         if ($this->filters) {
             $client->setFilters($this->filters);
+        }
+
+        // "false" is used as a sentinel here because "null" is a valid value
+        if ($this->memoryLimitIncrease !== false) {
+            $client->setMemoryLimitIncrease($this->memoryLimitIncrease);
         }
 
         return $client;

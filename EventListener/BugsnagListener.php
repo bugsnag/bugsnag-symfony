@@ -9,6 +9,8 @@ use InvalidArgumentException;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
+use Symfony\Component\Debug\Exception\OutOfMemoryException;
+use Symfony\Component\ErrorHandler\Error\OutOfMemoryError;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -39,6 +41,13 @@ class BugsnagListener implements EventSubscriberInterface
      * @var bool
      */
     protected $auto;
+
+    /**
+     * A regex that matches Symfony's OOM errors.
+     *
+     * @var string
+     */
+    private $oomRegex = '/Allowed memory size of (\d+) bytes exhausted \(tried to allocate \d+ bytes\)/';
 
     /**
      * Create a new bugsnag listener instance.
@@ -88,17 +97,18 @@ class BugsnagListener implements EventSubscriberInterface
      */
     public function onKernelException($event)
     {
-        // Compatibility with Symfony < 5 and Symfony >=5
-        // The additional `method_exists` check is to prevent errors in Symfony 4.3
-        // where the ExceptionEvent exists and is used but doesn't implement
-        // the `getThrowable` method, which was introduced in Symfony 4.4
-        if ($event instanceof ExceptionEvent && method_exists($event, 'getThrowable')) {
-            $this->sendNotify($event->getThrowable(), []);
-        } elseif ($event instanceof GetResponseForExceptionEvent) {
-            $this->sendNotify($event->getException(), []);
-        } else {
-            throw new InvalidArgumentException('onKernelException function only accepts GetResponseForExceptionEvent and ExceptionEvent arguments');
+        $throwable = $this->resolveThrowable($event);
+
+        if ($this->isOom($throwable)
+            && $this->client->getMemoryLimitIncrease() !== null
+            && preg_match($this->oomRegex, $throwable->getMessage(), $matches) === 1
+        ) {
+            $currentMemoryLimit = (int) $matches[1];
+
+            ini_set('memory_limit', $currentMemoryLimit + $this->client->getMemoryLimitIncrease());
         }
+
+        $this->sendNotify($throwable, []);
     }
 
     /**
@@ -134,6 +144,12 @@ class BugsnagListener implements EventSubscriberInterface
         $this->sendNotify($event->getError(), ['command' => $meta]);
     }
 
+    /**
+     * @param \Throwable $throwable
+     * @param array      $meta
+     *
+     * @return void
+     */
     private function sendNotify($throwable, $meta)
     {
         if (!$this->auto) {
@@ -154,6 +170,44 @@ class BugsnagListener implements EventSubscriberInterface
         $report->setMetaData($meta);
 
         $this->client->notify($report);
+    }
+
+    /**
+     * @param GetResponseForExceptionEvent|ExceptionEvent $event
+     *
+     * @return \Throwable
+     */
+    private function resolveThrowable($event)
+    {
+        // Compatibility with Symfony < 5 and Symfony >=5
+        // The additional `method_exists` check is to prevent errors in Symfony 4.3
+        // where the ExceptionEvent exists and is used but doesn't implement
+        // the `getThrowable` method, which was introduced in Symfony 4.4
+        if ($event instanceof ExceptionEvent && method_exists($event, 'getThrowable')) {
+            return $event->getThrowable();
+        }
+
+        if ($event instanceof GetResponseForExceptionEvent) {
+            return $event->getException();
+        }
+
+        throw new InvalidArgumentException('onKernelException function only accepts GetResponseForExceptionEvent and ExceptionEvent arguments');
+    }
+
+    /**
+     * Check if this $throwable is an OOM.
+     *
+     * This will be represented by an "OutOfMemoryError" on Symfony 4.4+ or an
+     * "OutOfMemoryException" on earlier versions.
+     *
+     * @param \Throwable $throwable
+     *
+     * @return bool
+     */
+    private function isOom($throwable)
+    {
+        return $throwable instanceof OutOfMemoryError
+            || $throwable instanceof OutOfMemoryException;
     }
 
     public static function getSubscribedEvents()

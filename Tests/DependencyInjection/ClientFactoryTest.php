@@ -241,6 +241,38 @@ final class ClientFactoryTest extends TestCase
     }
 
     /**
+     * @param int|null|false $memoryLimitIncrease
+     * @param int|null       $expected
+     *
+     * @return void
+     *
+     * @dataProvider memoryLimitIncreaseProvider
+     */
+    public function testMemoryLimitIncreaseIsSetCorrectly($memoryLimitIncrease, $expected)
+    {
+        $client = $this->createClient([
+            'memoryLimitIncrease' => $memoryLimitIncrease,
+        ]);
+
+        $this->assertInstanceOf(Client::class, $client);
+
+        /** @var Client $client */
+        $actual = $client->getMemoryLimitIncrease();
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function memoryLimitIncreaseProvider()
+    {
+        return [
+            'null' => [null, null],
+            '1234 bytes' => [1234, 1234],
+            '20 MiB' => [1024 * 1024 * 20, 1024 * 1024 * 20],
+            '"false" uses the default' => [false, 1024 * 1024 * 5],
+        ];
+    }
+
+    /**
      * Get the value of the given property on the given object.
      *
      * @param object $object
@@ -328,6 +360,7 @@ final class ClientFactoryTest extends TestCase
             'stripPathRegex' => null,
             'projectRootRegex' => null,
             'guzzle' => null,
+            'memoryLimitIncrease' => false,
         ];
     }
 }

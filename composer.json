@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.5",
-        "bugsnag/bugsnag": "^3.20",
+        "bugsnag/bugsnag": "^3.26.0",
         "symfony/config": "^2.7|^3|^4|^5",
         "symfony/console": "^2.7|^3|^4|^5",
         "symfony/dependency-injection": "^2.7|^3|^4|^5",
