@@ -9,6 +9,7 @@ use Bugsnag\Request\RequestInterface;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class SymfonyRequestTest extends TestCase
 {
@@ -34,5 +35,53 @@ class SymfonyRequestTest extends TestCase
 
         $this->assertInstanceOf(RequestInterface::class, $request);
         $this->assertInstanceOf(SymfonyRequest::class, $request);
+    }
+
+    public function testResolveSessionWhenPreviousSessionDoesNotExists()
+    {
+        $symfonyRequest = $this->getMock(Request::class);
+
+        $resolver = new SymfonyResolver();
+        $resolver->set($symfonyRequest);
+
+        $request = $resolver->resolve();
+
+        $symfonyRequest->expects($this->once())
+            ->method('hasPreviousSession')
+            ->willReturn(false);
+
+        $symfonyRequest->expects($this->never())
+            ->method('getSession');
+
+        $session = $request->getSession();
+        $this->assertTrue(is_array($session));
+        $this->assertEmpty($session);
+    }
+
+    public function testResolveSessionWhenPreviousSessionExists()
+    {
+        $symfonyRequest = $this->getMock(Request::class);
+        $symfonySession = $this->getMock(Session::class);
+
+        $resolver = new SymfonyResolver();
+        $resolver->set($symfonyRequest);
+
+        $request = $resolver->resolve();
+
+        $symfonyRequest->expects($this->once())
+            ->method('hasPreviousSession')
+            ->willReturn(true);
+
+        $symfonyRequest->expects($this->once())
+            ->method('getSession')
+            ->willReturn($symfonySession);
+
+        $symfonySession->expects($this->once())
+            ->method('all')
+            ->willReturn(['foobar' => 'baz']);
+
+        $session = $request->getSession();
+        $this->assertTrue(is_array($session));
+        $this->assertEquals(['foobar' => 'baz'], $session);
     }
 }
