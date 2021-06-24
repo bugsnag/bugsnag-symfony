@@ -7,6 +7,7 @@ use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Request\NullRequest;
 use Bugsnag\Request\RequestInterface;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -39,7 +40,10 @@ class SymfonyRequestTest extends TestCase
 
     public function testResolveSessionWhenPreviousSessionDoesNotExists()
     {
-        $symfonyRequest = $this->getMock(Request::class);
+        /** @var MockObject&Request $symfonyRequest */
+        $symfonyRequest = $this->getMockBuilder(Request::class)
+            ->setMethods(['hasPreviousSession', 'getSession'])
+            ->getMock();
 
         $resolver = new SymfonyResolver();
         $resolver->set($symfonyRequest);
@@ -54,14 +58,21 @@ class SymfonyRequestTest extends TestCase
             ->method('getSession');
 
         $session = $request->getSession();
-        $this->assertTrue(is_array($session));
-        $this->assertEmpty($session);
+
+        $this->assertSame([], $session);
     }
 
     public function testResolveSessionWhenPreviousSessionExists()
     {
-        $symfonyRequest = $this->getMock(Request::class);
-        $symfonySession = $this->getMock(Session::class);
+        /** @var MockObject&Request $symfonyRequest */
+        $symfonyRequest = $this->getMockBuilder(Request::class)
+            ->setMethods(['hasPreviousSession', 'getSession'])
+            ->getMock();
+
+        /** @var MockObject&Session $symfonySession */
+        $symfonySession = $this->getMockBuilder(Session::class)
+            ->setMethods(['all'])
+            ->getMock();
 
         $resolver = new SymfonyResolver();
         $resolver->set($symfonyRequest);
@@ -81,7 +92,7 @@ class SymfonyRequestTest extends TestCase
             ->willReturn(['foobar' => 'baz']);
 
         $session = $request->getSession();
-        $this->assertTrue(is_array($session));
-        $this->assertEquals(['foobar' => 'baz'], $session);
+
+        $this->assertSame(['foobar' => 'baz'], $session);
     }
 }
