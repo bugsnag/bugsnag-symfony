@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## TBD
+
+### Bug Fixes
+
+* Use `hasPreviousSession` instead of `hasSession` when checking for session data
+  [Oleg Andreyev](https://github.com/oleg-andreyev)
+  [#124](https://github.com/bugsnag/bugsnag-symfony/pull/124)
+
 ## 1.9.0 (2021-02-10)
 
 ### Enhancements
