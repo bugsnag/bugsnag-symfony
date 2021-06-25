@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
+use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;
 
 class BugsnagListener implements EventSubscriberInterface
 {
@@ -159,6 +160,26 @@ class BugsnagListener implements EventSubscriberInterface
         }
 
         $this->sendNotify($event->getThrowable(), []);
+
+        // Normally we flush after a message has been handled, but this event
+        // doesn't fire for failed messages so we have to flush here instead
+        $this->client->flush();
+    }
+
+    /**
+     * Flush any accumulated reports after a message has been handled.
+     *
+     * In batch sending mode reports are usually sent on shutdown but workers
+     * are (generally) long running processes so this doesn't work. Instead we
+     * flush after each handled message
+     *
+     * @param WorkerMessageHandledEvent $event
+     *
+     * @return void
+     */
+    public function onWorkerMessageHandled(WorkerMessageHandledEvent $event)
+    {
+        $this->client->flush();
     }
 
     /**
@@ -245,7 +266,13 @@ class BugsnagListener implements EventSubscriberInterface
         }
 
         if (class_exists(WorkerMessageFailedEvent::class)) {
-            $listeners[WorkerMessageFailedEvent::class] = 'onWorkerMessageFailed';
+            // This must run after Symfony's "SendFailedMessageForRetryListener"
+            // as it sets the "willRetry" flag
+            $listeners[WorkerMessageFailedEvent::class] = ['onWorkerMessageFailed', 64];
+        }
+
+        if (class_exists(WorkerMessageHandledEvent::class)) {
+            $listeners[WorkerMessageHandledEvent::class] = ['onWorkerMessageHandled', 128];
         }
 
         return $listeners;
