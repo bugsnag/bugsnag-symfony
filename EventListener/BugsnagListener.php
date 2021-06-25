@@ -155,11 +155,10 @@ class BugsnagListener implements EventSubscriberInterface
      */
     public function onWorkerMessageFailed(WorkerMessageFailedEvent $event)
     {
-        if ($event->willRetry()) {
-            return;
-        }
-
-        $this->sendNotify($event->getThrowable(), []);
+        $this->sendNotify(
+            $event->getThrowable(),
+            ['Messenger' => ['willRetry' => $event->willRetry()]]
+        );
 
         // Normally we flush after a message has been handled, but this event
         // doesn't fire for failed messages so we have to flush here instead
