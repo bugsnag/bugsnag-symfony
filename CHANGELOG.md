@@ -3,6 +3,13 @@ Changelog
 
 ## TBD
 
+### Enhancements
+
+* Add support for Symfony Messenger. Exceptions in workers will now automatically be reported to Bugsnag. The queue of events will also be flushed after each successful job
+  [Mathieu](https://github.com/MatTheCat)
+  [#89](https://github.com/bugsnag/bugsnag-symfony/pull/89)
+  [#125](https://github.com/bugsnag/bugsnag-symfony/pull/125)
+
 ### Bug Fixes
 
 * Use `hasPreviousSession` instead of `hasSession` when checking for session data
