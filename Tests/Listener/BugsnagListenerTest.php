@@ -5,13 +5,17 @@ namespace Bugsnag\BugsnagBundle\Tests\Listener;
 use Bugsnag\BugsnagBundle\EventListener\BugsnagListener;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
+use Bugsnag\Configuration;
 use Bugsnag\Report;
 use Exception;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use InvalidArgumentException;
 use Mockery;
 use Mockery\MockInterface as Mock;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
+use stdClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
@@ -20,6 +24,9 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Debug\Exception\OutOfMemoryException as OutOfMemorySymfony2Or3;
 use Symfony\Component\ErrorHandler\Error\OutOfMemoryError as OutOfMemorySymfony4Plus;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
+use Symfony\Component\Messenger\Event\WorkerMessageHandledEvent;
 
 class ReportStub
 {
@@ -30,6 +37,9 @@ class BugsnagListenerTest extends TestCase
 {
     use MockeryTrait;
 
+    /**
+     * @runInSeparateProcess the Mockery Report mock breaks any test using the real Report class
+     */
     public function testOnKernelException()
     {
         /** @var Mock&Report $report */
@@ -54,6 +64,9 @@ class BugsnagListenerTest extends TestCase
         $listener->onKernelException($event);
     }
 
+    /**
+     * @runInSeparateProcess the Mockery Report mock breaks any test using the real Report class
+     */
     public function testOnKernelExceptionWithAnOom()
     {
         $file = __FILE__;
@@ -97,6 +110,9 @@ class BugsnagListenerTest extends TestCase
         $listener->onKernelException($event);
     }
 
+    /**
+     * @runInSeparateProcess the Mockery Report mock breaks any test using the real Report class
+     */
     public function testOnRequestArgumentException()
     {
         /** @var Mock&Client $client */
@@ -115,6 +131,9 @@ class BugsnagListenerTest extends TestCase
         $listener->onKernelRequest('This should throw an exception');
     }
 
+    /**
+     * @runInSeparateProcess the Mockery Report mock breaks any test using the real Report class
+     */
     public function testOnConsoleError()
     {
         if (!class_exists(ConsoleErrorEvent::class)) {
@@ -145,6 +164,9 @@ class BugsnagListenerTest extends TestCase
         $listener->onConsoleError($event);
     }
 
+    /**
+     * @runInSeparateProcess the Mockery Report mock breaks any test using the real Report class
+     */
     public function testOnConsoleException()
     {
         if (!class_exists(ConsoleExceptionEvent::class)) {
@@ -171,5 +193,132 @@ class BugsnagListenerTest extends TestCase
         // Initiate test
         $listener = new BugsnagListener($client, $resolver, true);
         $listener->onConsoleException($event);
+    }
+
+    public function testReportIsCreatedWhenAWorkerMessageFailedEventFires()
+    {
+        if (!class_exists(WorkerMessageFailedEvent::class)) {
+            $this->markTestSkipped('This test requires symfony/messenger');
+        }
+
+        $exception = new RuntimeException('Failed to do stuff');
+        $config = new Configuration('api key');
+
+        /** @var MockObject&Client $client */
+        $client = $this->getMockBuilder(Client::class)
+            ->disableOriginalConstructor()
+            ->disableProxyingToOriginalMethods()
+            ->getMock();
+
+        $client->expects($this->once())
+            ->method('notify')
+            ->with($this->callback(function (Report $report) use ($exception) {
+                $this->assertSame($exception->getMessage(), $report->getMessage());
+                $this->assertTrue($report->getUnhandled());
+                $this->assertSame('warning', $report->getSeverity());
+                $this->assertSame(
+                    [
+                        'type' => 'unhandledExceptionMiddleware',
+                        'attributes' => ['framework' => 'Symfony'],
+                    ],
+                    $report->getSeverityReason()
+                );
+
+                $this->assertSame(
+                    ['Messenger' => ['willRetry' => false]],
+                    $report->getMetaData()
+                );
+
+                return true;
+            }));
+
+        $client->expects($this->once())->method('getConfig')->willReturn($config);
+        $client->expects($this->once())->method('flush');
+
+        $listener = new BugsnagListener($client, new SymfonyResolver(), true);
+
+        $message = new stdClass();
+        $envelope = new Envelope($message);
+
+        $event = new WorkerMessageFailedEvent($envelope, 'name', $exception);
+
+        $listener->onWorkerMessageFailed($event);
+    }
+
+    public function testWillRetryIsAttachedAsMetadataWhenWorkerMessageFails()
+    {
+        if (!class_exists(WorkerMessageFailedEvent::class)) {
+            $this->markTestSkipped('This test requires symfony/messenger');
+        }
+
+        $exception = new RuntimeException('Failed to do stuff');
+        $config = new Configuration('api key');
+
+        /** @var MockObject&Client $client */
+        $client = $this->getMockBuilder(Client::class)
+            ->disableOriginalConstructor()
+            ->disableProxyingToOriginalMethods()
+            ->getMock();
+
+        $client->expects($this->once())
+            ->method('notify')
+            ->with($this->callback(function (Report $report) use ($exception) {
+                $this->assertSame($exception->getMessage(), $report->getMessage());
+                $this->assertTrue($report->getUnhandled());
+                $this->assertSame('warning', $report->getSeverity());
+                $this->assertSame(
+                    [
+                        'type' => 'unhandledExceptionMiddleware',
+                        'attributes' => ['framework' => 'Symfony'],
+                    ],
+                    $report->getSeverityReason()
+                );
+
+                $this->assertSame(
+                    ['Messenger' => ['willRetry' => true]],
+                    $report->getMetaData()
+                );
+
+                return true;
+            }));
+
+        $client->expects($this->once())->method('getConfig')->willReturn($config);
+        $client->expects($this->once())->method('flush');
+
+        $listener = new BugsnagListener($client, new SymfonyResolver(), true);
+
+        $message = new stdClass();
+        $envelope = new Envelope($message);
+
+        $event = new WorkerMessageFailedEvent($envelope, 'name', $exception);
+        $event->setForRetry();
+
+        $listener->onWorkerMessageFailed($event);
+    }
+
+    public function testItShouldFlushWhenAWorkerMessageHandledEventFires()
+    {
+        if (!class_exists(WorkerMessageFailedEvent::class)) {
+            $this->markTestSkipped('This test requires symfony/messenger');
+        }
+
+        $config = new Configuration('api key');
+
+        /** @var MockObject&Client $client */
+        $client = $this->getMockBuilder(Client::class)
+            ->disableOriginalConstructor()
+            ->disableProxyingToOriginalMethods()
+            ->getMock();
+
+        $client->expects($this->once())->method('flush');
+
+        $listener = new BugsnagListener($client, new SymfonyResolver(), true);
+
+        $message = new stdClass();
+        $envelope = new Envelope($message);
+
+        $event = new WorkerMessageHandledEvent($envelope, 'name');
+
+        $listener->onWorkerMessageHandled($event);
     }
 }

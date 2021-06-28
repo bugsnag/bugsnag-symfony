@@ -38,6 +38,7 @@ if [ "$SYMFONY_VERSION" = "latest" ]; then
     composer require "symfony/http-foundation:$(lastversion symfony/http-foundation --pre)" --no-update
     composer require "symfony/http-kernel:$(lastversion symfony/http-kernel --pre)" --no-update
     composer require "symfony/security-core:$(lastversion symfony/security-core --pre)" --no-update
+    composer require "symfony/messenger:$(lastversion symfony/messenger --pre)" --no-update
 else
     # If we're requesting a specific version we can simply install it
     composer require "symfony/config:${SYMFONY_VERSION}" --no-update
@@ -46,4 +47,10 @@ else
     composer require "symfony/http-foundation:${SYMFONY_VERSION}" --no-update
     composer require "symfony/http-kernel:${SYMFONY_VERSION}" --no-update
     composer require "symfony/security-core:${SYMFONY_VERSION}" --no-update
+
+    # Symfony Messenger only exists from 4.1.0 onward
+    case "$SYMFONY_VERSION" in
+        4.0*) ;;
+        ^[4-5]*) composer require "symfony/messenger:${SYMFONY_VERSION}" --no-update ;;
+    esac
 fi
