@@ -1,6 +1,24 @@
 Changelog
 =========
 
+## 1.10.0 (2021-06-30)
+
+### Enhancements
+
+* Add support for Symfony Messenger. Exceptions in workers will now automatically be reported to Bugsnag. The queue of events will also be flushed after each successful job
+  [Mathieu](https://github.com/MatTheCat)
+  [#89](https://github.com/bugsnag/bugsnag-symfony/pull/89)
+  [#125](https://github.com/bugsnag/bugsnag-symfony/pull/125)
+
+### Bug Fixes
+
+* Use `hasPreviousSession` instead of `hasSession` when checking for session data
+  [Oleg Andreyev](https://github.com/oleg-andreyev)
+  [#124](https://github.com/bugsnag/bugsnag-symfony/pull/124)
+
+* Set the severity of exceptions to "error" instead of "warning"
+  [#126](https://github.com/bugsnag/bugsnag-symfony/pull/126)
+
 ## 1.9.0 (2021-02-10)
 
 ### Enhancements
