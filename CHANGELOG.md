@@ -16,6 +16,9 @@ Changelog
   [Oleg Andreyev](https://github.com/oleg-andreyev)
   [#124](https://github.com/bugsnag/bugsnag-symfony/pull/124)
 
+* Set the severity of exceptions to "error" instead of "warning"
+  [#126](https://github.com/bugsnag/bugsnag-symfony/pull/126)
+
 ## 1.9.0 (2021-02-10)
 
 ### Enhancements
