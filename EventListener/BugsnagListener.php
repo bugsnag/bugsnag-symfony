@@ -198,6 +198,7 @@ class BugsnagListener implements EventSubscriberInterface
             $throwable
         );
         $report->setUnhandled(true);
+        $report->setSeverity('error');
         $report->setSeverityReason([
             'type' => 'unhandledExceptionMiddleware',
             'attributes' => [

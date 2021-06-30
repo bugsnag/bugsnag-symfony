@@ -55,6 +55,7 @@ class BugsnagListenerTest extends TestCase
         $event->shouldReceive('getException')->once()->andReturn($exception);
         $report->shouldReceive('fromPHPThrowable')->once()->with('config', $exception)->andReturn($report);
         $report->shouldReceive('setUnhandled')->once()->with(true);
+        $report->shouldReceive('setSeverity')->once()->with('error');
         $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $report->shouldReceive('setMetaData')->once()->with([]);
@@ -99,6 +100,7 @@ class BugsnagListenerTest extends TestCase
 
         $report->shouldReceive('fromPHPThrowable')->once()->with('config', $oom)->andReturn($report);
         $report->shouldReceive('setUnhandled')->once()->with(true);
+        $report->shouldReceive('setSeverity')->once()->with('error');
         $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
         $report->shouldReceive('setMetaData')->once()->with([]);
 
@@ -155,6 +157,7 @@ class BugsnagListenerTest extends TestCase
         $report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
         $report->shouldReceive('fromPHPThrowable')->once()->with('config', $exception)->andReturn($report);
         $report->shouldReceive('setUnhandled')->once()->with(true);
+        $report->shouldReceive('setSeverity')->once()->with('error');
         $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $client->shouldReceive('notify')->once()->with($report);
@@ -186,6 +189,7 @@ class BugsnagListenerTest extends TestCase
         $report->shouldReceive('fromPHPThrowable')->once()->with('config', $exception)->andReturn($report);
         $report->shouldReceive('setMetaData')->once()->with(['command' => ['name' => 'test', 'status' => 1]]);
         $report->shouldReceive('setUnhandled')->once()->with(true);
+        $report->shouldReceive('setSeverity')->once()->with('error');
         $report->shouldReceive('setSeverityReason')->once()->with(['type' => 'unhandledExceptionMiddleware', 'attributes' => ['framework' => 'Symfony']]);
         $client->shouldReceive('getConfig')->once()->andReturn('config');
         $client->shouldReceive('notify')->once()->with($report);
@@ -215,7 +219,7 @@ class BugsnagListenerTest extends TestCase
             ->with($this->callback(function (Report $report) use ($exception) {
                 $this->assertSame($exception->getMessage(), $report->getMessage());
                 $this->assertTrue($report->getUnhandled());
-                $this->assertSame('warning', $report->getSeverity());
+                $this->assertSame('error', $report->getSeverity());
                 $this->assertSame(
                     [
                         'type' => 'unhandledExceptionMiddleware',
@@ -265,7 +269,7 @@ class BugsnagListenerTest extends TestCase
             ->with($this->callback(function (Report $report) use ($exception) {
                 $this->assertSame($exception->getMessage(), $report->getMessage());
                 $this->assertTrue($report->getUnhandled());
-                $this->assertSame('warning', $report->getSeverity());
+                $this->assertSame('error', $report->getSeverity());
                 $this->assertSame(
                     [
                         'type' => 'unhandledExceptionMiddleware',
