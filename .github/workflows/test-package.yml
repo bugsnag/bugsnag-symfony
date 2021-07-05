@@ -90,6 +90,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-version }}
+        coverage: none
         # by default setup-php uses a production php.ini so force development values
         ini-values: >-
           zend.exception_ignore_args=Off,
