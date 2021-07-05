@@ -15,4 +15,12 @@ class UnhandledController
     {
         throw new RuntimeException('Crashing exception!');
     }
+
+    /**
+     * @Route("/unhandled/controller/error")
+     */
+    public function unhandledErrorInController(): Response
+    {
+        foo();
+    }
 }
