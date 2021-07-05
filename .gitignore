@@ -5,3 +5,5 @@
 /.idea
 .phpunit.result.cache
 decisions.yml
+/Gemfile.lock
+/maze_output
