@@ -5,9 +5,8 @@ services:
       context: symfony-5
       args:
         - PHP_VERSION
-    environment:
-      - BUGSNAG_API_KEY
-      - BUGSNAG_ENDPOINT
+        - BUGSNAG_API_KEY
+        - BUGSNAG_ENDPOINT
     restart: "no"
     ports:
       - target: 8000
