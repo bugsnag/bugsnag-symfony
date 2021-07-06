@@ -1,5 +1,6 @@
 require "shellwords"
 require "fileutils"
+require "os"
 
 class Utils
   class << self
@@ -21,6 +22,14 @@ class Utils
       end
     ensure
       cleanup(directory)
+    end
+
+    def current_ip
+      return "host.docker.internal" if OS.mac?
+
+      ip_addr = `ifconfig | grep -Eo 'inet (addr:)?([0-9]*\\\.){3}[0-9]*' | grep -v '127.0.0.1'`
+      ip_list = /((?:[0-9]*\.){3}[0-9]*)/.match(ip_addr)
+      ip_list.captures.first
     end
 
     private
