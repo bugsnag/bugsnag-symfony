@@ -17,7 +17,7 @@ class Utils
 
       # untar bugsnag-symfony into a new directory within the fixture
       Dir.chdir(directory) do
-        Dir.mkdir(LIBRARY_NAME)
+        Dir.mkdir(LIBRARY_NAME) unless Dir.exist?(LIBRARY_NAME)
         execute(tar_command)
       end
     ensure
