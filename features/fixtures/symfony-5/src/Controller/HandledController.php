@@ -6,8 +6,9 @@ use LogicException;
 use Bugsnag\Client;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class HandledController
+class HandledController extends AbstractController
 {
     /**
      * @Route("/handled/controller/exception")
@@ -27,5 +28,21 @@ class HandledController
         $bugsnag->notifyError('Handled error', 'This is a handled error');
 
         return new Response(__METHOD__);
+    }
+
+    /**
+     * @Route("/handled/view/exception")
+     */
+    public function handledExceptionInView(): Response
+    {
+        return $this->render('handled/exception.html.twig');
+    }
+
+    /**
+     * @Route("/handled/view/error")
+     */
+    public function handledErrorInView(): Response
+    {
+        return $this->render('handled/error.html.twig');
     }
 }
