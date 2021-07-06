@@ -11,6 +11,13 @@ When("I navigate to the route {string}") do |route|
   Symfony.navigate_to(route)
 end
 
+When("I navigate to the route {string} with the query string parameters:") do |route, table|
+  # convert the data table into a query string, e.g. [['a', 'b'], ['c', 'd']] => a=b&c=d
+  query_string = URI.encode_www_form(table.rows)
+
+  Symfony.navigate_to("#{route}?#{query_string}")
+end
+
 Then("the event {string} matches the current PHP version") do |path|
   steps %{
     Then the event '#{path}' starts with '#{ENV["PHP_VERSION"]}'
