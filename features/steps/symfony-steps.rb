@@ -1,3 +1,5 @@
+require_relative "../lib/symfony"
+
 Given("I start the symfony fixture") do
   steps %{
     Given I start the service "#{Symfony.fixture}"
