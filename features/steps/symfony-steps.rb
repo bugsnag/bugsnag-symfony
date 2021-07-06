@@ -10,3 +10,17 @@ end
 When("I navigate to the route {string}") do |route|
   Symfony.navigate_to(route)
 end
+
+Then("the event {string} matches the current PHP version") do |path|
+  steps %{
+    Then the event '#{path}' starts with '#{ENV["PHP_VERSION"]}'
+    And the event '#{path}' matches '^(\\d\\.){2}\\d+$'
+  }
+end
+
+Then("the event {string} matches the current major Symfony version") do |path|
+  steps %{
+    Then the event '#{path}' starts with '#{ENV["SYMFONY_VERSION"]}'
+    And the event '#{path}' matches '^(\\d\\.){2}\\d+$'
+  }
+end
