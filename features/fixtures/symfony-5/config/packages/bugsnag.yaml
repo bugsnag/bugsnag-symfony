@@ -1,3 +1,2 @@
-bugsnag:
-  api_key: '%env(string:BUGSNAG_API_KEY)%'
-  endpoint: '%env(string:BUGSNAG_ENDPOINT)%'
+# this is a placeholder file, it gets written to during docker build by the
+# 'setup-bugsnag-config.php' script

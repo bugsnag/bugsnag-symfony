@@ -7,6 +7,7 @@ services:
         - PHP_VERSION
         - BUGSNAG_API_KEY
         - BUGSNAG_ENDPOINT
+        - BUGSNAG_REDACTED_KEYS
     restart: "no"
     ports:
       - target: 8000

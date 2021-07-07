@@ -18,23 +18,15 @@ class RedactedKeysController
      */
     public function __invoke(Request $request, Client $bugsnag): Response
     {
-        $redactedKeys = $request->query->get('keys');
-
-        if (is_array($redactedKeys)) {
-            $bugsnag->setRedactedKeys($redactedKeys);
-        }
-
         $bugsnag->notifyException(
             new Exception('This is a handled exception'),
-            function (Report $report) use ($redactedKeys) {
+            function (Report $report) {
                 $report->addMetadata([
                     'testing' => [
                         'a' => 1,
                         'b' => 2,
                         'c' => 3,
                         'xyz' => 4,
-                        // add the keys we got for debugging purposes
-                        'redactedKeys' => $redactedKeys,
                     ],
                 ]);
             }
