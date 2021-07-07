@@ -24,3 +24,12 @@ Then("the event {string} matches the current major Symfony version") do |path|
     And the event '#{path}' matches '^(\\d\\.){2}\\d+$'
   }
 end
+
+Then("the Symfony response matches {string}") do |regex|
+  wait = Maze::Wait.new(timeout: 10)
+  success = wait.until { Symfony.last_response != nil }
+
+  raise 'No response from the Symfony fixture!' unless success
+
+  assert_match(Regexp.new(regex), Symfony.last_response)
+end
