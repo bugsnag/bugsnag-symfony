@@ -33,3 +33,13 @@ Then("the Symfony response matches {string}") do |regex|
 
   assert_match(Regexp.new(regex), Symfony.last_response)
 end
+
+# TODO this should go in Maze Runner itself
+Then('the {word} {string} header is null') do |request_type, header_name|
+  request = Maze::Server.list_for(request_type).current[:request]
+
+  assert_nil(
+    request[header_name],
+    "The #{request_type} '#{header_name}' header should be null"
+  )
+end
