@@ -7,6 +7,10 @@ Given("I start the symfony fixture") do
   }
 end
 
+Given("I run the {string} command in the symfony fixture") do |command|
+  step "I run the service '#{Symfony.fixture}' with the command './bin/console #{command}'"
+end
+
 When("I navigate to the route {string}") do |route|
   Symfony.navigate_to(route)
 end
