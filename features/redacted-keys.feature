@@ -8,6 +8,14 @@ Scenario: Keys won't be redacted when there are no redacted keys
   And the event "metaData.testing.b" equals 2
   And the event "metaData.testing.c" equals 3
   And the event "metaData.testing.xyz" equals 4
+  # the following test the default "filters", which are independent of redacted keys
+  And the event "metaData.testing.password" equals "[FILTERED]"
+  And the event "metaData.testing.a_passWORD_confirmation" equals "[FILTERED]"
+  And the event "metaData.testing.cookie" equals "[FILTERED]"
+  And the event "metaData.testing.authorization" equals "[FILTERED]"
+  And the event "metaData.testing.php-AUTH-user" equals "[FILTERED]"
+  And the event "metaData.testing.php-auth-pw" equals "[FILTERED]"
+  And the event "metaData.testing.PHP-auth-DIGEST" equals "[FILTERED]"
 
 Scenario: Keys can be redacted from metadata
   Given I set environment variable "BUGSNAG_REDACTED_KEYS" to '["A", "/^x.z$/"]'
@@ -18,3 +26,10 @@ Scenario: Keys can be redacted from metadata
   And the event "metaData.testing.b" equals 2
   And the event "metaData.testing.c" equals 3
   And the event "metaData.testing.xyz" equals "[FILTERED]"
+  And the event "metaData.testing.password" equals "[FILTERED]"
+  And the event "metaData.testing.a_passWORD_confirmation" equals "[FILTERED]"
+  And the event "metaData.testing.cookie" equals "[FILTERED]"
+  And the event "metaData.testing.authorization" equals "[FILTERED]"
+  And the event "metaData.testing.php-AUTH-user" equals "[FILTERED]"
+  And the event "metaData.testing.php-auth-pw" equals "[FILTERED]"
+  And the event "metaData.testing.PHP-auth-DIGEST" equals "[FILTERED]"

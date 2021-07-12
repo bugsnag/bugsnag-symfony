@@ -24,6 +24,13 @@ class RedactedKeysController
                         'b' => 2,
                         'c' => 3,
                         'xyz' => 4,
+                        'password' => 'passw0rd1',
+                        'a_passWORD_confirmation' => 'passw0rd2',
+                        'cookie' => 'thanks',
+                        'authorization' => 'user:pass',
+                        'php-AUTH-user' => 'user',
+                        'php-auth-pw' => 'pass',
+                        'PHP-auth-DIGEST' => 'ives',
                     ],
                 ]);
             }
