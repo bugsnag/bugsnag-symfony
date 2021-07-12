@@ -5,3 +5,9 @@
 /.idea
 .phpunit.result.cache
 decisions.yml
+/Gemfile.lock
+/maze_output
+
+# these are created when running maze runner tests
+/features/fixtures/*/bugsnag-symfony
+/features/fixtures/*/bugsnag-symfony.tar

@@ -1,0 +1,2 @@
+# this is a placeholder file, it gets written to during docker build by the
+# 'setup-bugsnag-config.php' script

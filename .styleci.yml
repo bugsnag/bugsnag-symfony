@@ -1,3 +1,7 @@
+finder:
+  exclude:
+    - "features"
+
 disabled:
   - align_double_arrow
 
