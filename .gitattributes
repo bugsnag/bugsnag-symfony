@@ -12,3 +12,8 @@
 /README.md export-ignore
 /Makefile export-ignore
 /phpunit.xml.dist export-ignore
+/.ci export-ignore
+/.github export-ignore
+/features export-ignore
+/Gemfile export-ignore
+/Gemfile.lock export-ignore

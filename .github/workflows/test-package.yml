@@ -13,69 +13,75 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php-version: 5.5.9
+          - php-version: '5.5.9'
             symfony-version: '2.7.*'
             composer-flags: '--prefer-lowest'
-          - php-version: 5.5
+          - php-version: '5.5'
             symfony-version: '2.7.*'
-          - php-version: 5.5
+          - php-version: '5.5'
             symfony-version: '2.8.*'
-          - php-version: 5.5
+          - php-version: '5.5'
             symfony-version: '^3.0'
-          - php-version: 5.6
+          - php-version: '5.6'
             symfony-version: '2.7.*'
-          - php-version: 5.6
+          - php-version: '5.6'
             symfony-version: '2.8.*'
-          - php-version: 5.6
+          - php-version: '5.6'
             symfony-version: '^3.0'
-          - php-version: 7.0
+          - php-version: '7.0'
             symfony-version: '2.8.*'
-          - php-version: 7.0
+          - php-version: '7.0'
             symfony-version: '^3.0'
-          - php-version: 7.1
+          - php-version: '7.1'
             symfony-version: '2.8.*'
-          - php-version: 7.1
+          - php-version: '7.1'
             symfony-version: '^3.0'
-          - php-version: 7.1
+          - php-version: '7.1'
             symfony-version: '4.0.*'
-          - php-version: 7.1
+          - php-version: '7.1'
             symfony-version: '^4.0'
-          - php-version: 7.2
+          - php-version: '7.2'
             symfony-version: '2.8.*'
-          - php-version: 7.2
+          - php-version: '7.2'
             symfony-version: '^3.0'
-          - php-version: 7.2
+          - php-version: '7.2'
             symfony-version: '4.0.*'
-          - php-version: 7.2
+          - php-version: '7.2'
             symfony-version: '^4.0'
-          - php-version: 7.2
+          - php-version: '7.2'
             symfony-version: '^5.0'
-          - php-version: 7.3
+          - php-version: '7.3'
             symfony-version: '^3.0'
-          - php-version: 7.3
+          - php-version: '7.3'
             symfony-version: '4.0.*'
-          - php-version: 7.3
+          - php-version: '7.3'
             symfony-version: '^4.0'
-          - php-version: 7.3
+          - php-version: '7.3'
             symfony-version: '^5.0'
-          - php-version: 7.4
+          - php-version: '7.4'
             symfony-version: '^3.0'
-          - php-version: 7.4
+          - php-version: '7.4'
             symfony-version: '4.0.*'
-          - php-version: 7.4
+          - php-version: '7.4'
             symfony-version: '^4.0'
-          - php-version: 7.4
+          - php-version: '7.4'
             symfony-version: '^5.0'
-          - php-version: 7.4
+          - php-version: '7.4'
             symfony-version: 'latest'
-          - php-version: 8.0
+          - php-version: '8.0'
             symfony-version: '^3.4'
-          - php-version: 8.0
+          - php-version: '8.0'
             symfony-version: '^4.4'
-          - php-version: 8.0
+          - php-version: '8.0'
             symfony-version: '^5.0'
-          - php-version: 8.0
+          - php-version: '8.0'
             symfony-version: 'latest'
+          - php-version: '8.1'
+            symfony-version: '^4.4'
+            composer-flags: '--ignore-platform-req php'
+          - php-version: '8.1'
+            symfony-version: '^5.0'
+            composer-flags: '--ignore-platform-req php'
 
     steps:
     - uses: actions/checkout@v2
@@ -84,12 +90,21 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-version }}
+        coverage: none
+        # by default setup-php uses a production php.ini so force development values
+        ini-values: >-
+          zend.exception_ignore_args=Off,
+          zend.exception_string_param_max_len=15,
+          error_reporting=-1,
+          display_errors=On,
+          display_startup_errors=On,
+          zend.assertions=1
 
     - name: install Python
       if: ${{ matrix.symfony-version == 'latest' }}
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: '3.8'
 
     - run: composer validate
 
