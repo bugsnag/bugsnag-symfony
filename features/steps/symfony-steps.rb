@@ -24,7 +24,7 @@ end
 
 Then("the event {string} matches the current major Symfony version") do |path|
   steps %{
-    Then the event '#{path}' starts with '#{ENV["SYMFONY_VERSION"]}'
+    Then the event '#{path}' starts with '#{Symfony.version}'
     And the event '#{path}' matches '^(\\d\\.){2}\\d+$'
   }
 end
