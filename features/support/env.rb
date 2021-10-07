@@ -28,3 +28,9 @@ Maze.hooks.before do
   ENV["BUGSNAG_ENDPOINT"] = "http://#{Utils.current_ip}:9339/notify"
   Symfony.reset!
 end
+
+(2..5).each do |tag_version|
+  Before("@not_symfony_#{tag_version}") do
+    skip_this_scenario if Symfony.version == tag_version
+  end
+end
