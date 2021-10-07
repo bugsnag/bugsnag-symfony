@@ -4,8 +4,7 @@ require_relative "./../lib/utils"
 PROJECT_ROOT = File.realpath("#{__dir__}/../../")
 FIXTURE_PATH = File.realpath("#{PROJECT_ROOT}/features/fixtures/#{Symfony.fixture}")
 
-# TODO: Maze.hooks.after_configuration doesn't seem to work ?
-AfterConfiguration do
+Maze.hooks.after_configuration do
   # log to console, not the file
   Maze.config.file_log = false
   Maze.config.log_requests = true
