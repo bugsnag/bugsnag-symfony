@@ -27,5 +27,10 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+     # tell symfony to resolve "Bugsnag\Client" typehints to "@bugsnag", which will
+    # use the ClientFactory (provided by Bugsnag Symfony) to build a Client
+    Bugsnag\Client: '@bugsnag'
+
+    custom_guzzle:
+        class: GuzzleHttp\Client
+        factory: ['App\Factory\CustomGuzzleFactory', 'create']

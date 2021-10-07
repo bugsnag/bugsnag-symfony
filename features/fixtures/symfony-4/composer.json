@@ -1,10 +1,20 @@
 {
     "type": "project",
     "license": "proprietary",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "bugsnag-symfony",
+            "options": {
+                "symlink": false
+            }
+        }
+    ],
     "require": {
         "php": ">=7.1.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "bugsnag/bugsnag-symfony": "dev-master as 99.99.99",
         "composer/package-versions-deprecated": "1.11.99.4",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",
