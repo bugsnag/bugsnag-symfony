@@ -4,8 +4,7 @@ require_relative "./../lib/utils"
 PROJECT_ROOT = File.realpath("#{__dir__}/../../")
 FIXTURE_PATH = File.realpath("#{PROJECT_ROOT}/features/fixtures/#{Symfony.fixture}")
 
-# TODO: Maze.hooks.after_configuration doesn't seem to work ?
-AfterConfiguration do
+Maze.hooks.after_configuration do
   # log to console, not the file
   Maze.config.file_log = false
   Maze.config.log_requests = true
@@ -28,4 +27,10 @@ Maze.hooks.before do
   ENV["BUGSNAG_API_KEY"] = $api_key
   ENV["BUGSNAG_ENDPOINT"] = "http://#{Utils.current_ip}:9339/notify"
   Symfony.reset!
+end
+
+(2..5).each do |tag_version|
+  Before("@not_symfony_#{tag_version}") do
+    skip_this_scenario if Symfony.version == tag_version
+  end
 end

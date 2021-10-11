@@ -5,16 +5,20 @@ class Symfony
   class << self
     attr_reader :last_response
 
+    def version
+      @version ||= Integer(ENV["SYMFONY_VERSION"])
+    end
+
     def reset!
       @last_response = nil
     end
 
     def fixture
-      "symfony-#{ENV["SYMFONY_VERSION"]}"
+      "symfony-#{version}"
     end
 
     def fixture_port
-      "1230#{ENV["SYMFONY_VERSION"]}"
+      "1230#{version}"
     end
 
     def navigate_to(route)
