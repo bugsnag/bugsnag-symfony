@@ -5,6 +5,7 @@ services:
       context: symfony-5
       args:
         - PHP_VERSION
+        - COMPOSER_GITHUB_TOKEN
         - BUGSNAG_API_KEY
         - BUGSNAG_ENDPOINT
         - BUGSNAG_REDACTED_KEYS
@@ -22,6 +23,7 @@ services:
       context: symfony-4
       args:
         - PHP_VERSION
+        - COMPOSER_GITHUB_TOKEN
         - BUGSNAG_API_KEY
         - BUGSNAG_ENDPOINT
         - BUGSNAG_REDACTED_KEYS

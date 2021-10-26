@@ -34,3 +34,4 @@ jobs:
       env:
         PHP_VERSION: ${{ matrix.php-version }}
         SYMFONY_VERSION: ${{ matrix.symfony-version }}
+        COMPOSER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
