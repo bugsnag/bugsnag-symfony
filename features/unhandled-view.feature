@@ -21,8 +21,10 @@ Scenario: Unhandled errors are delivered from views
   When I navigate to the route "/unhandled/view/error"
   Then I wait to receive an error
   And the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
-  And the exception "errorClass" equals "Symfony\Component\ErrorHandler\Error\UndefinedFunctionError"
-  And the exception "message" equals 'Attempted to call function \\"abcxyz\\" from namespace \\"App\Twig\\".'
+  And the exception "errorClass" equals one of the following:
+    | Symfony\Component\Debug\Exception\UndefinedFunctionException |
+    | Symfony\Component\ErrorHandler\Error\UndefinedFunctionError  |
+  And the exception "message" matches '^Attempted to call function \\"abcxyz\\" from namespace \\"App(Bundle)?\\Twig\\"\.$'
   And the event "metaData.request.httpMethod" equals "GET"
   And the event "metaData.request.url" ends with "/unhandled/view/error"
   And the event "app.type" equals "HTTP"

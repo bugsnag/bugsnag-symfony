@@ -1,0 +1,16 @@
+# Learn more about services, parameters and containers at
+# https://symfony.com/doc/current/service_container.html
+parameters:
+    #parameter_name: value
+
+services:
+    custom_guzzle:
+        class: GuzzleHttp\Client
+        factory: ['AppBundle\Factory\CustomGuzzleFactory', 'create']
+
+    app.twig_extension:
+        class: AppBundle\Twig\BugsnagExtension
+        public: false
+        arguments: ['@bugsnag']
+        tags:
+            - { name: twig.extension }

@@ -21,8 +21,10 @@ Scenario: Unhandled errors are delivered from controllers
   When I navigate to the route "/unhandled/controller/error"
   Then I wait to receive an error
   And the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
-  And the exception "errorClass" equals "Symfony\Component\ErrorHandler\Error\UndefinedFunctionError"
-  And the exception "message" equals 'Attempted to call function \\"foo\\" from namespace \\"App\Controller\\".'
+  And the exception "errorClass" equals one of the following:
+    | Symfony\Component\Debug\Exception\UndefinedFunctionException |
+    | Symfony\Component\ErrorHandler\Error\UndefinedFunctionError  |
+  And the exception "message" matches '^Attempted to call function \\"foo\\" from namespace \\"App(Bundle)?\\Controller\\"\.$'
   And the event "metaData.request.httpMethod" equals "GET"
   And the event "metaData.request.url" ends with "/unhandled/controller/error"
   And the event "app.type" equals "HTTP"

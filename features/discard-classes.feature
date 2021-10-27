@@ -6,7 +6,7 @@ Scenario: Exceptions can be discarded by name
   When I navigate to the route "/discard-classes"
   Then I wait to receive an error
   And the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
-  And the exception "errorClass" equals "App\Exception\CustomException"
+  And the exception "errorClass" matches "^App(Bundle)?\\Exception\\CustomException$"
   And the exception "message" equals "This is a CustomException"
   And the event "metaData.request.httpMethod" equals "GET"
   And the event "metaData.request.url" ends with "/discard-classes"
@@ -18,7 +18,7 @@ Scenario: Exceptions can be discarded by name
   And the event "severityReason.attributes.framework" equals "Symfony"
 
 Scenario: Exceptions can be discarded by regex
-  Given I set environment variable "BUGSNAG_DISCARD_CLASSES" to "['/^App\\Exception\\/']"
+  Given I set environment variable "BUGSNAG_DISCARD_CLASSES" to "['/^App(Bundle)?\\Exception\\/']"
   And I start the symfony fixture
   When I navigate to the route "/discard-classes"
   Then I wait to receive an error
@@ -51,7 +51,7 @@ Scenario: Exceptions will be delivered when discard classes does not match
   And the error payload field "events.0.unhandled" is false
   And the error payload field "events.0.severityReason.type" equals "handledException"
   # the unhandled CustomException should be event 1
-  And the error payload field "events.1.exceptions.0.errorClass" equals "App\Exception\CustomException"
+  And the error payload field "events.1.exceptions.0.errorClass" matches the regex "^App(Bundle)?\\Exception\\CustomException$"
   And the error payload field "events.1.exceptions.0.message" equals "This is a CustomException"
   And the error payload field "events.1.metaData.request.httpMethod" equals "GET"
   And the error payload field "events.1.metaData.request.url" ends with "/discard-classes"

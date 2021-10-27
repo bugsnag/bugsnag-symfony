@@ -19,9 +19,11 @@ Scenario: Unhandled errors are delivered from commands
   Given I run the "app:error:unhandled" command in the symfony fixture
   When I wait to receive an error
   Then the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
-  And the exception "errorClass" equals "Error"
-  And the exception "message" equals "Call to undefined function App\Command\foo()"
-  And the event "metaData.command.status" equals 1
+  And the exception "errorClass" equals one of the following:
+    | Error                                                 |
+    | Symfony\Component\Debug\Exception\FatalThrowableError |
+  And the exception "message" matches "^Call to undefined function App(Bundle)?\\Command\\foo\(\)$"
+  And the event "metaData.command.status" is not null
   And the event "metaData.command.name" equals "app:error:unhandled"
   And the event "app.type" equals "Console"
   And the event "context" is null
