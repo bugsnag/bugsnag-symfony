@@ -8,7 +8,9 @@ Given("I start the symfony fixture") do
 end
 
 Given("I run the {string} command in the symfony fixture") do |command|
-  step "I run the service '#{Symfony.fixture}' with the command './bin/console #{command}'"
+  path = Symfony.version == 2 ? 'app' : 'bin'
+
+  step "I run the service '#{Symfony.fixture}' with the command './#{path}/console #{command}'"
 end
 
 When("I navigate to the route {string}") do |route|
@@ -36,4 +38,13 @@ Then("the Symfony response matches {string}") do |regex|
   raise 'No response from the Symfony fixture!' unless success
 
   assert_match(Regexp.new(regex), Symfony.last_response)
+end
+
+Then("the exception {string} equals one of the following:") do |path, values|
+  desired_value = Maze::Helper.read_key_path(
+    Maze::Server.errors.current[:body],
+    "events.0.exceptions.0.#{path}"
+  )
+
+  assert_includes(values.raw.flatten, desired_value)
 end
