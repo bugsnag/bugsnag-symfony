@@ -66,8 +66,6 @@ jobs:
             symfony-version: '^4.0'
           - php-version: '7.4'
             symfony-version: '^5.0'
-          - php-version: '7.4'
-            symfony-version: 'latest'
           - php-version: '8.0'
             symfony-version: '^3.4'
           - php-version: '8.0'
