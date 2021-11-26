@@ -76,10 +76,8 @@ jobs:
             symfony-version: 'latest'
           - php-version: '8.1'
             symfony-version: '^4.4'
-            composer-flags: '--ignore-platform-req php'
           - php-version: '8.1'
             symfony-version: '^5.0'
-            composer-flags: '--ignore-platform-req php'
 
     steps:
     - uses: actions/checkout@v2
