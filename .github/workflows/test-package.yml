@@ -78,6 +78,8 @@ jobs:
             symfony-version: '^4.4'
           - php-version: '8.1'
             symfony-version: '^5.0'
+          - php-version: '8.1'
+            symfony-version: 'latest'
 
     steps:
     - uses: actions/checkout@v2
