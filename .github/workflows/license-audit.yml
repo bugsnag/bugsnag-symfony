@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        symfony-version: ['^3.4', '^4.4', '^5.0']
+        symfony-version: ['^3.4', '^4.4', '^5.0', '^6.0']
 
     steps:
     - uses: actions/checkout@v2
