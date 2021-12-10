@@ -3,6 +3,12 @@ Changelog
 
 ## TBD
 
+### Enhancements
+
+* Add support for Symfony 6
+  [Julien Cousin-Alliot](https://github.com/Nispeon)
+  [#137](https://github.com/bugsnag/bugsnag-symfony/pull/137)
+
 ### Bug Fixes
 
 * Prevent a deprecation from `BugsnagListener::getSubscribedEvents`
