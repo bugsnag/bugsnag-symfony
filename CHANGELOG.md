@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## TBD
+## 1.11.0 (2021-12-13)
 
 ### Enhancements
 
