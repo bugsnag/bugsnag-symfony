@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## TBD
+
+### Bug Fixes
+
+* Prevent a deprecation from `BugsnagListener::getSubscribedEvents`
+  [#138](https://github.com/bugsnag/bugsnag-symfony/pull/138)
+
 ## 1.10.0 (2021-06-30)
 
 ### Enhancements

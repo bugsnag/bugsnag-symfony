@@ -248,6 +248,9 @@ class BugsnagListener implements EventSubscriberInterface
             || $throwable instanceof OutOfMemoryException;
     }
 
+    /**
+     * @return array<string, array{string, int}>
+     */
     public static function getSubscribedEvents()
     {
         $listeners = [
