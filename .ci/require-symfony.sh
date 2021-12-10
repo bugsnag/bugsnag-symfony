@@ -51,6 +51,6 @@ else
     # Symfony Messenger only exists from 4.1.0 onward
     case "$SYMFONY_VERSION" in
         4.0*) ;;
-        ^[4-5]*) composer require "symfony/messenger:${SYMFONY_VERSION}" --no-update ;;
+        ^[4-6]*) composer require "symfony/messenger:${SYMFONY_VERSION}" --no-update ;;
     esac
 fi
