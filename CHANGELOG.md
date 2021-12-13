@@ -1,6 +1,19 @@
 Changelog
 =========
 
+## 1.11.0 (2021-12-13)
+
+### Enhancements
+
+* Add support for Symfony 6
+  [Julien Cousin-Alliot](https://github.com/Nispeon)
+  [#137](https://github.com/bugsnag/bugsnag-symfony/pull/137)
+
+### Bug Fixes
+
+* Prevent a deprecation from `BugsnagListener::getSubscribedEvents`
+  [#138](https://github.com/bugsnag/bugsnag-symfony/pull/138)
+
 ## 1.10.0 (2021-06-30)
 
 ### Enhancements
