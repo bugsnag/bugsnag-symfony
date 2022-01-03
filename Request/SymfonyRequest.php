@@ -94,7 +94,7 @@ class SymfonyRequest implements RequestInterface
      *
      * This is based on Laravel's input source generation.
      *
-     * @return \Symfony\Component\HttpFoundation\ParameterBag
+     * @return array
      */
     protected function getInput()
     {

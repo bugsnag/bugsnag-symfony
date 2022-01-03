@@ -23,7 +23,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInterface
 {
     /**
-     * @var Client
+     * @var Client|null
      */
     private $client;
 
