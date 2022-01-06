@@ -3,7 +3,7 @@
 [![StyleCI Status](https://styleci.io/repos/62738129/shield?branch=master)](https://styleci.io/repos/62738129)
 [![Documentation](https://img.shields.io/badge/documentation-latest-blue.svg?style=flat-square)](https://docs.bugsnag.com/platforms/php/)
 
-The Bugsnag Notifier for Symfony gives you instant notification of errors and exceptions in your Symfony PHP applications. We support Symfony versions 2, 3, and 4. Learn more about [error monitoring and error reporting for your Symfony PHP apps](https://www.bugsnag.com/platforms/php/symfony/).
+The Bugsnag Notifier for Symfony gives you instant notification of errors and exceptions in your Symfony PHP applications. We support Symfony versions 2, 3, 4 and 5, running PHP 5.5+. Learn more about [error monitoring and error reporting for your Symfony PHP apps](https://www.bugsnag.com/platforms/php/symfony/).
 
 
 ## Features
