@@ -23,7 +23,7 @@
     ],
     "require": {
         "php": ">=5.3.9",
-        "bugsnag/bugsnag-symfony": "dev-master as 99.99.99",
+        "bugsnag/bugsnag-symfony": "dev-main as 99.99.99",
         "doctrine/doctrine-bundle": "~1.4",
         "doctrine/orm": "^2.4.8",
         "incenteev/composer-parameter-handler": "~2.0",

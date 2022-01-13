@@ -24,7 +24,7 @@ RUN apt-get update && \
   unzip
 
 COPY . .
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/composer
 
 RUN sh setup-github-token.sh
 RUN php setup-bugsnag-config.php
