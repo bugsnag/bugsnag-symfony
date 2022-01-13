@@ -17,3 +17,4 @@
 /features export-ignore
 /Gemfile export-ignore
 /Gemfile.lock export-ignore
+/vendor export-ignore
