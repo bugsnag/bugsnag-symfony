@@ -2,7 +2,6 @@ Feature: The current user ID should be detected automatically
 
 @not_symfony_2
 @not_symfony_5
-@not_symfony_6
 Scenario: The user ID of 'abc' should be detected when they are signed in
   Given I start the symfony fixture
   When I navigate to the route "/unhandled/controller/exception?name=abc"
@@ -22,7 +21,6 @@ Scenario: The user ID of 'abc' should be detected when they are signed in
 
 @not_symfony_2
 @not_symfony_5
-@not_symfony_6
 Scenario: The user ID of 'xyz' should be detected when they are signed in
   Given I start the symfony fixture
   When I navigate to the route "/unhandled/controller/exception?name=xyz"
