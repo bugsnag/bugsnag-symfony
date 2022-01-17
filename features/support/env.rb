@@ -4,7 +4,7 @@ require_relative "./../lib/utils"
 PROJECT_ROOT = File.realpath("#{__dir__}/../../")
 FIXTURE_PATH = File.realpath("#{PROJECT_ROOT}/features/fixtures/#{Symfony.fixture}")
 
-Maze.hooks.after_configuration do
+Maze.hooks.before_all do
   # log to console, not the file
   Maze.config.file_log = false
   Maze.config.log_requests = true
@@ -29,7 +29,7 @@ Maze.hooks.before do
   Symfony.reset!
 end
 
-(2..5).each do |tag_version|
+(2..10).each do |tag_version|
   Before("@not_symfony_#{tag_version}") do
     skip_this_scenario if Symfony.version == tag_version
   end
