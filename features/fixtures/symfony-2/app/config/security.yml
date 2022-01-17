@@ -4,8 +4,8 @@ security:
 
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
-        in_memory:
-            memory: ~
+        app_user_provider:
+            id: app.user_provider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -15,10 +15,8 @@ security:
 
         main:
             anonymous: ~
-            # activate different ways to authenticate
+            provider: app_user_provider
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+            guard:
+                authenticators:
+                    - app.query_string_authenticator

@@ -14,3 +14,9 @@ services:
         arguments: ['@bugsnag']
         tags:
             - { name: twig.extension }
+
+    app.query_string_authenticator:
+        class: AppBundle\Security\QueryStringAuthenticator
+
+    app.user_provider:
+        class: AppBundle\Security\UserProvider
