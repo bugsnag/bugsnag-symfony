@@ -101,9 +101,11 @@ class SymfonyRequest implements RequestInterface
         $type = $this->request->headers->get('CONTENT_TYPE');
 
         // If it's json, decode it
-        if (stripos($type, '/json') !== false || stripos($type, '+json') !== false) {
-            if (is_array($parsed = json_decode($this->request->getContent(), true))) {
-                return $parsed;
+        if (!is_null($type)) {
+            if (stripos($type, '/json') !== false || stripos($type, '+json') !== false) {
+                if (is_array($parsed = json_decode($this->request->getContent(), true))) {
+                    return $parsed;
+                }
             }
         }
 
