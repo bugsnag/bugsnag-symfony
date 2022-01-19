@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 1.11.1 (2022-01-19)
+
+### Bug Fixes
+
+* Call `getUserIdentifier` instead of `getUsername` on Symfony 6
+  [#145](https://github.com/bugsnag/bugsnag-symfony/pull/145)
+
 ## 1.11.0 (2021-12-13)
 
 ### Enhancements

@@ -389,7 +389,21 @@ class ClientFactory
             $user = $token->getUser();
 
             if ($user instanceof UserInterface) {
-                return ['id' => $user->getUsername()];
+                // Symfony 5.3 introduced 'getUserIdentifier' to replace 'getUsername'
+                // Symfony 6.0 removed 'getUsername'
+                if (method_exists(UserInterface::class, 'getUserIdentifier')) {
+                    return ['id' => $user->getUserIdentifier()];
+                }
+
+                // Symfony 5.4 and below use 'getUsername' ('getUserIdentifier'
+                // wasn't added to the interface until Symfony 6.0 for BC)
+                if (method_exists(UserInterface::class, 'getUsername')) {
+                    return ['id' => $user->getUsername()];
+                }
+
+                // if neither method exists then we don't know how to deal with
+                // this version of Symfony's UserInterface, so can't get an ID
+                return;
             }
 
             return ['id' => (string) $user];
