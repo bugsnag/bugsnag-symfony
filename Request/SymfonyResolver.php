@@ -18,7 +18,7 @@ class SymfonyResolver implements ResolverInterface
     /**
      * Set the current request.
      *
-     * @param \Symfony\Component\HttpFoundation\Request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return void
      */
