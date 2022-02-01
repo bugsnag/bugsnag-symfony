@@ -98,16 +98,14 @@ class SymfonyRequest implements RequestInterface
      */
     protected function getInput()
     {
-        $type = $this->request->headers->get('CONTENT_TYPE');
+        if ($this->isJsonContentType($this->request->headers->get('CONTENT_TYPE'))) {
+            $parsed = json_decode($this->request->getContent(), true);
 
-        // If it's json, decode it
-        if (stripos($type, '/json') !== false || stripos($type, '+json') !== false) {
-            if (is_array($parsed = json_decode($this->request->getContent(), true))) {
+            if (is_array($parsed)) {
                 return $parsed;
             }
         }
 
-        // Yes, we really do want request->request
         return $this->request->request->all();
     }
 
@@ -129,5 +127,20 @@ class SymfonyRequest implements RequestInterface
     public function getUserId()
     {
         return $this->request->getClientIp();
+    }
+
+    /**
+     * @param mixed $contentType
+     *
+     * @return bool
+     */
+    private function isJsonContentType($contentType)
+    {
+        if (is_string($contentType)) {
+            return stripos($contentType, '/json') !== false
+                || stripos($contentType, '+json') !== false;
+        }
+
+        return false;
     }
 }
