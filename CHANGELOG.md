@@ -1,6 +1,15 @@
 Changelog
 =========
 
+## 1.11.2 (2022-02-02)
+
+### Bug Fixes
+
+* Fix PHP 8.1 deprecation from `stripos` in `Request::getInput`
+  [phillylovepark](https://github.com/phillylovepark)
+  [#147](https://github.com/bugsnag/bugsnag-symfony/pull/147)
+  [#149](https://github.com/bugsnag/bugsnag-symfony/pull/149)
+
 ## 1.11.1 (2022-01-19)
 
 ### Bug Fixes
