@@ -304,6 +304,32 @@ final class ClientFactoryTest extends TestCase
         $this->assertSame($redactedKeys, $actual);
     }
 
+    public function testFeatureFlagsAreSetCorrectly()
+    {
+        $client = $this->createClient([
+            'featureFlags' => [
+                ['name' => 'flag1'],
+                ['name' => 'flag2', 'variant' => '1'],
+                ['name' => 'flag3', 'variant' => 2],
+                ['name' => 'flag4', 'variant' => null],
+            ],
+        ]);
+
+        $this->assertInstanceOf(Client::class, $client);
+
+        $expected = [
+            ['featureFlag' => 'flag1'],
+            ['featureFlag' => 'flag2', 'variant' => '1'],
+            ['featureFlag' => 'flag3', 'variant' => '2'],
+            ['featureFlag' => 'flag4'],
+        ];
+
+        /** @var Client $client */
+        $actual = $client->getConfig()->getFeatureFlagsCopy()->toArray();
+
+        $this->assertSame($expected, $actual);
+    }
+
     /**
      * Get the value of the given property on the given object.
      *
