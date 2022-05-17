@@ -20,3 +20,9 @@ services:
 
     app.user_provider:
         class: AppBundle\Security\UserProvider
+
+    app.add_feature_flags_on_request:
+        class: AppBundle\EventSubscriber\AddFeatureFlagsOnRequest
+        arguments: ['@bugsnag']
+        tags:
+            - { name: kernel.event_subscriber }
