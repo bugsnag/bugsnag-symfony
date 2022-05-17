@@ -1,6 +1,8 @@
 {
     "type": "project",
     "license": "proprietary",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "repositories": [
         {
             "type": "path",
