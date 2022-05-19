@@ -11,5 +11,5 @@ class BugsnagBundle extends Bundle
      *
      * @return string
      */
-    const VERSION = '1.11.2';
+    const VERSION = '1.12.0';
 }

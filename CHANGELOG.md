@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## TBD
+## 1.12.0 (2022-05-20)
 
 ### Enhancements
 
