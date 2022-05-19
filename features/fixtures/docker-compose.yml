@@ -11,6 +11,7 @@ services:
         - BUGSNAG_REDACTED_KEYS
         - BUGSNAG_DISCARD_CLASSES
         - BUGSNAG_GUZZLE
+        - BUGSNAG_FEATURE_FLAGS
     environment:
       - APP_DEBUG
     restart: "no"
@@ -29,6 +30,7 @@ services:
         - BUGSNAG_REDACTED_KEYS
         - BUGSNAG_DISCARD_CLASSES
         - BUGSNAG_GUZZLE
+        - BUGSNAG_FEATURE_FLAGS
     environment:
       - APP_DEBUG
     restart: "no"
@@ -47,6 +49,7 @@ services:
         - BUGSNAG_REDACTED_KEYS
         - BUGSNAG_DISCARD_CLASSES
         - BUGSNAG_GUZZLE
+        - BUGSNAG_FEATURE_FLAGS
     environment:
       - APP_DEBUG
     restart: "no"
@@ -64,6 +67,7 @@ services:
         - BUGSNAG_REDACTED_KEYS
         - BUGSNAG_DISCARD_CLASSES
         - BUGSNAG_GUZZLE
+        - BUGSNAG_FEATURE_FLAGS
     environment:
       - APP_DEBUG
     restart: "no"

@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## TBD
+
+### Enhancements
+
+* New APIs to support feature flag and experiment functionality. For more information, please see https://docs.bugsnag.com/product/features-experiments.
+  [#153](https://github.com/bugsnag/bugsnag-symfony/pull/153)
+
 ## 1.11.2 (2022-02-02)
 
 ### Bug Fixes

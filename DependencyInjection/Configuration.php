@@ -116,6 +116,24 @@ class Configuration implements ConfigurationInterface
                     ->treatNullLike([])
                     ->defaultValue([])
                 ->end()
+                ->arrayNode('feature_flags')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('name')
+                                ->isRequired()
+                                ->validate()
+                                    ->ifTrue(function ($value) {
+                                        return !is_string($value);
+                                    })
+                                    ->thenInvalid('Feature flag name should be a string, got %s')
+                                ->end()
+                            ->end()
+                            ->scalarNode('variant')->end()
+                        ->end()
+                    ->end()
+                    ->treatNullLike([])
+                    ->defaultValue([])
+                ->end()
             ->end();
 
         return $treeBuilder;
