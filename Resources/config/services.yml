@@ -31,6 +31,7 @@ services:
           - '%bugsnag.memory_limit_increase%'
           - '%bugsnag.discard_classes%'
           - '%bugsnag.redacted_keys%'
+          - '%bugsnag.feature_flags%'
 
     bugsnag:
         class: '%bugsnag.client%'

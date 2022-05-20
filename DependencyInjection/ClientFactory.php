@@ -7,6 +7,7 @@ use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Callbacks\CustomUser;
 use Bugsnag\Client;
 use Bugsnag\Configuration as Config;
+use Bugsnag\FeatureFlag;
 use Bugsnag\Shutdown\ShutdownStrategyInterface;
 use GuzzleHttp;
 use Symfony\Component\HttpKernel\Kernel;
@@ -211,6 +212,16 @@ class ClientFactory
     private $redactedKeys;
 
     /**
+     * An array of feature flags with a "name" and optional "variant".
+     *
+     * For example:
+     * [['name' => 'example', 'variant' => 'test'], ['name' => 'another name']]
+     *
+     * @var array[]
+     */
+    private $featureFlags;
+
+    /**
      * @param SymfonyResolver                    $resolver
      * @param TokenStorageInterface|null         $tokens
      * @param AuthorizationCheckerInterface|null $checker
@@ -237,6 +248,7 @@ class ClientFactory
      * @param int|null|false                     $memoryLimitIncrease
      * @param array                              $discardClasses
      * @param string[]                           $redactedKeys
+     * @param array[]                            $featureFlags
      *
      * @return void
      */
@@ -266,7 +278,8 @@ class ClientFactory
         GuzzleHttp\ClientInterface $guzzle = null,
         $memoryLimitIncrease = false,
         array $discardClasses = [],
-        array $redactedKeys = []
+        array $redactedKeys = [],
+        array $featureFlags = []
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -296,6 +309,7 @@ class ClientFactory
         $this->memoryLimitIncrease = $memoryLimitIncrease;
         $this->discardClasses = $discardClasses;
         $this->redactedKeys = $redactedKeys;
+        $this->featureFlags = $featureFlags;
     }
 
     /**
@@ -363,6 +377,18 @@ class ClientFactory
 
         if ($this->redactedKeys) {
             $client->setRedactedKeys($this->redactedKeys);
+        }
+
+        if ($this->featureFlags) {
+            $featureFlags = array_map(function (array $flag) {
+                if (array_key_exists('variant', $flag)) {
+                    return new FeatureFlag($flag['name'], $flag['variant']);
+                }
+
+                return new FeatureFlag($flag['name']);
+            }, $this->featureFlags);
+
+            $client->addFeatureFlags($featureFlags);
         }
 
         return $client;
