@@ -134,6 +134,8 @@ class Configuration implements ConfigurationInterface
                     ->treatNullLike([])
                     ->defaultValue([])
                 ->end()
+                ->scalarNode('max_breadcrumbs')
+                    ->defaultNull()
             ->end();
 
         return $treeBuilder;

@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## TBD
+
+### Enhancements
+
+* Add `max_breadcrumbs` config option for configuring the maximum number of breadcrumbs to attach to a report
+  [#158](https://github.com/bugsnag/bugsnag-symfony/pull/158)
+
 ## 1.12.0 (2022-05-20)
 
 ### Enhancements
