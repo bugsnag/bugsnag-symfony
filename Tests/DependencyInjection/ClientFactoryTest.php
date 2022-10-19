@@ -422,6 +422,7 @@ final class ClientFactoryTest extends TestCase
             'memoryLimitIncrease' => false,
             'discardClasses' => [],
             'redactedKeys' => [],
+            'featureFlags' => [],
         ];
     }
 }
