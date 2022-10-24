@@ -331,6 +331,22 @@ final class ClientFactoryTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testMaxBreadcrumbsIsSetCorrectly()
+    {
+        $maxBreadcrumbs = 100;
+
+        $client = $this->createClient([
+            'maxBreadcrumbs' => $maxBreadcrumbs,
+        ]);
+
+        $this->assertInstanceOf(Client::class, $client);
+
+        /** @var Client $client */
+        $actual = $client->getMaxBreadcrumbs();
+
+        $this->assertSame($maxBreadcrumbs, $actual);
+    }
+
     /**
      * Get the value of the given property on the given object.
      *
@@ -422,6 +438,8 @@ final class ClientFactoryTest extends TestCase
             'memoryLimitIncrease' => false,
             'discardClasses' => [],
             'redactedKeys' => [],
+            'featureFlags' => [],
+            'maxBreadcrumbs' => null,
         ];
     }
 }

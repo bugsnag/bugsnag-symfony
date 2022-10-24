@@ -41,6 +41,7 @@ final class ConfigurationTest extends TestCase
         'discard_classes' => [],
         'redacted_keys' => [],
         'feature_flags' => [],
+        'max_breadcrumbs' => null,
     ];
 
     /**
@@ -108,6 +109,7 @@ final class ConfigurationTest extends TestCase
                         ['name' => 'flag1'],
                         ['name' => 'flag2', 'variant' => 'var1'],
                     ],
+                    'max_breadcrumbs' => 100,
                 ],
                 $this->buildExpectedConfiguration($fullConfig),
             ],
