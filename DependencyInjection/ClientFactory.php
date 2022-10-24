@@ -222,6 +222,13 @@ class ClientFactory
     private $featureFlags;
 
     /**
+     * The maximum number of breadcrumbs that are allowed to be stored.
+     *
+     * @var int|null
+     */
+    private $maxBreadcrumbs;
+
+    /**
      * @param SymfonyResolver                    $resolver
      * @param TokenStorageInterface|null         $tokens
      * @param AuthorizationCheckerInterface|null $checker
@@ -249,6 +256,7 @@ class ClientFactory
      * @param array                              $discardClasses
      * @param string[]                           $redactedKeys
      * @param array[]                            $featureFlags
+     * @param int|null                           $maxBreadcrumbs
      *
      * @return void
      */
@@ -279,7 +287,8 @@ class ClientFactory
         $memoryLimitIncrease = false,
         array $discardClasses = [],
         array $redactedKeys = [],
-        array $featureFlags = []
+        array $featureFlags = [],
+        $maxBreadcrumbs = null
     ) {
         $this->resolver = $resolver;
         $this->tokens = $tokens;
@@ -310,6 +319,7 @@ class ClientFactory
         $this->discardClasses = $discardClasses;
         $this->redactedKeys = $redactedKeys;
         $this->featureFlags = $featureFlags;
+        $this->maxBreadcrumbs = $maxBreadcrumbs;
     }
 
     /**
@@ -389,6 +399,10 @@ class ClientFactory
             }, $this->featureFlags);
 
             $client->addFeatureFlags($featureFlags);
+        }
+
+        if ($this->maxBreadcrumbs !== null) {
+            $client->setMaxBreadcrumbs($this->maxBreadcrumbs);
         }
 
         return $client;

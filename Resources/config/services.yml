@@ -32,6 +32,7 @@ services:
           - '%bugsnag.discard_classes%'
           - '%bugsnag.redacted_keys%'
           - '%bugsnag.feature_flags%'
+          - '%bugsnag.max_breadcrumbs%'
 
     bugsnag:
         class: '%bugsnag.client%'
