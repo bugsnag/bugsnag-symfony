@@ -6,6 +6,7 @@ use Bugsnag\BugsnagBundle\DependencyInjection\ClientFactory;
 use Bugsnag\BugsnagBundle\EventListener\BugsnagShutdown;
 use Bugsnag\BugsnagBundle\Request\SymfonyResolver;
 use Bugsnag\Client;
+use Bugsnag\FeatureFlag;
 use GrahamCampbell\TestBenchCore\MockeryTrait;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -318,16 +319,16 @@ final class ClientFactoryTest extends TestCase
         $this->assertInstanceOf(Client::class, $client);
 
         $expected = [
-            ['featureFlag' => 'flag1'],
-            ['featureFlag' => 'flag2', 'variant' => '1'],
-            ['featureFlag' => 'flag3', 'variant' => '2'],
-            ['featureFlag' => 'flag4'],
+            new FeatureFlag('flag1'),
+            new FeatureFlag('flag2', '1'),
+            new FeatureFlag('flag3', '2'),
+            new FeatureFlag('flag4'),
         ];
 
         /** @var Client $client */
         $actual = $client->getConfig()->getFeatureFlagsCopy()->toArray();
 
-        $this->assertSame($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
