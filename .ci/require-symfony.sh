@@ -29,7 +29,7 @@ SYMFONY_VERSION=$1
 if [ "$SYMFONY_VERSION" = "latest" ]; then
     if ! [ "$(command -v lastversion)" ]; then
         # Install "lastversion" if it's not already installed
-        pip install lastversion==v1.6.0
+        pip install lastversion==v2.4.15
     fi
 
     composer require "symfony/config:$(lastversion symfony/config --pre)" --no-update
