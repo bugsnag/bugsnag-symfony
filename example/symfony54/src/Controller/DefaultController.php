@@ -10,19 +10,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
-    protected $bugsnag;
+    private $bugsnag;
 
-    public function __construct($bugsnag)
+    public function __construct(\Bugsnag\Client $bugsnag)
     {
         $this->bugsnag = $bugsnag;
     }
+    
 
     /**
      * @Route("/", name="homepage")
      */
     public function index()
     {
-        return new Response('Welcome to the Bugsnag Symfony 5 example. Visit the
+        return new Response('Welcome to the BugSnag Symfony 5 example. Visit the
          file "src/Controller/DefaultController" to see how certain functions 
         are implemented, and routes they can be tested on.');
     }
@@ -32,7 +33,7 @@ class DefaultController extends AbstractController
      */
     public function crash()
     {
-        throw new RuntimeException('It crashed!  Go to your Bugsnag dashboard to view the exception');
+        throw new RuntimeException('It crashed!  Go to your BugSnag dashboard to view the exception');
     }
 
     /**
@@ -49,7 +50,7 @@ class DefaultController extends AbstractController
             ]);
         });
 
-        throw new RuntimeException('It crashed!  Go to your Bugsnag dashboard to view the exception and metadata');
+        throw new RuntimeException('It crashed!  Go to your BugSnag dashboard to view the exception and metadata');
     }
 
     /**
@@ -59,7 +60,7 @@ class DefaultController extends AbstractController
     {
         $this->bugsnag->notifyException(new RuntimeException("It didn't crash!"));
 
-        return new Response("It didn't crash, but check your Bugsnag dashboard for the manual notification");
+        return new Response("It didn't crash, but check your BugSnag dashboard for the manual notification");
     }
 
     /**
@@ -76,7 +77,7 @@ class DefaultController extends AbstractController
             ]);
         });
 
-        return new Response("It didn't crash, but check your Bugsnag dashboard for the manual notification with additional metadata");
+        return new Response("It didn't crash, but check your BugSnag dashboard for the manual notification with additional metadata");
     }
 
     /**
@@ -88,6 +89,6 @@ class DefaultController extends AbstractController
             $report->setSeverity('info');
         });
 
-        return new Response("It didn't crash, but check your Bugsnag dashboard for the manual notification, and check the severity of the report");
+        return new Response("It didn't crash, but check your BugSnag dashboard for the manual notification, and check the severity of the report");
     }
 }
