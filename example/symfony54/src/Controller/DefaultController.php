@@ -16,7 +16,6 @@ class DefaultController extends AbstractController
     {
         $this->bugsnag = $bugsnag;
     }
-    
 
     /**
      * @Route("/", name="homepage")

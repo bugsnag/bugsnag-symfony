@@ -1,4 +1,4 @@
-# Running BugSnag with Symfony 6
+# Running BugSnag with Symfony 5
 
 This example shows how to integrate BugSnag with Symfony 5.  Full instructions on how to set BugSnag up with Symfony can be found in [the official BugSnag documentation](https://docs.bugsnag.com/platforms/php/symfony/).
 
@@ -33,7 +33,7 @@ BUGSNAG_API_KEY=YOUR_API_KEY_HERE
 
 More information about configuring BugSnag can be found in [the configuration section of the BugSnag documentation](https://docs.bugsnag.com/platforms/php/symfony/configuration-options/).
 
-In Symfony 6 the BugSnag bundle should be automatically registered in the `config/bundles.php` file:
+In Symfony 5 the BugSnag bundle should be automatically registered in the `config/bundles.php` file:
 ```php
 return [
     // ...
