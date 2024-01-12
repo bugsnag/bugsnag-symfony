@@ -81,7 +81,7 @@ class BugsnagListener implements EventSubscriberInterface
             throw new InvalidArgumentException('onKernelRequest function only accepts GetResponseEvent and RequestEvent arguments');
         }
 
-        if ($event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST) {
+        if (!$this->isMainRequest($event->getRequestType())) {
             return;
         }
 
@@ -246,6 +246,20 @@ class BugsnagListener implements EventSubscriberInterface
     {
         return $throwable instanceof OutOfMemoryError
             || $throwable instanceof OutOfMemoryException;
+    }
+
+    /**
+     * Check if the given request type is the "main request"
+     *
+     * @param int $requestType
+     * @return bool
+     */
+    private function isMainRequest($requestType)
+    {
+        // Symfony 7+ uses the 'MAIN_REQUEST' constant
+        return defined(HttpKernelInterface::class.'::MAIN_REQUEST')
+            ? $requestType === HttpKernelInterface::MAIN_REQUEST
+            : $requestType === HttpKernelInterface::MASTER_REQUEST;
     }
 
     /**
