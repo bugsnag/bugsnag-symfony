@@ -17,6 +17,8 @@ jobs:
         include:
           - php-version: '7.2'
             symfony-version: 2
+          - php-version: '8.3'
+            symfony-version: 7
 
     steps:
     - uses: actions/checkout@v2
