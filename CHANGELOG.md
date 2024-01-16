@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 1.14.0 (2024-01-16)
+
+* Add support for Symfony 7
+  [elliotbruneel](https://github.com/elliotbruneel)
+  [jdecool](https://github.com/jdecool)
+  [#170](https://github.com/bugsnag/bugsnag-symfony/pull/170)
+
 ## 1.13.0 (2022-10-24)
 
 ### Enhancements
