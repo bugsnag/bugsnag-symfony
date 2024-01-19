@@ -30,6 +30,7 @@ COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/composer
 
 RUN sh setup-github-token.sh
 RUN php setup-bugsnag-config.php
-RUN composer install
+RUN composer install --no-dev --classmap-authoritative
+RUN php bin/console cache:clear
 
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
