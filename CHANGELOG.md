@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 1.14.1 (2024-01-23)
+
+* Fix "Configuration class not found" error when using Composer's `--classmap-authoritative` option
+  [#174](https://github.com/bugsnag/bugsnag-symfony/pull/174)
+
 ## 1.14.0 (2024-01-16)
 
 * Add support for Symfony 7

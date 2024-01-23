@@ -6,14 +6,14 @@
  * not supported
  *
  * Symfony 7 requires a return type on this method, which is implemented in
- * 'configuration-with-return-type.php' and required in 'Configuration.php' when
- * running on PHP 7+
+ * 'ConfigurationWithReturnType.php' and is used by
+ * 'create-configuration-class-alias.php' when running on PHP 7+
  */
 
 namespace Bugsnag\BugsnagBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration extends BaseConfiguration implements ConfigurationInterface
+class ConfigurationWithoutReturnType extends BaseConfiguration implements ConfigurationInterface
 {
 }

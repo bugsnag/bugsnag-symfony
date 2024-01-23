@@ -19,6 +19,7 @@ Scenario: OOM from a single large allocation
 
 @not_symfony_2
 @not_symfony_4
+@not_symfony_7
 Scenario: OOM from many small allocations
   # Symfony does a lot more stuff in debug mode, which can cause it to run OOM
   # again when trying to handle the original OOM
