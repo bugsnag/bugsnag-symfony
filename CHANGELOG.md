@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## TBD
+
+* Prevent duplicate `Configuration` class declaration warnings
+  [#178](https://github.com/bugsnag/bugsnag-symfony/pull/178)
+
 ## 1.14.1 (2024-01-23)
 
 * Fix "Configuration class not found" error when using Composer's `--classmap-authoritative` option
