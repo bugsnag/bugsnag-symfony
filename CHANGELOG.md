@@ -1,12 +1,23 @@
 Changelog
 =========
 
+## 1.14.2 (2024-06-06)
+
+### Bug Fixes
+
+* Prevent duplicate `Configuration` class declaration warnings
+  [#178](https://github.com/bugsnag/bugsnag-symfony/pull/178)
+
 ## 1.14.1 (2024-01-23)
+
+### Bug Fixes
 
 * Fix "Configuration class not found" error when using Composer's `--classmap-authoritative` option
   [#174](https://github.com/bugsnag/bugsnag-symfony/pull/174)
 
 ## 1.14.0 (2024-01-16)
+
+### Enhancements
 
 * Add support for Symfony 7
   [elliotbruneel](https://github.com/elliotbruneel)
