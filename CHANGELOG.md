@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## TBD
+## 1.14.2 (2024-06-06)
 
 * Prevent duplicate `Configuration` class declaration warnings
   [#178](https://github.com/bugsnag/bugsnag-symfony/pull/178)
