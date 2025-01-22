@@ -1,6 +1,7 @@
 Feature: Out of memory error support
 
 @not_symfony_2
+@not_symfony_7
 Scenario: OOM from a single large allocation
   Given I start the symfony fixture
   When I navigate to the route "/oom/big"

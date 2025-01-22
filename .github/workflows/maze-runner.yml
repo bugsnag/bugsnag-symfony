@@ -12,8 +12,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.0']
-        symfony-version: [4, 5, 6]
+        php-version: ['8.4']
+        symfony-version: [5, 6, 7]
         include:
           - php-version: '7.2'
             symfony-version: 2
@@ -26,14 +26,28 @@ jobs:
     - name: Install libcurl4-openssl-dev and net-tools
       run: |
         sudo apt-get update
-        sudo apt-get install libcurl4-openssl-dev
-        sudo apt-get install net-tools
+        sudo apt-get -y install libcurl4-openssl-dev
+        sudo apt-get -y install net-tools
 
     - name: install Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.0'
+        ruby-version: '3.2.3'
         bundler-cache: true
+
+    - name: install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        coverage: none
+        # by default setup-php uses a production php.ini so force development values
+        ini-values: >-
+            zend.exception_ignore_args=Off,
+            zend.exception_string_param_max_len=15,
+            error_reporting=-1,
+            display_errors=On,
+            display_startup_errors=On,
+            zend.assertions=1
 
     - run: bundle exec maze-runner --no-source
       env:
