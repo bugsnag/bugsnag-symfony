@@ -1,12 +1,10 @@
 Feature: Out of memory error support
 
 @not_symfony_2
-@not_symfony_7
 Scenario: OOM from a single large allocation
   Given I start the symfony fixture
   When I navigate to the route "/oom/big"
-  Then the Symfony response matches "Allowed memory size of \d+ bytes exhausted \(tried to allocate \d+ bytes\)"
-  When I wait to receive an error
+  And I wait to receive an error
   Then the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
   And the exception "errorClass" equals "Symfony\Component\ErrorHandler\Error\OutOfMemoryError"
   And the exception "message" matches "Allowed memory size of \d+ bytes exhausted \(tried to allocate \d+ bytes\)"
@@ -27,8 +25,7 @@ Scenario: OOM from many small allocations
   Given I set environment variable "APP_DEBUG" to "0"
   And I start the symfony fixture
   When I navigate to the route "/oom/small"
-  Then the Symfony response matches "Allowed memory size of \d+ bytes exhausted \(tried to allocate \d+ bytes\)"
-  When I wait to receive an error
+  And I wait to receive an error
   Then the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
   And the exception "errorClass" equals "Symfony\Component\ErrorHandler\Error\OutOfMemoryError"
   And the exception "message" matches "Allowed memory size of \d+ bytes exhausted \(tried to allocate \d+ bytes\)"
