@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## v1.14.3 (2025-01-30)
+
+This release should ensure compatibility with PHP 8.4 by removing the usage of certain
+deprecated features by:
+- Removing type annotations from parameters defaulting to `null`. Comment type annotations will continue to be present and accurate
+
+### Fixes
+
+* Ensure PHP 8.4 compatibility
+  [#183](https://github.com/bugsnag/bugsnag-symfony/pull/183)
+
 ## 1.14.2 (2024-06-06)
 
 ### Bug Fixes
