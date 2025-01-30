@@ -18,12 +18,13 @@ ENV BUGSNAG_DISCARD_CLASSES $BUGSNAG_DISCARD_CLASSES
 ENV BUGSNAG_GUZZLE $BUGSNAG_GUZZLE
 ENV BUGSNAG_FEATURE_FLAGS $BUGSNAG_FEATURE_FLAGS
 ENV COMPOSER_GITHUB_TOKEN $COMPOSER_GITHUB_TOKEN
+ENV BUGSNAG_MEMORY_LIMIT_INCREASE 10485760
 
 RUN apt-get update && \
-  apt-get install -y --no-install-recommends \
-  git \
-  zip \
-  unzip
+    apt-get install -y --no-install-recommends \
+    git \
+    zip \
+    unzip
 
 COPY . .
 COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/composer
