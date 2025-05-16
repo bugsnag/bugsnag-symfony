@@ -1,6 +1,7 @@
 # Running BugSnag with Symfony 6
 
-This example shows how to integrate BugSnag with Symfony 6.  Full instructions on how to set BugSnag up with Symfony can be found in [the official BugSnag documentation](https://docs.bugsnag.com/platforms/php/symfony/).
+This example shows how to integrate BugSnag with Symfony 6. Full instructions on how to set BugSnag up with Symfony can be found in [the official BugSnag documentation](https://docs.bugsnag.com/platforms/php/symfony/).
+Symfony 6.4 requires PHP 8.1.0 or higher. Alternatively, you can run this using Docker.
 
 ## Using Docker
 
