@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## Unreleased
+
+### Enhancements
+
+* Add support for Symfony 8
+
 ## v1.14.3 (2025-01-30)
 
 This release should ensure compatibility with PHP 8.4 by removing the usage of certain

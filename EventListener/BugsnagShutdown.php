@@ -32,7 +32,7 @@ class BugsnagShutdown implements EventSubscriberInterface, ShutdownStrategyInter
      *
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         $listeners = [
             KernelEvents::TERMINATE => ['onTerminate', 10],
