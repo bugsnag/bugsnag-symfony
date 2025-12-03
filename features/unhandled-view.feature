@@ -7,7 +7,7 @@ Scenario: Unhandled exceptions are delivered from views
   And the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
   And the exception "errorClass" equals "Twig\Error\RuntimeError"
   And the exception "message" equals one of the following:
-    | An exception has been thrown during the rendering of a template (\\"Crash!\\"). |
+    | An exception has been thrown during the rendering of a template ("Crash!"). |
     | An exception has been thrown during the rendering of a template ("Crash!") in "unhandled/exception.html.twig" at line 6. |
   And the event "metaData.request.httpMethod" equals "GET"
   And the event "metaData.request.url" ends with "/unhandled/view/exception"
