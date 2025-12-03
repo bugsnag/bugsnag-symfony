@@ -6,7 +6,9 @@ Scenario: Unhandled exceptions are delivered from views
   Then I wait to receive an error
   And the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
   And the exception "errorClass" equals "Twig\Error\RuntimeError"
-  And the exception "message" equals 'An exception has been thrown during the rendering of a template (\\"Crash!\\").'
+  And the exception "message" equals one of the following:
+    | An exception has been thrown during the rendering of a template (\\"Crash!\\"). |
+    | An exception has been thrown during the rendering of a template ("Crash!") in "unhandled/exception.html.twig" at line 6. |
   And the event "metaData.request.httpMethod" equals "GET"
   And the event "metaData.request.url" ends with "/unhandled/view/exception"
   And the event "app.type" equals "HTTP"
@@ -22,11 +24,12 @@ Scenario: Unhandled errors are delivered from views
   Then I wait to receive an error
   And the error is valid for the error reporting API version "4.0" for the "Bugsnag Symfony" notifier
   And the exception "errorClass" equals one of the following:
-    | Twig\Error\RuntimeError                                      |
-    | Symfony\Component\Debug\Exception\UndefinedFunctionException |
+    | Twig\\Error\\RuntimeError                                        |
+    | Symfony\\Component\\Debug\\Exception\\UndefinedFunctionException |
   And the exception "message" equals one of the following:
-    | Attempted to call function "abcxyz" from namespace "AppBundle\Twig".                                              |
-    | An exception has been thrown during the rendering of a template ("Call to undefined function App\Twig\abcxyz()"). |
+    | Attempted to call function "abcxyz" from namespace "AppBundle\\Twig".                                               |
+    | An exception has been thrown during the rendering of a template ("Call to undefined function App\\Twig\\abcxyz()"). |
+    | An exception has been thrown during the rendering of a template ("Call to undefined function App\\Twig\\abcxyz()") in "unhandled/error.html.twig" at line 6. |
   And the event "metaData.request.httpMethod" equals "GET"
   And the event "metaData.request.url" ends with "/unhandled/view/error"
   And the event "app.type" equals "HTTP"

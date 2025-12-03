@@ -19,6 +19,9 @@ jobs:
               symfony-version: 7
             - php-version: 8.1
               symfony-version: 7
+        include:
+            - php-version: 8.4
+              symfony-version: 8
 
     steps:
     - uses: actions/checkout@v2
