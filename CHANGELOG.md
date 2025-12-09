@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## v2.0.0 (2025-12-08)
+## v2.0.0 (2025-12-09)
 
 ### Breaking Changes
 * Minimum supported PHP version is now 7.2
