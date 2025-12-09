@@ -1,13 +1,13 @@
 {
     "name": "bugsnag/bugsnag-symfony",
-    "description": "Official Bugsnag notifier for Symfony applications.",
+    "description": "Official BugSnag notifier for Symfony applications.",
     "keywords": ["bugsnag", "exceptions", "errors", "logging", "tracking", "symfony"],
     "homepage": "https://github.com/bugsnag/bugsnag-symfony",
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
         {
-            "name": "James Smith",
+            "name": "SmartBear",
             "email": "notifiers@bugsnag.com"
         }
     ],
