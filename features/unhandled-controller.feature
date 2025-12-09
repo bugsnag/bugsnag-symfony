@@ -24,7 +24,8 @@ Scenario: Unhandled errors are delivered from controllers
   And the exception "errorClass" equals one of the following:
     | Symfony\Component\Debug\Exception\UndefinedFunctionException |
     | Symfony\Component\ErrorHandler\Error\UndefinedFunctionError  |
-  And the exception "message" matches '^Attempted to call function \\"foo\\" from namespace \\"App(Bundle)?\\Controller\\"\.$'
+    | Error |
+  And the exception "message" matches '(^Attempted to call (undefined )?function \\"foo\\" from namespace \\"App(Bundle)?\\Controller\\"\.$)|(^Call to undefined function App(Bundle)?\\Controller\\foo\(\)$)'
   And the event "metaData.request.httpMethod" equals "GET"
   And the event "metaData.request.url" ends with "/unhandled/controller/error"
   And the event "app.type" equals "HTTP"

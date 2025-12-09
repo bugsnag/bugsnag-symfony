@@ -32,6 +32,8 @@ class OomController
 
         while ($i++ < 12345678) {
             $a = new stdClass;
+            $s = str_repeat('a', 1024 * (512 + $i));
+            $a->s = $s;
             $a->b = $a;
         }
 

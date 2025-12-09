@@ -1,6 +1,5 @@
 Feature: Out of memory error support
 
-@not_symfony_2
 Scenario: OOM from a single large allocation
   Given I start the symfony fixture
   When I navigate to the route "/oom/big"
@@ -16,9 +15,8 @@ Scenario: OOM from a single large allocation
   And the event "severityReason.type" equals "unhandledExceptionMiddleware"
   And the event "severityReason.attributes.framework" equals "Symfony"
 
-@not_symfony_2
-@not_symfony_4
 @not_symfony_7
+@not_symfony_8
 Scenario: OOM from many small allocations
   # Symfony does a lot more stuff in debug mode, which can cause it to run OOM
   # again when trying to handle the original OOM
