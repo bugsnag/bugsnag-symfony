@@ -265,7 +265,7 @@ class BugsnagListener implements EventSubscriberInterface
     /**
      * @return array<string, array{string, int}>
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         $listeners = [
             KernelEvents::REQUEST => ['onKernelRequest', 256],

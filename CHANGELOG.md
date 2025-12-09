@@ -1,6 +1,17 @@
 Changelog
 =========
 
+## v2.0.0 (2025-12-09)
+
+### Breaking Changes
+* Minimum supported PHP version is now 7.2
+* Minimum supported Symfony version is now 5.4
+
+### Enhancements
+* Added support and tests for Symfony 8
+  [Damien Alexandre](https://github.com/damienalexandre)
+  [#188](https://github.com/bugsnag/bugsnag-symfony/pull/188)
+
 ## v1.14.3 (2025-01-30)
 
 This release should ensure compatibility with PHP 8.4 by removing the usage of certain
