@@ -4794,16 +4794,16 @@
         },
         {
             "name": "symfony/mailer",
-            "version": "v8.0.0",
+            "version": "v8.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mailer.git",
-                "reference": "f9b546f0e28cbd08fd5d03f2472aad913a9398f9"
+                "reference": "5266d594e83593dff3492b5655ff6e8f38d67cfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mailer/zipball/f9b546f0e28cbd08fd5d03f2472aad913a9398f9",
-                "reference": "f9b546f0e28cbd08fd5d03f2472aad913a9398f9",
+                "url": "https://api.github.com/repos/symfony/mailer/zipball/5266d594e83593dff3492b5655ff6e8f38d67cfc",
+                "reference": "5266d594e83593dff3492b5655ff6e8f38d67cfc",
                 "shasum": ""
             },
             "require": {
@@ -4850,7 +4850,7 @@
             "description": "Helps sending emails",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/mailer/tree/v8.0.0"
+                "source": "https://github.com/symfony/mailer/tree/v8.0.12"
             },
             "funding": [
                 {
@@ -4870,7 +4870,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-27T08:09:45+00:00"
+            "time": "2026-05-20T07:22:03+00:00"
         },
         {
             "name": "symfony/messenger",
@@ -4962,16 +4962,16 @@
         },
         {
             "name": "symfony/mime",
-            "version": "v8.0.0",
+            "version": "v8.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/mime.git",
-                "reference": "7576ce3b2b4d3a2a7fe7020a07a392065d6ffd40"
+                "reference": "7d9a72bbf0a9cb169ed1cbbbbbf709a592207fc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/mime/zipball/7576ce3b2b4d3a2a7fe7020a07a392065d6ffd40",
-                "reference": "7576ce3b2b4d3a2a7fe7020a07a392065d6ffd40",
+                "url": "https://api.github.com/repos/symfony/mime/zipball/7d9a72bbf0a9cb169ed1cbbbbbf709a592207fc1",
+                "reference": "7d9a72bbf0a9cb169ed1cbbbbbf709a592207fc1",
                 "shasum": ""
             },
             "require": {
@@ -5024,7 +5024,7 @@
                 "mime-type"
             ],
             "support": {
-                "source": "https://github.com/symfony/mime/tree/v8.0.0"
+                "source": "https://github.com/symfony/mime/tree/v8.0.12"
             },
             "funding": [
                 {
@@ -5044,7 +5044,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-16T10:17:21+00:00"
+            "time": "2026-05-20T07:22:03+00:00"
         },
         {
             "name": "symfony/monolog-bridge",
@@ -6583,16 +6583,16 @@
         },
         {
             "name": "symfony/security-http",
-            "version": "v8.0.0",
+            "version": "v8.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-http.git",
-                "reference": "bea6dc79db4d95c34b77ec27273d812aa64d65be"
+                "reference": "d776945b2dc41c0e609c56c1ef69863ab56856ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-http/zipball/bea6dc79db4d95c34b77ec27273d812aa64d65be",
-                "reference": "bea6dc79db4d95c34b77ec27273d812aa64d65be",
+                "url": "https://api.github.com/repos/symfony/security-http/zipball/d776945b2dc41c0e609c56c1ef69863ab56856ed",
+                "reference": "d776945b2dc41c0e609c56c1ef69863ab56856ed",
                 "shasum": ""
             },
             "require": {
@@ -6646,7 +6646,7 @@
             "description": "Symfony Security Component - HTTP Integration",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/security-http/tree/v8.0.0"
+                "source": "https://github.com/symfony/security-http/tree/v8.0.12"
             },
             "funding": [
                 {
@@ -6666,7 +6666,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-27T08:09:45+00:00"
+            "time": "2026-05-20T07:22:03+00:00"
         },
         {
             "name": "symfony/serializer",
