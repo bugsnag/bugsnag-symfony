@@ -32,6 +32,11 @@ jobs:
 
     - name: Install dependencies
       run: composer update --prefer-dist --no-progress --no-suggest --no-interaction --no-dev
+      env:
+        # This job only audits licenses. Composer now refuses to install package
+        # versions with security advisories by default, and every Symfony 3.4/4.4
+        # (and Symfony 6.0 on PHP 8.0) release has one, so allow them here.
+        COMPOSER_NO_SECURITY_BLOCKING: 1
 
     - name: Run License Finder
       # for some reason license finder doesn't run without a login shell (-l)
